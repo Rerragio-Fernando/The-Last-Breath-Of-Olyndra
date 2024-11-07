@@ -9,7 +9,7 @@ public class AnimatorUtil : MonoBehaviour {
     }
 
     public void BlendTreeValue(Animator anim, string name, float to, float rate){
-        float val = Mathf.Lerp(anim.GetFloat(name), to, rate);
+        float val = Mathf.Lerp(anim.GetFloat(name), to, rate * Time.deltaTime);
 
         if(to == 0f){
             if(val < 0.1f)
