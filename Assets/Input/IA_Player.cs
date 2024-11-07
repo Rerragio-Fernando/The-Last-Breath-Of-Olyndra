@@ -260,6 +260,34 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""UI"",
+            ""id"": ""ea19759d-a19d-4ca8-a85e-e7e8b7442891"",
+            ""actions"": [
+                {
+                    ""name"": ""ShowControls"",
+                    ""type"": ""Button"",
+                    ""id"": ""5573af13-ebb8-438c-9f42-ab50d4bd4f60"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""92a5e7e1-93f2-427a-84be-92f7113e036c"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShowControls"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -300,11 +328,15 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_SwitchWeapon = m_Player.FindAction("SwitchWeapon", throwIfNotFound: true);
         m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
+        // UI
+        m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
+        m_UI_ShowControls = m_UI.FindAction("ShowControls", throwIfNotFound: true);
     }
 
     ~@IA_Player()
     {
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, IA_Player.Player.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, IA_Player.UI.Disable() has not been called.");
     }
 
     public void Dispose()
@@ -448,6 +480,52 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
+
+    // UI
+    private readonly InputActionMap m_UI;
+    private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
+    private readonly InputAction m_UI_ShowControls;
+    public struct UIActions
+    {
+        private @IA_Player m_Wrapper;
+        public UIActions(@IA_Player wrapper) { m_Wrapper = wrapper; }
+        public InputAction @ShowControls => m_Wrapper.m_UI_ShowControls;
+        public InputActionMap Get() { return m_Wrapper.m_UI; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(UIActions set) { return set.Get(); }
+        public void AddCallbacks(IUIActions instance)
+        {
+            if (instance == null || m_Wrapper.m_UIActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_UIActionsCallbackInterfaces.Add(instance);
+            @ShowControls.started += instance.OnShowControls;
+            @ShowControls.performed += instance.OnShowControls;
+            @ShowControls.canceled += instance.OnShowControls;
+        }
+
+        private void UnregisterCallbacks(IUIActions instance)
+        {
+            @ShowControls.started -= instance.OnShowControls;
+            @ShowControls.performed -= instance.OnShowControls;
+            @ShowControls.canceled -= instance.OnShowControls;
+        }
+
+        public void RemoveCallbacks(IUIActions instance)
+        {
+            if (m_Wrapper.m_UIActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IUIActions instance)
+        {
+            foreach (var item in m_Wrapper.m_UIActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_UIActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public UIActions @UI => new UIActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -474,5 +552,9 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         void OnSprint(InputAction.CallbackContext context);
         void OnSwitchWeapon(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
+    }
+    public interface IUIActions
+    {
+        void OnShowControls(InputAction.CallbackContext context);
     }
 }

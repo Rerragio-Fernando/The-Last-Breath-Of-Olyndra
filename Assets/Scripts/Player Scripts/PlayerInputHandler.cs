@@ -13,6 +13,7 @@ public class PlayerInputHandler : MonoBehaviour {
     private bool _sprint;
     private bool _jump;
     private bool _switchWeapon;
+    private bool _showPlayerControls;
 
     private void Awake() {
         _playerInputActions = new IA_Player();
@@ -23,8 +24,13 @@ public class PlayerInputHandler : MonoBehaviour {
             Destroy(this);
     }
 
+    public IA_Player GetInputActionAsset(){
+        return _playerInputActions;
+    }
+
     private void OnEnable() {
         _playerInputActions.Player.Enable();
+        _playerInputActions.UI.Enable();
 
         _playerInputActions.Player.Sprint.performed += OnSprintIn;
 
@@ -33,10 +39,15 @@ public class PlayerInputHandler : MonoBehaviour {
 
         _playerInputActions.Player.SwitchWeapon.started += OnSwitchWeaponIn;
         _playerInputActions.Player.SwitchWeapon.canceled += OnSwitchWeaponOut;
+
+        //UI
+        _playerInputActions.UI.ShowControls.performed += ShowControls;
+        _playerInputActions.UI.ShowControls.canceled += HideControls;
     }
 
     private void OnDisable() {
         _playerInputActions.Player.Disable();
+        _playerInputActions.UI.Disable();
 
         _playerInputActions.Player.Sprint.performed -= OnSprintIn;
 
@@ -45,6 +56,10 @@ public class PlayerInputHandler : MonoBehaviour {
 
         _playerInputActions.Player.SwitchWeapon.started -= OnSwitchWeaponIn;
         _playerInputActions.Player.SwitchWeapon.canceled -= OnSwitchWeaponOut;
+
+        //UI
+        _playerInputActions.UI.ShowControls.performed -= ShowControls;
+        _playerInputActions.UI.ShowControls.canceled -= HideControls;
     }
 
     private void Update() {
@@ -56,6 +71,7 @@ public class PlayerInputHandler : MonoBehaviour {
 
     //Events
 
+    #region PlayerControls
     //Sprinting
     void OnSprintIn(InputAction.CallbackContext ctx){
         _sprint = !_sprint;
@@ -76,6 +92,16 @@ public class PlayerInputHandler : MonoBehaviour {
     void OnSwitchWeaponOut(InputAction.CallbackContext ctx){
         _switchWeapon = false;
     }
+    #endregion
+
+    #region UI
+    void ShowControls(InputAction.CallbackContext ctx){
+        _showPlayerControls = true;
+    }
+    void HideControls(InputAction.CallbackContext ctx){
+        _showPlayerControls = false;
+    }
+    #endregion
 
     public Vector2 GetLookInputRaw(){
         return _lookInputRaw;
@@ -93,6 +119,9 @@ public class PlayerInputHandler : MonoBehaviour {
     }
     public bool GetSwitchWeapon(){
         return _switchWeapon;
+    }
+    public bool GetShowControls(){
+        return _showPlayerControls;
     }
     public float GetAimValue(){
         if(_aim < 0.1f)
