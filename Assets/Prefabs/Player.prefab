@@ -460,9 +460,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c3a6755dbc8fe0458dac7a5f4806a42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _input: {fileID: 0}
   _cam: {fileID: 0}
-  _playerGraphics: {fileID: 8300790593586582061}
   _gravity: 0.5
   _playerMass: 60
   _walkSpeed: 2
@@ -492,7 +490,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6115fe53d3961a4694406e0d09ba3f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movementLerper: 7.5
+  _movementLerper: 15
   _rumbleFq:
     serializedVersion: 2
     m_Curve:

@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
-    [SerializeField] private PlayerInputHandler _input;
     [SerializeField] private Transform _cam;
-    [SerializeField] private Transform _playerGraphics;
 
     [Header("Player Properties")]
     [SerializeField] private float _gravity;
@@ -38,48 +36,37 @@ public class PlayerScript : MonoBehaviour
     private bool _jump = false;
 
     //Input Variables
-    private bool _sprintIN, _jumpIN, _changeWeaponIN;
-    private bool _toggleChangeWeapon = false;
+    private bool _sprintIN, _jumpIN;
     private float _aimValue;
     private Vector2 _movementIN, _lookIN;
     private Vector3 _velocity;
 
-    private void Awake() {
-        _activeWeaponIndex = 0;
-        InitializeActiveWeapon();
-    }
-
     private void Start() {
         Cursor.lockState = CursorLockMode.Locked;
-
         _cont = GetComponent<CharacterController>();
         _playerAnim = GetComponent<PlayerAnimationScript>();
-
         GameEventSystem._current.OnAnimationJumpForceEvent += JumpForce;
     }
 
     private void Update() {
         Grounded();
         UpdateInputVariables();
-        PlayerLook();
+        PlayerLookRotation();
         PlayerMovement();
-        Combat();
     }
 
     void Grounded(){
         _isGrounded = Physics.CheckSphere(_groundTrans.position, _distanceToGround, _groundLayer);
         _playerAnim.SetGrounded(_isGrounded);
     }
-
     void UpdateInputVariables(){
-        _sprintIN = _input.GetSprint();
-        _jumpIN = _input.GetJump();
-        _movementIN = _input.GetMoveInputRaw();
-        _lookIN = _input.GetLookInputRaw();
-        _changeWeaponIN = _input.GetSwitchWeapon();
-        _aimValue = _input.GetAimValue();
+        _sprintIN = PlayerInputHandler._current.GetSprint();
+        _jumpIN = PlayerInputHandler._current.GetJump();
+        _movementIN = PlayerInputHandler._current.GetMoveInputRaw();
+        _lookIN = PlayerInputHandler._current.GetLookInputRaw();
+        _aimValue = PlayerInputHandler._current.GetAimValue();
     }
-    void PlayerLook(){
+    void PlayerLookRotation(){
         float l_angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targAngle, ref _turnSmoothVelocity, _turnSmoothTime);
         if(_aimValue > 0f){
             GameEventSystem._current.CharacterAimIn();
@@ -150,39 +137,8 @@ public class PlayerScript : MonoBehaviour
         _cont.Move(_velocity * Time.deltaTime);
     }
 
-    void Combat(){
-        if(_changeWeaponIN){
-            if(!_toggleChangeWeapon){
-                _toggleChangeWeapon = true;
-                SwitchWeapon();   
-            }
-        }
-        else
-            _toggleChangeWeapon = false;
-    }
-
     void JumpForce(){//This is being called by animation events
         Debug.Log($"Pamka");
         _jump = true;
-    }
-
-    void InitializeActiveWeapon(){
-        foreach (var item in _weaponList)
-        {
-            item.SetActive(false);
-        }
-
-        _weaponList[_activeWeaponIndex].SetActive(true);
-    }
-
-    void SwitchWeapon(){
-        int temp = _activeWeaponIndex;
-        _activeWeaponIndex++;
-
-        if(_activeWeaponIndex > _weaponList.Length - 1)
-            _activeWeaponIndex = 0;
-
-        _weaponList[temp].SetActive(false);
-        _weaponList[_activeWeaponIndex].SetActive(true);
     }
 }
