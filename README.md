@@ -4,7 +4,7 @@ This project has been created as a submission for the group assignment "DSP Grou
 
 This Group project was developed by group 12 which include the following people:
 
-Marco Minganna - Lead Programmer & Producer
+Marco Minganna - Lead Programmer & Producer \
 Rerragio Fernando - Gameplay programmer \
 Raven Xing - Art designer & animator \
 Niyati Gosar - Game Designer \
