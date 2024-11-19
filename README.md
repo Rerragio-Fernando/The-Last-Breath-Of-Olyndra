@@ -5,12 +5,12 @@ This project has been created as a submission for the group assignment "DSP Grou
 This Group project was developed by group 12 which include the following people:
 
 Marco Minganna - Lead Programmer & Producer
-Rerragio Fernando - Gameplay programmer 
-Raven Xing - Art designer & animator
-Niyati Gosar - Game Designer
-Tony El Antoury - Lead Game Designer
-Yuxuan Wang - Game Designer
-Alisija Litavora - Character designer & Animator
+Rerragio Fernando - Gameplay programmer \
+Raven Xing - Art designer & animator \
+Niyati Gosar - Game Designer \
+Tony El Antoury - Lead Game Designer \
+Yuxuan Wang - Game Designer \
+Alisija Litavora - Character designer & Animator \
 Fajiyaz Mohammed - Animator
 
 ## Introduction
