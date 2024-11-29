@@ -9,6 +9,6 @@ public class UIManager : MonoBehaviour
 
     private void Update() {
         _controlScheme.SetActive(PlayerInputHandler._current.GetShowControls());
-        Debug.Log(PlayerInputHandler._current.GetShowControls());
+        //Debug.Log(PlayerInputHandler._current.GetShowControls());
     }
 }
