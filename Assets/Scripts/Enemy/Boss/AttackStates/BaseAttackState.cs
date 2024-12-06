@@ -24,27 +24,35 @@ using UnityEngine;
 
 namespace NPC
 {
-    [CreateAssetMenu(menuName = "AI/States/Movements")]
-    public class MovementState : BossAIState
+    public abstract class BaseAttackState : BossAIState
     {
+        [SerializeField]
+        protected string abilityName;
+        [SerializeField]
+        protected float cooldown;
+        private float lastUsedTime = -Mathf.Infinity;
+        [SerializeField]
+        protected float damage;
 
         public override BossAIState stateTick(BossAIManager bossAI)
         {
             BossAIState stateToReturn = this;
-            float distanceToTarget = Vector3.Distance(bossAI.getBossTransform().position, bossAI.getSetCurrentTarget.position);
-
-            if (distanceToTarget > bossAI.getSetAgentStoppingDistance)
-            {
-                bossAI.updateBossMovements(true);
-            }
-            else
-            {
-
-                // TODO add logic to add an attack using ANN
-                stateToReturn = nextState == null ? this : nextState;
-                bossAI.updateBossMovements(false);
-            }
             return stateToReturn;
         }
+
+        public abstract void Activate();
+        protected abstract void visualizeAbility();
+
+        protected void startCooldown()
+        {
+            lastUsedTime = Time.time;
+        }
+
+        protected bool isOnCooldown()
+        {
+            return Time.time < (lastUsedTime + cooldown);
+        }
+
+
     }
 }

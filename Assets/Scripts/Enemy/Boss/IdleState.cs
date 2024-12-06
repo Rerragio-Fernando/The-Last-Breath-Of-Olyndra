@@ -30,8 +30,6 @@ namespace NPC
         public float fieldOfViewAngle = 90f;
         public float detectionRange = 20f;
         public LayerMask obstructionMask;
-        [Header("Next State")]
-        [SerializeField] BossAIState nextState;
         public override BossAIState stateTick(BossAIManager bossAI)
         {
             BossAIState stateToReturn = this;
