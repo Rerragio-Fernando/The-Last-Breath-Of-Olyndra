@@ -49,7 +49,9 @@ namespace NPC
         bool hasPlayerEnteredArena = false;
         bool hasFightStarted = false;
 
-        Transform currentTarget;
+        
+
+        AiMovements bossMovements;
 
         private void Awake()
         {
@@ -84,6 +86,7 @@ namespace NPC
             {
                 //Spawn the area boss
                 spawnBoss();
+                bossMovements = bossObject == null? null: bossObject.GetComponent<AiMovements>();
             }
             if(hasBossBeenFound)
             {
@@ -161,6 +164,19 @@ namespace NPC
             }
         }
 
+        public void updateBossMovements(bool shouldMove)
+        {
+            if(shouldMove)
+            {
+                bossMovements.updateMovementPosition();
+            }
+            else
+            {
+                bossMovements.stopAgent();
+            }
+            
+        }
+
         //Getter and setters 
         public int getBossID
         {
@@ -187,12 +203,24 @@ namespace NPC
 
         public Transform getSetCurrentTarget
         {
-            get { return currentTarget; }
+            get { return bossMovements.getSetCurrentTarget; }
             set
             {
-                if (currentTarget != value)
+                if (bossMovements.getSetCurrentTarget != value)
                 {
-                    currentTarget = value;
+                    bossMovements.getSetCurrentTarget = value;
+                }
+            }
+        }
+
+        public float getSetAgentStoppingDistance
+        {
+            get { return bossMovements.getSetAgentStoppingDistance; }
+            set
+            {
+                if (bossMovements.getSetAgentStoppingDistance != value)
+                {
+                    bossMovements.getSetAgentStoppingDistance = value;
                 }
             }
         }
