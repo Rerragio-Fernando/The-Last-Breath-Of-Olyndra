@@ -11,16 +11,14 @@ public class PlayerAnimationScript : AnimatorUtil
     private float _moveVal;
     private int _activeWeaponIndex;
 
-    //Animator Variables
-    private float _movement;
-
     private void Start() {
         GameEventSystem._current.OnCharacterIdleEvent += Idle;
         GameEventSystem._current.OnCharacterWalkEvent += Walk;
         GameEventSystem._current.OnCharacterRunEvent += Run;
 
         GameEventSystem._current.OnCharacterJumpEvent += Jump;
-        GameEventSystem._current.OnCharacterSwitchWeapon += Switch;
+
+        GameEventSystem._current.OnCharacterAttackEvent += Attack;
 
         GameEventSystem._current.OnCharacterAimInEvent += AimIn;
         GameEventSystem._current.OnCharacterAimOutEvent += AimOut;
@@ -32,7 +30,8 @@ public class PlayerAnimationScript : AnimatorUtil
         GameEventSystem._current.OnCharacterRunEvent -= Run;
 
         GameEventSystem._current.OnCharacterJumpEvent -= Jump;
-        GameEventSystem._current.OnCharacterSwitchWeapon -= Switch;
+
+        GameEventSystem._current.OnCharacterAttackEvent -= Attack;
 
         GameEventSystem._current.OnCharacterAimInEvent -= AimIn;
         GameEventSystem._current.OnCharacterAimOutEvent -= AimOut;
@@ -50,8 +49,8 @@ public class PlayerAnimationScript : AnimatorUtil
     public void Jump(){
         AnimatorTrigger(_anim, "Jump", 0.5f);
     }
-    public void Switch(){
-        AnimatorTrigger(_anim, "Switch Weapon", 0.5f);
+    public void Attack(){
+        
     }
     public void AimIn(){
         _anim.SetBool("Aiming", true);

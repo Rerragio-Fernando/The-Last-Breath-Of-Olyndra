@@ -16,7 +16,7 @@ public class GameEventSystem : MonoBehaviour
     public event Action OnCharacterWalkEvent;
     public event Action OnCharacterRunEvent;
     public event Action OnCharacterJumpEvent;
-    public event Action OnCharacterSwitchWeapon;
+    public event Action OnCharacterAttackEvent;
     public event Action OnCharacterAimInEvent;
     public event Action OnCharacterAimOutEvent;
     public event Action OnAnimationJumpForceEvent;
@@ -47,9 +47,9 @@ public class GameEventSystem : MonoBehaviour
             OnAnimationJumpForceEvent();
         }
     }
-    public void CharacterSwitchWeapon(){
-        if(OnCharacterSwitchWeapon != null){
-            OnCharacterSwitchWeapon();
+    public void CharacterAttack(){
+        if(OnCharacterAttackEvent != null){
+            OnCharacterAttackEvent();
         }
     }
     public void CharacterAimIn(){

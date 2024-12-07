@@ -42,12 +42,12 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "SwitchWeapon",
+                    "name": "Attack",
                     "type": "Button",
                     "id": "c867f97d-e997-4eec-97d8-d6bb911255ef",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Tap",
                     "initialStateCheck": false
                 },
                 {
@@ -196,22 +196,22 @@
                 {
                     "name": "",
                     "id": "f823d8d5-9b36-44eb-a95d-5c4ba2d11a72",
-                    "path": "<Mouse>/middleButton",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "SwitchWeapon",
+                    "action": "Attack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "244cf6da-9342-4f98-8d87-ec62043a875a",
-                    "path": "<DualShockGamepad>/buttonNorth",
+                    "path": "<DualShockGamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "SwitchWeapon",
+                    "action": "Attack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

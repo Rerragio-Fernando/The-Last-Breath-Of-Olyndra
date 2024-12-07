@@ -12,7 +12,7 @@ public class PlayerInputHandler : MonoBehaviour {
     private float _aim;
     private bool _sprint;
     private bool _jump;
-    private bool _switchWeapon;
+    private bool _attack;
     private bool _showPlayerControls;
 
     private void Awake() {
@@ -37,8 +37,8 @@ public class PlayerInputHandler : MonoBehaviour {
         _playerInputActions.Player.Jump.performed += OnJumpIn;
         _playerInputActions.Player.Jump.canceled += OnJumpOut;
 
-        _playerInputActions.Player.SwitchWeapon.started += OnSwitchWeaponIn;
-        _playerInputActions.Player.SwitchWeapon.canceled += OnSwitchWeaponOut;
+        _playerInputActions.Player.Attack.started += OnAttackIn;
+        _playerInputActions.Player.Attack.canceled += OnAttackOut;
 
         //UI
         _playerInputActions.UI.ShowControls.performed += ShowControls;
@@ -54,8 +54,8 @@ public class PlayerInputHandler : MonoBehaviour {
         _playerInputActions.Player.Jump.performed -= OnJumpIn;
         _playerInputActions.Player.Jump.canceled -= OnJumpOut;
 
-        _playerInputActions.Player.SwitchWeapon.started -= OnSwitchWeaponIn;
-        _playerInputActions.Player.SwitchWeapon.canceled -= OnSwitchWeaponOut;
+        _playerInputActions.Player.Attack.started -= OnAttackIn;
+        _playerInputActions.Player.Attack.canceled -= OnAttackOut;
 
         //UI
         _playerInputActions.UI.ShowControls.performed -= ShowControls;
@@ -86,11 +86,11 @@ public class PlayerInputHandler : MonoBehaviour {
     }
 
     //Switch Weapon
-    void OnSwitchWeaponIn(InputAction.CallbackContext ctx){
-        _switchWeapon = true;
+    void OnAttackIn(InputAction.CallbackContext ctx){
+        _attack = true;
     }
-    void OnSwitchWeaponOut(InputAction.CallbackContext ctx){
-        _switchWeapon = false;
+    void OnAttackOut(InputAction.CallbackContext ctx){
+        _attack = false;
     }
     #endregion
 
@@ -117,8 +117,8 @@ public class PlayerInputHandler : MonoBehaviour {
     public bool GetJump(){
         return _jump;
     }
-    public bool GetSwitchWeapon(){
-        return _switchWeapon;
+    public bool GetAttack(){
+        return _attack;
     }
     public bool GetShowControls(){
         return _showPlayerControls;

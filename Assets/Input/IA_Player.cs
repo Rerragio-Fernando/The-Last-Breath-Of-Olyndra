@@ -64,12 +64,12 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""SwitchWeapon"",
+                    ""name"": ""Attack"",
                     ""type"": ""Button"",
                     ""id"": ""c867f97d-e997-4eec-97d8-d6bb911255ef"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Tap"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -218,22 +218,22 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""f823d8d5-9b36-44eb-a95d-5c4ba2d11a72"",
-                    ""path"": ""<Mouse>/middleButton"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""SwitchWeapon"",
+                    ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""244cf6da-9342-4f98-8d87-ec62043a875a"",
-                    ""path"": ""<DualShockGamepad>/buttonNorth"",
+                    ""path"": ""<DualShockGamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""SwitchWeapon"",
+                    ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -326,7 +326,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
-        m_Player_SwitchWeapon = m_Player.FindAction("SwitchWeapon", throwIfNotFound: true);
+        m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
         m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
@@ -402,7 +402,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Movement;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Sprint;
-    private readonly InputAction m_Player_SwitchWeapon;
+    private readonly InputAction m_Player_Attack;
     private readonly InputAction m_Player_Aim;
     public struct PlayerActions
     {
@@ -412,7 +412,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
-        public InputAction @SwitchWeapon => m_Wrapper.m_Player_SwitchWeapon;
+        public InputAction @Attack => m_Wrapper.m_Player_Attack;
         public InputAction @Aim => m_Wrapper.m_Player_Aim;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
@@ -435,9 +435,9 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
-            @SwitchWeapon.started += instance.OnSwitchWeapon;
-            @SwitchWeapon.performed += instance.OnSwitchWeapon;
-            @SwitchWeapon.canceled += instance.OnSwitchWeapon;
+            @Attack.started += instance.OnAttack;
+            @Attack.performed += instance.OnAttack;
+            @Attack.canceled += instance.OnAttack;
             @Aim.started += instance.OnAim;
             @Aim.performed += instance.OnAim;
             @Aim.canceled += instance.OnAim;
@@ -457,9 +457,9 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
-            @SwitchWeapon.started -= instance.OnSwitchWeapon;
-            @SwitchWeapon.performed -= instance.OnSwitchWeapon;
-            @SwitchWeapon.canceled -= instance.OnSwitchWeapon;
+            @Attack.started -= instance.OnAttack;
+            @Attack.performed -= instance.OnAttack;
+            @Attack.canceled -= instance.OnAttack;
             @Aim.started -= instance.OnAim;
             @Aim.performed -= instance.OnAim;
             @Aim.canceled -= instance.OnAim;
@@ -550,7 +550,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
-        void OnSwitchWeapon(InputAction.CallbackContext context);
+        void OnAttack(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
     }
     public interface IUIActions
