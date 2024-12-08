@@ -138,7 +138,6 @@ public class PlayerScript : MonoBehaviour
     }
 
     void JumpForce(){//This is being called by animation events
-        Debug.Log($"Pamka");
         _jump = true;
     }
 }
