@@ -56,10 +56,6 @@ public class PlayerCombatScript : MonoBehaviour
                     PlayerEventSystem._current.CharacterBoostOut();
                     _boostTriggered = false;
                 }
-                // if(Physics.Raycast(transform.position, 
-                //     PlayerLockOnScript.currentFocusedEnemy.transform.position - transform.position, out _hit, _lockBoostRange, _enemyLayer)){
-                //     
-                // }
             }
         }
 
@@ -67,32 +63,46 @@ public class PlayerCombatScript : MonoBehaviour
             if(Time.time >= _nextAtk){
                 switch(PlayerInputHandler.IN_Attack.attackType){
                     case 1:
-                        IncrementNextAtk(_basicAtkRate);
-                        BasicAttackLogic();
-                        LoopThroughBasicAttackFX();
+                        BasicAttack();
                         return;
                     case 2:
-                        IncrementNextAtk(_strongAtkRate);
-                        SpawnFX(_strongAtkFX);
-                        _basicIndx = 0;
+                        StrongAttack();
                         return;
                     case 3:
-                        IncrementNextAtk(_aoeAtkRate);
-                        SpawnFX(_aoeAtkFX);
-                        AOEAttackLogic();
-                        _basicIndx = 0;
+                        AOEAttack();
                         return;
                 }
             }
         }
     }
 
+    //Attack Functions
+    void BasicAttack(){
+        BasicAttackLogic();
+        LoopThroughBasicAttackFX();
+        IncrementNextAtk(_basicAtkRate);
+    }
+    void StrongAttack(){
+        IncrementNextAtk(_strongAtkRate);
+        SpawnFX(_strongAtkFX);
+        _basicIndx = 0;
+    }
+    void AOEAttack(){
+        IncrementNextAtk(_aoeAtkRate);
+        SpawnFX(_aoeAtkFX);
+        AOEAttackLogic();
+        // PlayerAnimationScript._current.Attack("AOE");
+        _basicIndx = 0;
+    }
+
     void LoopThroughBasicAttackFX(){
         SpawnFX(_basicAtkFX[_basicIndx]);
+
         _basicIndx++;
-        
         if(_basicIndx >= _basicAtkFX.Length)
             _basicIndx = 0;
+
+        // PlayerAnimationScript._current.Attack("Melee " + (_basicIndx + 1));
     }
 
     void IncrementNextAtk(float val){
@@ -109,7 +119,7 @@ public class PlayerCombatScript : MonoBehaviour
         if(Physics.Raycast(l_rayStartPos, transform.TransformDirection(Vector3.forward), out _hit, _basicAttackRange, _enemyLayer)){
             Debug.DrawRay(l_rayStartPos, transform.TransformDirection(Vector3.forward) * _hit.distance, Color.red);
             var hitFx = Instantiate(_enemyHitFX, _hit.point, Quaternion.identity);
-
+            PlayerEventSystem._current.CharacterAttack();
             _hit.transform.gameObject.GetComponent<Rigidbody>().AddForce(transform.TransformDirection(Vector3.forward) * _basicAttackForce, ForceMode.Impulse);
         }
     }

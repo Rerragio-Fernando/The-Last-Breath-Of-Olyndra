@@ -30,7 +30,7 @@ public class PlayerScript : MonoBehaviour
     private Vector3 _movDir;
     private bool _isGrounded;
     private int _activeWeaponIndex;
-    // private PlayerAnimationScript _playerAnim;
+    private PlayerAnimationScript _playerAnim;
     private CharacterController _cont;
 
     protected Vector2 _lookIN;
@@ -41,22 +41,22 @@ public class PlayerScript : MonoBehaviour
     private void Start() {
         Cursor.lockState = CursorLockMode.Locked;
         _cont = GetComponent<CharacterController>();
-        // _playerAnim = GetComponent<PlayerAnimationScript>();
+        _playerAnim = GetComponent<PlayerAnimationScript>();
 
-        PlayerEventSystem._current.OnAnimationJumpForceEvent += JumpForce;
+        // PlayerEventSystem._current.OnAnimationJumpForceEvent += JumpForce;
         PlayerEventSystem._current.OnCharacterBoostInEvent += BoostIn;
         PlayerEventSystem._current.OnCharacterBoostOutEvent += BoostOut;
     }
 
     private void Update() {
         Grounded();
-        PlayerLookRotation();
         PlayerMovement();
+        PlayerLookRotation();
     }
 
     void Grounded(){
         _isGrounded = Physics.CheckSphere(_groundTrans.position, _distanceToGround, _groundLayer);
-        // _playerAnim.SetGrounded(_isGrounded);
+        _playerAnim.SetGrounded(_isGrounded);
     }
     void PlayerLookRotation(){
         float l_angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targAngle, ref _turnSmoothVelocity, _turnSmoothTime);
@@ -74,7 +74,10 @@ public class PlayerScript : MonoBehaviour
                 }
             }
             else{
-                transform.LookAt(PlayerLockOnScript.currentFocusedEnemy.transform, Vector3.up);
+                if(_movDir.magnitude <= 0f)
+                    transform.LookAt(PlayerLockOnScript.currentFocusedEnemy.transform, Vector3.up);
+                else
+                    transform.rotation = Quaternion.Euler(0f, l_angle, 0f);
             }
         }
     }
@@ -89,7 +92,7 @@ public class PlayerScript : MonoBehaviour
         }
         else{
             if(PlayerInputHandler.IN_JumpInput){
-                JumpForce();
+                // JumpForce();
                 PlayerEventSystem._current.CharacterJump();
             }
             else{
@@ -100,7 +103,7 @@ public class PlayerScript : MonoBehaviour
         if(_movDir.magnitude > 0f && _isGrounded){            
             if(PlayerInputHandler.IN_Aim > 0f){ //if Player Aiming
                 l_moveSpeed = _aimMoveSpeed;
-                // _playerAnim.UpdateCharacterDirection(_movementIN);
+                _playerAnim.UpdateCharacterDirection(PlayerInputHandler.IN_MoveInputRaw);
             }
 
             if(PlayerInputHandler.IN_IsSprinting){

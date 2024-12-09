@@ -4,21 +4,29 @@ using UnityEngine;
 
 public class PlayerAnimationScript : AnimatorUtil
 {
+    public static PlayerAnimationScript _current;
     [SerializeField] private float _movementLerper = .5f;
     [SerializeField] AnimationCurve _rumbleFq;
-    [SerializeField] private Animator _anim;
 
+    private Animator _anim;
     private float _moveVal;
     private int _activeWeaponIndex;
 
+    private void Awake() {
+        if(_current == null)
+            _current = this;
+        else
+            Destroy(this);
+    }
+
     private void Start() {
+        _anim = GetComponent<Animator>();
+
         PlayerEventSystem._current.OnCharacterIdleEvent += Idle;
         PlayerEventSystem._current.OnCharacterWalkEvent += Walk;
         PlayerEventSystem._current.OnCharacterRunEvent += Run;
 
         PlayerEventSystem._current.OnCharacterJumpEvent += Jump;
-
-        PlayerEventSystem._current.OnCharacterAttackEvent += Attack;
 
         PlayerEventSystem._current.OnCharacterAimInEvent += AimIn;
         PlayerEventSystem._current.OnCharacterAimOutEvent += AimOut;
@@ -30,8 +38,6 @@ public class PlayerAnimationScript : AnimatorUtil
         PlayerEventSystem._current.OnCharacterRunEvent -= Run;
 
         PlayerEventSystem._current.OnCharacterJumpEvent -= Jump;
-
-        PlayerEventSystem._current.OnCharacterAttackEvent -= Attack;
 
         PlayerEventSystem._current.OnCharacterAimInEvent -= AimIn;
         PlayerEventSystem._current.OnCharacterAimOutEvent -= AimOut;
@@ -49,8 +55,8 @@ public class PlayerAnimationScript : AnimatorUtil
     public void Jump(){
         AnimatorTrigger(_anim, "Jump", 0.5f);
     }
-    public void Attack(){
-        
+    public void Attack(string val){
+        _anim.Play(val, 1, 0f);
     }
     public void AimIn(){
         _anim.SetBool("Aiming", true);
