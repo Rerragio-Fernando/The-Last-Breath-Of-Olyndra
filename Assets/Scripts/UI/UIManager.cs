@@ -8,6 +8,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject _controlScheme;
 
     private void Update() {
-        _controlScheme.SetActive(PlayerInputHandler._current.GetShowControls());
+        _controlScheme.SetActive(PlayerInputHandler.IN_ShowControls);
     }
 }

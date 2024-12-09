@@ -64,7 +64,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Attack"",
+                    ""name"": ""BasicAttack"",
                     ""type"": ""Button"",
                     ""id"": ""c867f97d-e997-4eec-97d8-d6bb911255ef"",
                     ""expectedControlType"": """",
@@ -73,9 +73,45 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""StrongAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""0e644b44-6b17-4ac3-ba8a-1e3e67c6e951"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AOEAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""923fca4e-af35-4005-835a-4e021370463f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Aim"",
                     ""type"": ""Value"",
                     ""id"": ""c37b63f4-43ce-4cde-8867-223ab30767b2"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""EnemyLockOn_Cycle"",
+                    ""type"": ""Button"",
+                    ""id"": ""0cef1f79-5f8c-4545-87ce-16de9c44435e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""EnemyLockOut"",
+                    ""type"": ""Button"",
+                    ""id"": ""c3edbe30-d994-4607-a8b3-308306a80e12"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -222,7 +258,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Attack"",
+                    ""action"": ""BasicAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -233,7 +269,29 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Attack"",
+                    ""action"": ""BasicAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""31e6ca29-5115-40f5-8993-22c5d26099a3"",
+                    ""path"": ""<DualShockGamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StrongAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b859207a-99be-49bd-b391-b98f0788f897"",
+                    ""path"": ""<DualShockGamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AOEAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -256,6 +314,28 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e9a4e20e-b6cd-40fa-9e1b-c1219125b908"",
+                    ""path"": ""<DualShockGamepad>/leftShoulder"",
+                    ""interactions"": ""Tap"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EnemyLockOn_Cycle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""899b1e61-e75d-4579-baf3-8f054642c6a5"",
+                    ""path"": ""<DualShockGamepad>/leftShoulder"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EnemyLockOut"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -326,8 +406,12 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
-        m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
+        m_Player_BasicAttack = m_Player.FindAction("BasicAttack", throwIfNotFound: true);
+        m_Player_StrongAttack = m_Player.FindAction("StrongAttack", throwIfNotFound: true);
+        m_Player_AOEAttack = m_Player.FindAction("AOEAttack", throwIfNotFound: true);
         m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
+        m_Player_EnemyLockOn_Cycle = m_Player.FindAction("EnemyLockOn_Cycle", throwIfNotFound: true);
+        m_Player_EnemyLockOut = m_Player.FindAction("EnemyLockOut", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_ShowControls = m_UI.FindAction("ShowControls", throwIfNotFound: true);
@@ -402,8 +486,12 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Movement;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Sprint;
-    private readonly InputAction m_Player_Attack;
+    private readonly InputAction m_Player_BasicAttack;
+    private readonly InputAction m_Player_StrongAttack;
+    private readonly InputAction m_Player_AOEAttack;
     private readonly InputAction m_Player_Aim;
+    private readonly InputAction m_Player_EnemyLockOn_Cycle;
+    private readonly InputAction m_Player_EnemyLockOut;
     public struct PlayerActions
     {
         private @IA_Player m_Wrapper;
@@ -412,8 +500,12 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
-        public InputAction @Attack => m_Wrapper.m_Player_Attack;
+        public InputAction @BasicAttack => m_Wrapper.m_Player_BasicAttack;
+        public InputAction @StrongAttack => m_Wrapper.m_Player_StrongAttack;
+        public InputAction @AOEAttack => m_Wrapper.m_Player_AOEAttack;
         public InputAction @Aim => m_Wrapper.m_Player_Aim;
+        public InputAction @EnemyLockOn_Cycle => m_Wrapper.m_Player_EnemyLockOn_Cycle;
+        public InputAction @EnemyLockOut => m_Wrapper.m_Player_EnemyLockOut;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -435,12 +527,24 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
-            @Attack.started += instance.OnAttack;
-            @Attack.performed += instance.OnAttack;
-            @Attack.canceled += instance.OnAttack;
+            @BasicAttack.started += instance.OnBasicAttack;
+            @BasicAttack.performed += instance.OnBasicAttack;
+            @BasicAttack.canceled += instance.OnBasicAttack;
+            @StrongAttack.started += instance.OnStrongAttack;
+            @StrongAttack.performed += instance.OnStrongAttack;
+            @StrongAttack.canceled += instance.OnStrongAttack;
+            @AOEAttack.started += instance.OnAOEAttack;
+            @AOEAttack.performed += instance.OnAOEAttack;
+            @AOEAttack.canceled += instance.OnAOEAttack;
             @Aim.started += instance.OnAim;
             @Aim.performed += instance.OnAim;
             @Aim.canceled += instance.OnAim;
+            @EnemyLockOn_Cycle.started += instance.OnEnemyLockOn_Cycle;
+            @EnemyLockOn_Cycle.performed += instance.OnEnemyLockOn_Cycle;
+            @EnemyLockOn_Cycle.canceled += instance.OnEnemyLockOn_Cycle;
+            @EnemyLockOut.started += instance.OnEnemyLockOut;
+            @EnemyLockOut.performed += instance.OnEnemyLockOut;
+            @EnemyLockOut.canceled += instance.OnEnemyLockOut;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -457,12 +561,24 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
-            @Attack.started -= instance.OnAttack;
-            @Attack.performed -= instance.OnAttack;
-            @Attack.canceled -= instance.OnAttack;
+            @BasicAttack.started -= instance.OnBasicAttack;
+            @BasicAttack.performed -= instance.OnBasicAttack;
+            @BasicAttack.canceled -= instance.OnBasicAttack;
+            @StrongAttack.started -= instance.OnStrongAttack;
+            @StrongAttack.performed -= instance.OnStrongAttack;
+            @StrongAttack.canceled -= instance.OnStrongAttack;
+            @AOEAttack.started -= instance.OnAOEAttack;
+            @AOEAttack.performed -= instance.OnAOEAttack;
+            @AOEAttack.canceled -= instance.OnAOEAttack;
             @Aim.started -= instance.OnAim;
             @Aim.performed -= instance.OnAim;
             @Aim.canceled -= instance.OnAim;
+            @EnemyLockOn_Cycle.started -= instance.OnEnemyLockOn_Cycle;
+            @EnemyLockOn_Cycle.performed -= instance.OnEnemyLockOn_Cycle;
+            @EnemyLockOn_Cycle.canceled -= instance.OnEnemyLockOn_Cycle;
+            @EnemyLockOut.started -= instance.OnEnemyLockOut;
+            @EnemyLockOut.performed -= instance.OnEnemyLockOut;
+            @EnemyLockOut.canceled -= instance.OnEnemyLockOut;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -550,8 +666,12 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
-        void OnAttack(InputAction.CallbackContext context);
+        void OnBasicAttack(InputAction.CallbackContext context);
+        void OnStrongAttack(InputAction.CallbackContext context);
+        void OnAOEAttack(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
+        void OnEnemyLockOn_Cycle(InputAction.CallbackContext context);
+        void OnEnemyLockOut(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

@@ -17,7 +17,7 @@ public class RangedWeapon : WeaponScript{
     }
 
     public void Aim(){
-        if(PlayerInputHandler._current.GetAimValue() > 0f)
+        if(PlayerInputHandler.IN_Aim > 0f)
             PlayerCameraHandler._current.ActivateAimCam();
         else
             PlayerCameraHandler._current.ActivateMainCam();

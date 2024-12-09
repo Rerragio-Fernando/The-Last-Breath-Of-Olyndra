@@ -12,29 +12,29 @@ public class PlayerAnimationScript : AnimatorUtil
     private int _activeWeaponIndex;
 
     private void Start() {
-        GameEventSystem._current.OnCharacterIdleEvent += Idle;
-        GameEventSystem._current.OnCharacterWalkEvent += Walk;
-        GameEventSystem._current.OnCharacterRunEvent += Run;
+        PlayerEventSystem._current.OnCharacterIdleEvent += Idle;
+        PlayerEventSystem._current.OnCharacterWalkEvent += Walk;
+        PlayerEventSystem._current.OnCharacterRunEvent += Run;
 
-        GameEventSystem._current.OnCharacterJumpEvent += Jump;
+        PlayerEventSystem._current.OnCharacterJumpEvent += Jump;
 
-        GameEventSystem._current.OnCharacterAttackEvent += Attack;
+        PlayerEventSystem._current.OnCharacterAttackEvent += Attack;
 
-        GameEventSystem._current.OnCharacterAimInEvent += AimIn;
-        GameEventSystem._current.OnCharacterAimOutEvent += AimOut;
+        PlayerEventSystem._current.OnCharacterAimInEvent += AimIn;
+        PlayerEventSystem._current.OnCharacterAimOutEvent += AimOut;
     }
 
     private void OnDisable() {
-        GameEventSystem._current.OnCharacterIdleEvent -= Idle;
-        GameEventSystem._current.OnCharacterWalkEvent -= Walk;
-        GameEventSystem._current.OnCharacterRunEvent -= Run;
+        PlayerEventSystem._current.OnCharacterIdleEvent -= Idle;
+        PlayerEventSystem._current.OnCharacterWalkEvent -= Walk;
+        PlayerEventSystem._current.OnCharacterRunEvent -= Run;
 
-        GameEventSystem._current.OnCharacterJumpEvent -= Jump;
+        PlayerEventSystem._current.OnCharacterJumpEvent -= Jump;
 
-        GameEventSystem._current.OnCharacterAttackEvent -= Attack;
+        PlayerEventSystem._current.OnCharacterAttackEvent -= Attack;
 
-        GameEventSystem._current.OnCharacterAimInEvent -= AimIn;
-        GameEventSystem._current.OnCharacterAimOutEvent -= AimOut;
+        PlayerEventSystem._current.OnCharacterAimInEvent -= AimIn;
+        PlayerEventSystem._current.OnCharacterAimOutEvent -= AimOut;
     }
 
     public void Idle(){
