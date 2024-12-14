@@ -4,12 +4,20 @@ using UnityEngine;
 
 public class PlayerAnimationScript : AnimatorUtil
 {
+    public static PlayerAnimationScript _current;
     [SerializeField] private float _movementLerper = .5f;
     [SerializeField] AnimationCurve _rumbleFq;
 
     private Animator _anim;
     private float _moveVal;
     private int _activeWeaponIndex;
+
+    private void Awake() {
+        if(_current == null)
+            _current = this;
+        else
+            Destroy(this);
+    }
 
     private void Start() {
         _anim = GetComponent<Animator>();
