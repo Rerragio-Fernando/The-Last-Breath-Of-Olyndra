@@ -177,6 +177,20 @@ namespace NPC
             
         }
 
+        private void OnApplicationQuit()
+        {
+            if (currentState != this)
+            {
+                BaseAttackState attackState = currentState as BaseAttackState;
+
+                if (attackState != null)
+                {
+                    attackState.resetCooldown();
+                    attackState.resetValues();
+                }
+            }
+        }
+
         //Getter and setters 
         public int getBossID
         {

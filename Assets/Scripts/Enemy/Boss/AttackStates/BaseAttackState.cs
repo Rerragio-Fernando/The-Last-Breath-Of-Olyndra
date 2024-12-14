@@ -30,6 +30,10 @@ namespace NPC
         protected string abilityName;
         [SerializeField]
         protected float cooldown;
+        [SerializeField]
+        protected bool comboAttack;
+        [SerializeField]
+        protected int numbOfCombo;
         private float lastUsedTime = -Mathf.Infinity;
         [SerializeField]
         protected float damage;
@@ -37,11 +41,27 @@ namespace NPC
         public override BossAIState stateTick(BossAIManager bossAI)
         {
             BossAIState stateToReturn = this;
+            checkIfCooldownNeedReset(stateToReturn);
             return stateToReturn;
+        }
+
+        protected void checkIfCooldownNeedReset(BossAIState stateToReturn)
+        {
+            if (stateToReturn != this)
+            {
+                BaseAttackState attackState = stateToReturn as BaseAttackState;
+
+                if (attackState != null && attackState.abilityName != this.abilityName)
+                {
+                    attackState.resetCooldown();
+                }
+            }
         }
 
         public abstract void Activate();
         protected abstract void visualizeAbility();
+
+        public abstract void resetValues();
 
         protected void startCooldown()
         {
@@ -51,6 +71,11 @@ namespace NPC
         protected bool isOnCooldown()
         {
             return Time.time < (lastUsedTime + cooldown);
+        }
+
+        public void resetCooldown()
+        {
+            lastUsedTime = -Mathf.Infinity;
         }
 
 

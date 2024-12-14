@@ -1,8 +1,9 @@
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace NPC
 {
-    [CreateAssetMenu(menuName = "AI/States/Attacks")]
+    [CreateAssetMenu(menuName = "AI/States/Attacks/Swipes")]
     public class CorruptionSwipeState : BaseAttackState
     {
         Transform bossTransform;
@@ -12,24 +13,32 @@ namespace NPC
         float attackAngle = 120f;
         [SerializeField]
         LayerMask targetLayer;
+        /// <summary>
+        /// Reference to the particle system prefab used for the slash
+        /// </summary>
+        [SerializeField]
+        GameObject slashParticles;
+
         public override BossAIState stateTick(BossAIManager bossAI)
         {
+
             BossAIState stateToReturn = this;
             bossTransform = bossAI.getBossTransform();
-            if(!isOnCooldown())
+            if (!isOnCooldown())
             {
                 Activate();
                 visualizeAbility();
             }
-
+            bossAI.getSetCurrentTarget = null;
+            stateToReturn = nextState == null ? stateToReturn : nextState;
+            checkIfCooldownNeedReset(stateToReturn);
             return stateToReturn;
         }
 
         public override void Activate()
         {
             Debug.Log($"{abilityName} activated!");
-            //TODO set animation
-
+           
             Collider[] hits = Physics.OverlapSphere(bossTransform.position, attackRadius, targetLayer);
             foreach (var hit in hits)
             {
@@ -45,13 +54,45 @@ namespace NPC
 
             startCooldown();
 
-            
+
+        }
+        public override void resetValues()
+        {
+            //not needed
+        }
+
+
+        private void spawnSwipeEffect()
+        {
+            if (slashParticles)
+            {
+                GameObject tmpSlash = GameObject.Instantiate(slashParticles);
+                tmpSlash.transform.position = bossTransform.position;
+
+                float effectScale = attackRadius / 5f; 
+                tmpSlash.transform.localScale = new Vector3(effectScale, effectScale, effectScale);
+
+                VisualEffect visualEffect = tmpSlash.GetComponentInChildren<VisualEffect>();
+                if (visualEffect != null)
+                {
+                    float effectDuration = 0.3f;
+                    Destroy(tmpSlash, effectDuration + 1);
+                }
+                else
+                {
+                    Destroy(tmpSlash, 5f);
+                }
+            }
+            else
+            {
+                Debug.LogError("SlashParticles prefab is null!");
+            }
         }
 
         protected override void visualizeAbility()
         {
-
-            Debug.Log("Visualizing ability effects if any");
+            //TODO set animation
+            spawnSwipeEffect();
         }
     }
 }
