@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Cinemachine;
 
-public class PlayerCameraHandler : MonoBehaviour
+public class PlayerCameraHandler : Singleton<PlayerCameraHandler>
 {
     public static PlayerCameraHandler _current;
     [SerializeField] private CinemachineBrain _cineBrain;

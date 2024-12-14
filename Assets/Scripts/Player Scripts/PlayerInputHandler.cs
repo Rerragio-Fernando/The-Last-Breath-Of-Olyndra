@@ -8,8 +8,8 @@ public struct AttackType{
     public int attackType;//1-basic, 2-strong, 3-AOE
 }
 
-public class PlayerInputHandler : MonoBehaviour {
-    public static PlayerInputHandler _current;
+public class PlayerInputHandler : Singleton<PlayerInputHandler>
+{
     private IA_Player _playerInputActions;
     private Vector2 _lookInputRaw;
     public static Vector2 IN_LookInputRaw{
@@ -74,11 +74,6 @@ public class PlayerInputHandler : MonoBehaviour {
 
     private void Awake() {
         _playerInputActions = new IA_Player();
-
-        if(_current == null)
-            _current = this;
-        else
-            Destroy(this);
     }
 
     public IA_Player GetInputActionAsset(){

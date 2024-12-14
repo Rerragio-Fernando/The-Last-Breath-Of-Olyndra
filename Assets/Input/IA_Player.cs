@@ -116,6 +116,15 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Dash"",
+                    ""type"": ""Button"",
+                    ""id"": ""cbd49447-0c92-44f4-b057-2e5baee25de1"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -338,6 +347,17 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""action"": ""EnemyLockOut"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""65e6eb79-a2b9-4c74-8cec-a4d03269ec22"",
+                    ""path"": ""<DualShockGamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -412,6 +432,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
         m_Player_EnemyLockOn_Cycle = m_Player.FindAction("EnemyLockOn_Cycle", throwIfNotFound: true);
         m_Player_EnemyLockOut = m_Player.FindAction("EnemyLockOut", throwIfNotFound: true);
+        m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_ShowControls = m_UI.FindAction("ShowControls", throwIfNotFound: true);
@@ -492,6 +513,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Aim;
     private readonly InputAction m_Player_EnemyLockOn_Cycle;
     private readonly InputAction m_Player_EnemyLockOut;
+    private readonly InputAction m_Player_Dash;
     public struct PlayerActions
     {
         private @IA_Player m_Wrapper;
@@ -506,6 +528,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         public InputAction @Aim => m_Wrapper.m_Player_Aim;
         public InputAction @EnemyLockOn_Cycle => m_Wrapper.m_Player_EnemyLockOn_Cycle;
         public InputAction @EnemyLockOut => m_Wrapper.m_Player_EnemyLockOut;
+        public InputAction @Dash => m_Wrapper.m_Player_Dash;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -545,6 +568,9 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @EnemyLockOut.started += instance.OnEnemyLockOut;
             @EnemyLockOut.performed += instance.OnEnemyLockOut;
             @EnemyLockOut.canceled += instance.OnEnemyLockOut;
+            @Dash.started += instance.OnDash;
+            @Dash.performed += instance.OnDash;
+            @Dash.canceled += instance.OnDash;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -579,6 +605,9 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @EnemyLockOut.started -= instance.OnEnemyLockOut;
             @EnemyLockOut.performed -= instance.OnEnemyLockOut;
             @EnemyLockOut.canceled -= instance.OnEnemyLockOut;
+            @Dash.started -= instance.OnDash;
+            @Dash.performed -= instance.OnDash;
+            @Dash.canceled -= instance.OnDash;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -672,6 +701,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         void OnAim(InputAction.CallbackContext context);
         void OnEnemyLockOn_Cycle(InputAction.CallbackContext context);
         void OnEnemyLockOut(InputAction.CallbackContext context);
+        void OnDash(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
