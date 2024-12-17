@@ -24,13 +24,19 @@ namespace NPC
 
             BossAIState stateToReturn = this;
             bossTransform = bossAI.getBossTransform();
-            if (!isOnCooldown())
+            if (!isOnCooldown() && !isActive)
             {
                 Activate();
                 visualizeAbility();
             }
+            if (checkCooldownStateChange())
+            {
+                Debug.Log("cooldown done Swipe");
+                isActive = false;
+                stateToReturn = nextState == null ? stateToReturn : nextState;
+            }
             bossAI.getSetCurrentTarget = null;
-            stateToReturn = nextState == null ? stateToReturn : nextState;
+
             checkIfCooldownNeedReset(stateToReturn);
             return stateToReturn;
         }
@@ -51,14 +57,14 @@ namespace NPC
                     Debug.Log("Damaging player");
                 }
             }
+            isActive = true;
 
             startCooldown();
-
-
         }
+
         public override void resetValues()
         {
-            //not needed
+            resetCooldown();
         }
 
 

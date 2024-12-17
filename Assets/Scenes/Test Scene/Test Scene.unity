@@ -3371,6 +3371,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2102106735}
   - component: {fileID: 2102106736}
+  - component: {fileID: 2102106737}
   m_Layer: 0
   m_Name: BossManager
   m_TagString: Untagged
@@ -3412,6 +3413,27 @@ MonoBehaviour:
     type: 3}
   spawningPoint: {fileID: 0}
   currentState: {fileID: 11400000, guid: c2cba32cf918bab49a446ef2719e413f, type: 2}
+--- !u!114 &2102106737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2102106734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aaf60e3a6a0f00b4bbe036ad09218698, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AiStates:
+  - bossAIState: {fileID: 11400000, guid: c2cba32cf918bab49a446ef2719e413f, type: 2}
+    stateType: 0
+  - bossAIState: {fileID: 11400000, guid: 2e6783eac2243e2498decdd0781e45f3, type: 2}
+    stateType: 1
+  - bossAIState: {fileID: 11400000, guid: d14b866e2587ecb41a6af6bb9bc9d207, type: 2}
+    stateType: 2
+  - bossAIState: {fileID: 11400000, guid: 018082997eafc914eb97155933c29233, type: 2}
+    stateType: 2
 --- !u!222 &65393468880020089
 CanvasRenderer:
   m_ObjectHideFlags: 0

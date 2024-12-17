@@ -9,7 +9,6 @@ namespace NPC
         [SerializeField] private float leapDistance = 5f; 
         [SerializeField] private float impactRadius = 2f; 
         [SerializeField] private LayerMask targetLayer;
-        private bool isLeaping = false;
         Vector3 targetPosition = Vector3.zero;
         Transform playerPos;
 
@@ -17,22 +16,25 @@ namespace NPC
         {
             BossAIState stateToReturn = this;
             bossTransform = bossAI.getBossTransform();
-            Debug.Log(isLeaping);
-            if (!isOnCooldown() && !isLeaping)
+            if (!isOnCooldown()&& !isActive)
             {
-                Debug.Log("In here");
                 playerPos = bossAI.getSetCurrentTarget;
+                bossAI.getSetCurrentTarget = null;
                 Activate();
+
             }
 
-            if(isLeaping)
+            if(isActive)
             {
-                Debug.Log("How the shit am I here if I never logged the one before");
                 LeapTowardsTarget();
-                CheckImpact();
+                checkLeapEnd();
                 visualizeAbility();
             }
-            stateToReturn = nextState == null ? stateToReturn : nextState;
+            if (checkCooldownStateChange())
+            {
+                Debug.Log("cooldown done pounce");
+                stateToReturn = nextState == null ? stateToReturn : nextState;
+            }
             checkIfCooldownNeedReset(stateToReturn);
             return stateToReturn;
         }
@@ -43,43 +45,50 @@ namespace NPC
             if(playerPos)
             {
                 targetPosition = playerPos.position;
-                isLeaping = true;
+                isActive = true;
             }
             else
             {
                 targetPosition = Vector3.zero;
             }
-            startCooldown();
 
         }
 
         public override void resetValues()
         {
-            isLeaping = false;
+            isActive = false;
             targetPosition = Vector3.zero;
+            resetCooldown();
         }
 
         private void LeapTowardsTarget()
         {
             if (targetPosition == Vector3.zero)
             {
-                //Debug.LogWarning("Player position is null!");
+                Debug.LogWarning("Player position is null!");
                 return;
             }
             Vector3 direction = (targetPosition - bossTransform.position).normalized;
             Vector3 leapMovement = direction * leapSpeed * Time.deltaTime;
             bossTransform.position = Vector3.MoveTowards(bossTransform.position, targetPosition, leapMovement.magnitude);
-            Debug.Log($"Leap direction: {direction}, Leap movement: {leapMovement}");
+        }
 
-            if (Vector3.Distance(bossTransform.position, targetPosition) <= 1.0f)
+        private void checkLeapEnd()
+        {
+            Vector3 bossPositionXZ = new Vector3(bossTransform.position.x, 0, bossTransform.position.z);
+            Vector3 targetPositionXZ = new Vector3(targetPosition.x, 0, targetPosition.z);
+
+            if (Vector3.Distance(bossPositionXZ, targetPositionXZ) <= impactRadius)
             {
-                isLeaping = false;
+                isActive = false;
+                checkImpact();
+                
             }
         }
 
-        private void CheckImpact()
+        private void checkImpact()
         {
-            Collider[] hitTargets = Physics.OverlapSphere(bossTransform.position, impactRadius, targetLayer);
+            Collider[] hitTargets = Physics.OverlapSphere(bossTransform.position, impactRadius * 2f, targetLayer);
             foreach (var hit in hitTargets)
             {
                 if (hit.CompareTag("Player"))
@@ -87,8 +96,10 @@ namespace NPC
                     // TODO Apply high damage to Ilyra
                     Debug.Log("Ilyra hit! Taking high damage!");
                     // TODO add knockback or other effects here
+                    
                 }
             }
+            startCooldown();
         }
 
         protected override void visualizeAbility()

@@ -15,7 +15,9 @@ MonoBehaviour:
   nextState: {fileID: 11400000, guid: c2cba32cf918bab49a446ef2719e413f, type: 2}
   animator: {fileID: 0}
   abilityName: Swipe
-  cooldown: 1
+  cooldown: 3
+  comboAttack: 0
+  numbOfCombo: 0
   damage: 10
   attackRadius: 5
   attackAngle: 120
