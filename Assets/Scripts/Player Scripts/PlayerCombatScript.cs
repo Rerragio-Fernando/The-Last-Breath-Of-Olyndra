@@ -41,15 +41,16 @@ public class PlayerCombatScript : MonoBehaviour
     }
     
     private void Update() {
+
         // Debug.Log($"Attacking: " + _attackIN.attack);
         if(PlayerInputHandler.IN_LockInput && PlayerInputHandler.IN_MoveInputRaw.normalized.magnitude <= 0f){
             if(PlayerInputHandler.IN_Attack.attack && PlayerInputHandler.IN_Attack.attackType == 1){
                 float l_distance = Vector3.Distance(transform.position, PlayerLockOnScript.currentFocusedEnemy.transform.position);
                 if(l_distance > _basicAttackRange && l_distance < _lockBoostRange){
-                    // if(Time.time > _nextBoost){
-                    //     PlayerEventSystem._current.CharacterBoostIn();
-                    //     _nextBoost = Time.time + 1/_boostRate;
-                    // }
+                    if(Time.time > _nextBoost){
+                        PlayerEventSystem._current.CharacterBoostIn();
+                        _nextBoost = Time.time + 1/_boostRate;
+                    }
                     PlayerEventSystem._current.CharacterBoostIn();
                 }
                 if(l_distance <= _basicAttackRange){

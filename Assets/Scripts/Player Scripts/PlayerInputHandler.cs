@@ -70,6 +70,11 @@ public class PlayerInputHandler : MonoBehaviour {
     public static bool IN_ShowControls{
         get { return PlayerInputHandler._current._showPlayerControls; }   // get method
     }
+
+    private bool _boost;
+    public static bool IN_Boost{
+        get { return PlayerInputHandler._current._boost; }   // get method
+    }
     
 
     private void Awake() {
@@ -93,6 +98,9 @@ public class PlayerInputHandler : MonoBehaviour {
 
         _playerInputActions.Player.Jump.performed += OnJumpIn;
         _playerInputActions.Player.Jump.canceled += OnJumpOut;
+
+        _playerInputActions.Player.Boost.performed += OnBoostIn;
+        _playerInputActions.Player.Boost.canceled += OnBoostOut;
 
         _playerInputActions.Player.BasicAttack.started += OnBasicAttackIn;
         _playerInputActions.Player.BasicAttack.performed += OnAttackOut;
@@ -121,6 +129,9 @@ public class PlayerInputHandler : MonoBehaviour {
 
         _playerInputActions.Player.Jump.performed -= OnJumpIn;
         _playerInputActions.Player.Jump.canceled -= OnJumpOut;
+
+        _playerInputActions.Player.Boost.performed += OnBoostIn;
+        _playerInputActions.Player.Boost.canceled += OnBoostOut;
 
         _playerInputActions.Player.BasicAttack.started -= OnBasicAttackIn;
         _playerInputActions.Player.BasicAttack.performed -= OnAttackOut;
@@ -160,6 +171,14 @@ public class PlayerInputHandler : MonoBehaviour {
         }
         void OnJumpOut(InputAction.CallbackContext ctx){
             _jump = false;
+        }
+
+        //Boost
+        void OnBoostIn(InputAction.CallbackContext ctx){
+            _boost = true;
+        }
+        void OnBoostOut(InputAction.CallbackContext ctx){
+            _boost = false;
         }
 
         void OnEnemyLockInOrCycle(InputAction.CallbackContext ctx){
