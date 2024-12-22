@@ -20,21 +20,35 @@
  * Security Classification: Public                                                              *
  * ----------------------------------------------------------------------------------------------
  */
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace NPC
-{
-    public class BossAIState : ScriptableObject
-    {
-        [Header("Next State")]
-        [SerializeField] protected BossAIState nextState;
 
-        [Header("Boss Animator")]
-        [SerializeField] protected Animator animator;
-        public virtual BossAIState stateTick(BossAIManager bossAI)
+namespace NPC.Brain
+{
+    public class Neuron
+    {
+        // number of imputs coming in to the neuron
+        [SerializeField] int numInputs;
+        // A constant value added to the weighted sum of inputs to adjust the output
+        [SerializeField] double bias;
+        // The calculated output value of the neuron after applying the activation function
+        [SerializeField] double output;
+        // The error gradient used during the backpropagation process to update weights
+        [SerializeField] double errorGradient;
+        // The list of weights corresponding to each input connection
+        [SerializeField] List<double> weights = new List<double>();
+        // The list of inputs received by this neuron
+        [SerializeField] List<double> inputs = new List<double>();
+
+        public Neuron(int nInputs)
         {
-            return this;
+            bias = Random.Range(-1.0f, 1.0f);
+            numInputs = nInputs;
+            for(int i=0; i< numInputs; i++)
+            {
+                weights.Add(Random.Range(-1.0f, 1.0f));
+            }
         }
     }
 }
-
