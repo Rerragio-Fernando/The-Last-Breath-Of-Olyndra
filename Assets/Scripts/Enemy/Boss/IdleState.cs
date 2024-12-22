@@ -68,6 +68,7 @@ namespace NPC
                     bossAI.getSetAgentStoppingDistance = 5;
                     bossAI.getSetAttackString = "Swipe";
                 }
+                bossAI.getSetAttackString = "Blight Breath";
                 stateToReturn = nextState == null ? this : nextState;
             }
             else

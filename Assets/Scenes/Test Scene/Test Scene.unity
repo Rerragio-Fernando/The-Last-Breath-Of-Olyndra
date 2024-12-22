@@ -3434,6 +3434,8 @@ MonoBehaviour:
     stateType: 2
   - bossAIState: {fileID: 11400000, guid: 018082997eafc914eb97155933c29233, type: 2}
     stateType: 2
+  - bossAIState: {fileID: 11400000, guid: 6e51254550dba474b9feb070da4e6746, type: 2}
+    stateType: 2
 --- !u!222 &65393468880020089
 CanvasRenderer:
   m_ObjectHideFlags: 0

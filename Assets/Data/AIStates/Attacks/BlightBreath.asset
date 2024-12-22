@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeca124fc71c59247a6ba6928fddbad1, type: 3}
+  m_Name: BlightBreath
+  m_EditorClassIdentifier: 
+  nextState: {fileID: 11400000, guid: c2cba32cf918bab49a446ef2719e413f, type: 2}
+  animator: {fileID: 0}
+  abilityName: Blight Breath
+  cooldown: 4
+  comboAttack: 0
+  numbOfCombo: 0
+  damage: 0
+  exhaleRange: 10
+  exhaleAngle: 90
+  hazardDuration: 5
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  gasParticlesPrefab: {fileID: 0}
