@@ -61,14 +61,21 @@ namespace NPC
                 if (distanceToPlayer > 10f)
                 {
                     bossAI.getSetAgentStoppingDistance = 10;
-                    bossAI.getSetAttackString = "Blighted Pounce";
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        bossAI.getSetAttackString = "Blighted Pounce";
+                    }
+                    else
+                    {
+                        bossAI.getSetAttackString = "Blight Breath";
+                    }
                 }
                 else
                 {
                     bossAI.getSetAgentStoppingDistance = 5;
                     bossAI.getSetAttackString = "Swipe";
                 }
-                bossAI.getSetAttackString = "Blight Breath";
+                
                 stateToReturn = nextState == null ? this : nextState;
             }
             else

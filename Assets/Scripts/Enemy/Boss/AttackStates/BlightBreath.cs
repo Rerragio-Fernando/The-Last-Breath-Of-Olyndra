@@ -29,6 +29,7 @@ namespace NPC
             if (!isOnCooldown() && !isActive)
             {
                 Activate();
+                bossAI.getSetCurrentTarget = null;
                 visualizeAbility();
             }
 
