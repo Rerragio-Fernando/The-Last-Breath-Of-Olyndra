@@ -19,7 +19,7 @@ public class PlayerLockOnScript : MonoBehaviour
         PlayerEventSystem._current.OnCharacterEnemyLockOutEvent += LockOut;
     }
     private void Update() {
-        Debug.Log($"Locked In: " + PlayerInputHandler.IN_LockInput);
+        // Debug.Log($"Locked In: " + PlayerInputHandler.IN_LockInput);
     }
     void LockCycle(){
         if(PlayerInputHandler.IN_LockInput){

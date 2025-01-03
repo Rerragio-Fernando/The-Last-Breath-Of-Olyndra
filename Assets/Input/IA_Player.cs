@@ -116,15 +116,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""Boost"",
-                    ""type"": ""Button"",
-                    ""id"": ""8b57cd7d-6000-4734-bdee-39302a8170b0"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -295,8 +286,30 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""4f0554e0-01b2-48ab-83c4-4e8379fa0991"",
+                    ""path"": ""<Mouse>/forwardButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StrongAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""b859207a-99be-49bd-b391-b98f0788f897"",
                     ""path"": ""<DualShockGamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AOEAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d29b2610-6469-4397-ac6d-be260127024f"",
+                    ""path"": ""<Mouse>/backButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -345,17 +358,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""EnemyLockOut"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ad65316e-674d-46d2-a91d-d984eaee2e0f"",
-                    ""path"": ""<DualShockGamepad>/rightShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Boost"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -432,7 +434,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
         m_Player_EnemyLockOn_Cycle = m_Player.FindAction("EnemyLockOn_Cycle", throwIfNotFound: true);
         m_Player_EnemyLockOut = m_Player.FindAction("EnemyLockOut", throwIfNotFound: true);
-        m_Player_Boost = m_Player.FindAction("Boost", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_ShowControls = m_UI.FindAction("ShowControls", throwIfNotFound: true);
@@ -513,7 +514,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Aim;
     private readonly InputAction m_Player_EnemyLockOn_Cycle;
     private readonly InputAction m_Player_EnemyLockOut;
-    private readonly InputAction m_Player_Boost;
     public struct PlayerActions
     {
         private @IA_Player m_Wrapper;
@@ -528,7 +528,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         public InputAction @Aim => m_Wrapper.m_Player_Aim;
         public InputAction @EnemyLockOn_Cycle => m_Wrapper.m_Player_EnemyLockOn_Cycle;
         public InputAction @EnemyLockOut => m_Wrapper.m_Player_EnemyLockOut;
-        public InputAction @Boost => m_Wrapper.m_Player_Boost;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -568,9 +567,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @EnemyLockOut.started += instance.OnEnemyLockOut;
             @EnemyLockOut.performed += instance.OnEnemyLockOut;
             @EnemyLockOut.canceled += instance.OnEnemyLockOut;
-            @Boost.started += instance.OnBoost;
-            @Boost.performed += instance.OnBoost;
-            @Boost.canceled += instance.OnBoost;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -605,9 +601,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @EnemyLockOut.started -= instance.OnEnemyLockOut;
             @EnemyLockOut.performed -= instance.OnEnemyLockOut;
             @EnemyLockOut.canceled -= instance.OnEnemyLockOut;
-            @Boost.started -= instance.OnBoost;
-            @Boost.performed -= instance.OnBoost;
-            @Boost.canceled -= instance.OnBoost;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -701,7 +694,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         void OnAim(InputAction.CallbackContext context);
         void OnEnemyLockOn_Cycle(InputAction.CallbackContext context);
         void OnEnemyLockOut(InputAction.CallbackContext context);
-        void OnBoost(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

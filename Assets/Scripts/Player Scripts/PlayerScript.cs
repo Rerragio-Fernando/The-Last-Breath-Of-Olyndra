@@ -31,6 +31,7 @@ public class PlayerScript : MonoBehaviour
     private bool _isGrounded;
     private int _activeWeaponIndex;
     private PlayerAnimationScript _playerAnim;
+    private PlayerCombatScript _playerCombat;
     private CharacterController _cont;
 
     protected Vector2 _lookIN;
@@ -42,6 +43,7 @@ public class PlayerScript : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         _cont = GetComponent<CharacterController>();
         _playerAnim = GetComponent<PlayerAnimationScript>();
+        _playerCombat = GetComponent<PlayerCombatScript>();
 
         // PlayerEventSystem._current.OnAnimationJumpForceEvent += JumpForce;
         PlayerEventSystem._current.OnCharacterBoostInEvent += BoostIn;
@@ -50,7 +52,8 @@ public class PlayerScript : MonoBehaviour
 
     private void Update() {
         Grounded();
-        PlayerMovement();
+        if(!_playerCombat.GetIsAttacking())
+            PlayerMovement();
         PlayerLookRotation();
     }
 

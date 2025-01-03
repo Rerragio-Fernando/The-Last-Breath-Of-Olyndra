@@ -28,6 +28,12 @@ public class PlayerAnimationScript : AnimatorUtil
 
         PlayerEventSystem._current.OnCharacterJumpEvent += Jump;
 
+        PlayerEventSystem._current.OnCharacterAttackTriggerEvent += TriggerAttack;
+
+        PlayerEventSystem._current.OnCharacterBasicAttack1Event += Attack1;
+        PlayerEventSystem._current.OnCharacterBasicAttack2Event += Attack2;
+        PlayerEventSystem._current.OnCharacterBasicAttack3Event += Attack3;
+
         PlayerEventSystem._current.OnCharacterAimInEvent += AimIn;
         PlayerEventSystem._current.OnCharacterAimOutEvent += AimOut;
     }
@@ -38,6 +44,12 @@ public class PlayerAnimationScript : AnimatorUtil
         PlayerEventSystem._current.OnCharacterRunEvent -= Run;
 
         PlayerEventSystem._current.OnCharacterJumpEvent -= Jump;
+
+        PlayerEventSystem._current.OnCharacterAttackTriggerEvent -= TriggerAttack;
+
+        PlayerEventSystem._current.OnCharacterBasicAttack1Event -= Attack1;
+        PlayerEventSystem._current.OnCharacterBasicAttack2Event -= Attack2;
+        PlayerEventSystem._current.OnCharacterBasicAttack3Event -= Attack3;
 
         PlayerEventSystem._current.OnCharacterAimInEvent -= AimIn;
         PlayerEventSystem._current.OnCharacterAimOutEvent -= AimOut;
@@ -55,8 +67,20 @@ public class PlayerAnimationScript : AnimatorUtil
     public void Jump(){
         AnimatorTrigger(_anim, "Jump", 0.5f);
     }
-    public void Attack(string val){
-        _anim.Play(val, 1, 0f);
+    public void TriggerAttack(){
+        _anim.SetBool("IsAttacking", true);
+    }
+    public void Attack1(){
+        TriggerAttack();
+        _anim.SetInteger("Attack Index", 1);
+    }
+    public void Attack2(){
+        TriggerAttack();
+        _anim.SetInteger("Attack Index", 2);
+    }
+    public void Attack3(){
+        TriggerAttack();
+        _anim.SetInteger("Attack Index", 3);
     }
     public void AimIn(){
         _anim.SetBool("Aiming", true);
@@ -68,11 +92,14 @@ public class PlayerAnimationScript : AnimatorUtil
         BlendTreeValue(_anim, "FrontBack", direction.y, _movementLerper);
         BlendTreeValue(_anim, "LeftRight", direction.x, _movementLerper);
     }
-    public void SetActiveWeaponIndex(int val){
-        _activeWeaponIndex = val;
-    }
 
     public void SetGrounded(bool val){
         _anim.SetBool("Grounded", val);
     }
+
+    //Animation Events
+    public void NotAttacking(){
+        _anim.SetBool("IsAttacking", false);
+    }
+    // Add an event to falsify the Is Attacking parameter
 }
