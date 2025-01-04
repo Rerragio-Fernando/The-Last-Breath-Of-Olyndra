@@ -48,5 +48,16 @@ namespace NPC.Brain
             }
         }
 
+        //Getters
+        public int getNumNeurons()
+        {
+            return numNeurons;
+        }
+
+        public List<Neuron> GetNeurons()
+        {
+            return neurons;
+        }
+
     }
 }

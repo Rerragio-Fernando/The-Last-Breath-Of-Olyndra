@@ -50,5 +50,64 @@ namespace NPC.Brain
                 weights.Add(Random.Range(-1.0f, 1.0f));
             }
         }
+
+        //Getter and setters 
+        public double getSetOutput
+        {
+            get { return output; }
+            set
+            {
+                if (output != value)
+                {
+                    output = value;
+                }
+            }
+        }
+
+        public double getSetErrorGradient
+        {
+            get { return errorGradient; }
+            set
+            {
+                if (errorGradient != value)
+                {
+                    errorGradient = value;
+                }
+            }
+        }
+
+        public double getSetBias
+        {
+            get { return bias; }
+            set
+            {
+                if (bias != value)
+                {
+                    bias = value;
+                }
+            }
+        }
+
+
+
+        //Getters
+        public List<double> getInputs()
+        {
+            return inputs;
+        }
+
+        public int getNumInputs()
+        {
+            return numInputs;
+        }
+
+        public List<double> getWeights()
+        {
+            return weights;
+        }
+
+
+
+
     }
 }
