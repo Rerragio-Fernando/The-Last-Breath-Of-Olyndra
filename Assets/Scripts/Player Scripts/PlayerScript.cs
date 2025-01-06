@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -31,11 +32,7 @@ public class PlayerScript : MonoBehaviour
     private bool _isGrounded;
     private int _activeWeaponIndex;
     private PlayerAnimationScript _playerAnim;
-    private PlayerCombatScript _playerCombat;
     private CharacterController _cont;
-
-    protected Vector2 _lookIN;
-
     private bool _jump = false;
     private Vector3 _velocity;
 
@@ -43,17 +40,58 @@ public class PlayerScript : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         _cont = GetComponent<CharacterController>();
         _playerAnim = GetComponent<PlayerAnimationScript>();
-        _playerCombat = GetComponent<PlayerCombatScript>();
 
-        // PlayerEventSystem._current.OnAnimationJumpForceEvent += JumpForce;
+        PlayerInputHandler.MoveEvent += MoveInput;
+        PlayerInputHandler.LookEvent += LookInput;
+        PlayerInputHandler.SprintEvent += SprintInput;
+
+        PlayerInputHandler.JumpEvent += JumpInput;
+        PlayerInputHandler.AimEvent += AimInput;
+
         PlayerEventSystem._current.OnCharacterBoostInEvent += BoostIn;
         PlayerEventSystem._current.OnCharacterBoostOutEvent += BoostOut;
     }
 
+    #region Input Functions
+        private Vector2 _movementIN, _lookIN;
+        private bool _aimIN;
+        private bool _jumpIN;
+        private bool _sprintIN = false;
+
+        void MoveInput(Vector2 move, InputActionPhase phase){
+            if(phase == InputActionPhase.Performed)
+                _movementIN = move;
+            else
+                _movementIN = Vector2.zero;
+        }
+        void LookInput(Vector2 look, InputActionPhase phase){
+            if(phase == InputActionPhase.Performed)
+                _lookIN = look;
+            else
+                _lookIN = Vector2.zero;
+        }
+        void JumpInput(InputActionPhase phase){
+            if(phase == InputActionPhase.Performed)
+                _jumpIN = true;
+            else
+                _jumpIN = false;
+        }
+        void SprintInput(InputActionPhase phase){
+            if(phase == InputActionPhase.Performed)
+                _sprintIN = !_sprintIN;
+        }
+
+        private void AimInput(InputActionPhase phase){
+            if(phase != InputActionPhase.Canceled)
+                _aimIN = true;
+            else    
+                _aimIN = false;
+        }
+    #endregion
+
     private void Update() {
         Grounded();
-        if(!_playerCombat.GetIsAttacking())
-            PlayerMovement();
+        PlayerMovement();
         PlayerLookRotation();
     }
 
@@ -63,30 +101,31 @@ public class PlayerScript : MonoBehaviour
     }
     void PlayerLookRotation(){
         float l_angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targAngle, ref _turnSmoothVelocity, _turnSmoothTime);
-        if(PlayerInputHandler.IN_Aim > 0f){
+        if(_aimIN){
             PlayerEventSystem._current.CharacterAimIn();
             if(_targAngle != l_angle)
                 transform.rotation = Quaternion.Euler(0f, _cam.eulerAngles.y, 0f);
-            this.transform.Rotate(Vector3.up * (PlayerInputHandler.IN_LookInputRaw.x * _aimSensitivity * Time.deltaTime));
+            this.transform.Rotate(Vector3.up * (_lookIN.x * _aimSensitivity * Time.deltaTime));
         }
         else{
-            if(!PlayerInputHandler.IN_LockInput){
-                PlayerEventSystem._current.CharacterAimOut();
-                if(_movDir.magnitude > 0f){
-                    transform.rotation = Quaternion.Euler(0f, l_angle, 0f);
-                }
+            PlayerEventSystem._current.CharacterAimOut();
+            if(_movDir.magnitude > 0f){
+                transform.rotation = Quaternion.Euler(0f, l_angle, 0f);
             }
-            else{
-                if(_movDir.magnitude <= 0f)
-                    transform.LookAt(PlayerLockOnScript.currentFocusedEnemy.transform, Vector3.up);
-                else
-                    transform.rotation = Quaternion.Euler(0f, l_angle, 0f);
-            }
+            // if(!_enemyLockIN){
+            //     PlayerEventSystem._current.CharacterAimOut();
+            //     if(_movDir.magnitude > 0f){
+            //         transform.rotation = Quaternion.Euler(0f, l_angle, 0f);
+            //     }
+            // }
+            // else{
+            //     transform.rotation = Quaternion.Euler(0f, l_angle, 0f);
+            // }
         }
     }
     
     void PlayerMovement(){
-        _movDir = new Vector3(PlayerInputHandler.IN_MoveInputRaw.x, 0f, PlayerInputHandler.IN_MoveInputRaw.y).normalized;
+        _movDir = new Vector3(_movementIN.x, 0f, _movementIN.y).normalized;
         _targAngle = Mathf.Atan2(_movDir.x, _movDir.z) * Mathf.Rad2Deg + _cam.eulerAngles.y;
         
         if(!_isGrounded){
@@ -94,8 +133,7 @@ public class PlayerScript : MonoBehaviour
             _jump = false;
         }
         else{
-            if(PlayerInputHandler.IN_JumpInput){
-                // JumpForce();
+            if(_jumpIN){
                 PlayerEventSystem._current.CharacterJump();
             }
             else{
@@ -104,13 +142,13 @@ public class PlayerScript : MonoBehaviour
         }
         
         if(_movDir.magnitude > 0f && _isGrounded){            
-            if(PlayerInputHandler.IN_Aim > 0f){ //if Player Aiming
+            if(_aimIN){ //if Player Aiming
                 l_moveSpeed = _aimMoveSpeed;
-                _playerAnim.UpdateCharacterDirection(PlayerInputHandler.IN_MoveInputRaw);
+                _playerAnim.UpdateCharacterDirection(_movementIN);
             }
 
-            if(PlayerInputHandler.IN_IsSprinting){
-                if(PlayerInputHandler.IN_Aim <= 0f)
+            if(_sprintIN){
+                if(!_aimIN)
                     l_moveSpeed = _runSpeed;
                 PlayerEventSystem._current.CharacterRun();
             }
@@ -125,6 +163,7 @@ public class PlayerScript : MonoBehaviour
         }
         else{
             PlayerEventSystem._current.CharacterIdle();
+            _sprintIN = false;
             float l_friction;
 
             if(_isGrounded)
@@ -148,8 +187,8 @@ public class PlayerScript : MonoBehaviour
 
     void BoostIn(){
         float l_tempYVelocity = _velocity.y;
-        _velocity = (PlayerLockOnScript.currentFocusedEnemy.transform.position - transform.position) * 50f;
-        // _velocity.y = l_tempYVelocity;
+        // _velocity = (PlayerLockOnScript.currentFocusedEnemy.transform.position - transform.position) * 50f;
+        _velocity.y = l_tempYVelocity;
     }
 
     void BoostOut(){

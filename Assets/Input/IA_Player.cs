@@ -92,7 +92,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Aim"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""c37b63f4-43ce-4cde-8867-223ab30767b2"",
                     ""expectedControlType"": """",
                     ""processors"": """",

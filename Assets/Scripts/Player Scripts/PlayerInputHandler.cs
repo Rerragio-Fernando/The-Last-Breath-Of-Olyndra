@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,200 +9,76 @@ public struct AttackType{
     public int attackType;//1-basic, 2-strong, 3-AOE
 }
 
-public class PlayerInputHandler : MonoBehaviour {
-    public static PlayerInputHandler _current;
+public class PlayerInputHandler : Singleton<PlayerInputHandler> {
     private IA_Player _playerInputActions;
+    private bool canAct = true;
 
-    private Vector2 _lookInputRaw;
-    public static Vector2 IN_LookInputRaw{
-        get { return PlayerInputHandler._current._lookInputRaw; }   // get method
-    }
-
-    private Vector2 _moveInputRaw;
-    public static Vector2 IN_MoveInputRaw{
-        get { return PlayerInputHandler._current._moveInputRaw; }   // get method
-    }
-
-    private float _fire;
-    public static float IN_IsFiring{
-        get { return PlayerInputHandler._current._fire; }   // get method
-    }
-
-    private float _aim;
-    public static float IN_Aim{
-        get { 
-            float l_aim = PlayerInputHandler._current._aim;
-
-            if(l_aim < 0.1f)
-                return 0f;
-            else if(l_aim > 0.9f)
-                return 1f;
-            
-            return l_aim; 
-        }
-    }
+    // Movement Events
+    public static event Action<Vector2, InputActionPhase> MoveEvent;
+    public static event Action<Vector2, InputActionPhase> LookEvent;
     
-    private bool _sprint;
-    public static bool IN_IsSprinting{
-        get { return PlayerInputHandler._current._sprint; }   // get method
-    }
-    
-    private bool _jump;
-    public static bool IN_JumpInput{
-        get { return PlayerInputHandler._current._jump; }   // get method
-    }
-    
-    private bool _lockIn;
-    public static bool IN_LockInput{
-        get { return PlayerInputHandler._current._lockIn; }   // get method
-        set { PlayerInputHandler._current._lockIn = value; }
-    }
+    public static event Action<InputActionPhase> JumpEvent;
+    public static event Action<InputActionPhase> SprintEvent;
 
-    private bool _lockCycle;
-    public static bool IN_LockCycleInput{
-        get { return PlayerInputHandler._current._lockCycle; }   // get method
-    }
-    
-    private AttackType _attack;
-    public static AttackType IN_Attack{
-        get { return PlayerInputHandler._current._attack; }   // get method
-    }
-    
-    private bool _showPlayerControls;
-    public static bool IN_ShowControls{
-        get { return PlayerInputHandler._current._showPlayerControls; }   // get method
-    }    
+    public static event Action<InputActionPhase> AimEvent;
+    public static event Action<InputActionPhase> BasicAttackEvent;
+    public static event Action<InputActionPhase> StrongAttackEvent;
+    public static event Action<InputActionPhase> AOEAttackEvent;
 
-    private void Awake() {
+    public override void Awake(){
+        base.Awake();
         _playerInputActions = new IA_Player();
-
-        if(_current == null)
-            _current = this;
-        else
-            Destroy(this);
-    }
-
-    public IA_Player GetInputActionAsset(){
-        return _playerInputActions;
     }
 
     private void OnEnable() {
-        _playerInputActions.Player.Enable();
-        _playerInputActions.UI.Enable();
+        _playerInputActions.Enable();
+    
+        // Player input bindings
+        BindAction(_playerInputActions.Player.Movement, ctx => InvokeIfCanAct(() => MoveEvent?.Invoke(ctx.ReadValue<Vector2>(), ctx.phase)));
+        BindAction(_playerInputActions.Player.Look, ctx => InvokeIfCanAct(() => LookEvent?.Invoke(ctx.ReadValue<Vector2>(), ctx.phase)));
 
-        _playerInputActions.Player.Sprint.performed += OnSprintIn;
+        BindAction(_playerInputActions.Player.Jump, ctx => InvokeIfCanAct(() => JumpEvent?.Invoke(ctx.phase)));
+        BindAction(_playerInputActions.Player.Sprint, ctx => InvokeIfCanAct(() => SprintEvent?.Invoke(ctx.phase)));
 
-        _playerInputActions.Player.Jump.performed += OnJumpIn;
-        _playerInputActions.Player.Jump.canceled += OnJumpOut;
+        BindAction(_playerInputActions.Player.Aim, ctx => InvokeIfCanAct(() => AimEvent?.Invoke(ctx.phase)));
 
-        _playerInputActions.Player.BasicAttack.started += OnBasicAttackIn;
-        _playerInputActions.Player.BasicAttack.performed += OnAttackOut;
-        _playerInputActions.Player.BasicAttack.canceled += OnAttackOut;
-
-        _playerInputActions.Player.StrongAttack.performed += OnStrongAttackIn;
-        _playerInputActions.Player.StrongAttack.canceled += OnAttackOut;
-
-        _playerInputActions.Player.AOEAttack.performed += OnAOEAttackIn;
-        _playerInputActions.Player.AOEAttack.canceled += OnAttackOut;
-
-        _playerInputActions.Player.EnemyLockOn_Cycle.performed += OnEnemyLockInOrCycle;
-
-        _playerInputActions.Player.EnemyLockOut.performed += OnEnemyLockOut;
-
-        //UI
-        _playerInputActions.UI.ShowControls.performed += ShowControls;
-        _playerInputActions.UI.ShowControls.canceled += HideControls;
+        BindAction(_playerInputActions.Player.BasicAttack, ctx => InvokeIfCanAct(() => BasicAttackEvent?.Invoke(ctx.phase)));
+        BindAction(_playerInputActions.Player.StrongAttack, ctx => InvokeIfCanAct(() => StrongAttackEvent?.Invoke(ctx.phase)));
+        BindAction(_playerInputActions.Player.AOEAttack, ctx => InvokeIfCanAct(() => AOEAttackEvent?.Invoke(ctx.phase)));
     }
 
     private void OnDisable() {
-        _playerInputActions.Player.Disable();
-        _playerInputActions.UI.Disable();
+        _playerInputActions.Disable();
 
-        _playerInputActions.Player.Sprint.performed -= OnSprintIn;
+        UnbindAction(_playerInputActions.Player.Movement, ctx => InvokeIfCanAct(() => MoveEvent?.Invoke(ctx.ReadValue<Vector2>(), ctx.phase)));
+        UnbindAction(_playerInputActions.Player.Look, ctx => InvokeIfCanAct(() => LookEvent?.Invoke(ctx.ReadValue<Vector2>(), ctx.phase)));
 
-        _playerInputActions.Player.Jump.performed -= OnJumpIn;
-        _playerInputActions.Player.Jump.canceled -= OnJumpOut;
+        UnbindAction(_playerInputActions.Player.Jump, ctx => InvokeIfCanAct(() => JumpEvent?.Invoke(ctx.phase)));
+        UnbindAction(_playerInputActions.Player.Sprint, ctx => InvokeIfCanAct(() => SprintEvent?.Invoke(ctx.phase)));
 
-        _playerInputActions.Player.BasicAttack.started -= OnBasicAttackIn;
-        _playerInputActions.Player.BasicAttack.performed -= OnAttackOut;
+        UnbindAction(_playerInputActions.Player.Aim, ctx => InvokeIfCanAct(() => AimEvent?.Invoke(ctx.phase)));
 
-        _playerInputActions.Player.StrongAttack.performed -= OnStrongAttackIn;
-        _playerInputActions.Player.StrongAttack.canceled -= OnAttackOut;
-
-        _playerInputActions.Player.AOEAttack.performed -= OnAOEAttackIn;
-        _playerInputActions.Player.AOEAttack.canceled -= OnAttackOut;
-
-        _playerInputActions.Player.EnemyLockOn_Cycle.performed += OnEnemyLockInOrCycle;
-
-        _playerInputActions.Player.EnemyLockOut.performed += OnEnemyLockOut;
-
-        //UI
-        _playerInputActions.UI.ShowControls.performed -= ShowControls;
-        _playerInputActions.UI.ShowControls.canceled -= HideControls;
+        UnbindAction(_playerInputActions.Player.BasicAttack, ctx => InvokeIfCanAct(() => BasicAttackEvent?.Invoke(ctx.phase)));
+        UnbindAction(_playerInputActions.Player.StrongAttack, ctx => InvokeIfCanAct(() => StrongAttackEvent?.Invoke(ctx.phase)));
+        UnbindAction(_playerInputActions.Player.AOEAttack, ctx => InvokeIfCanAct(() => AOEAttackEvent?.Invoke(ctx.phase)));
     }
 
-    private void Update() {
-        _lookInputRaw = _playerInputActions.Player.Look.ReadValue<Vector2>();
-        _moveInputRaw = _playerInputActions.Player.Movement.ReadValue<Vector2>();
-        _aim = _playerInputActions.Player.Aim.ReadValue<float>();
+    private void InvokeIfCanAct(Action action)
+    {
+        if (canAct) action?.Invoke();
     }
 
-    //Events
+    private void BindAction(InputAction inputAction, Action<InputAction.CallbackContext> callback)
+    {
+        inputAction.started += callback;
+        inputAction.performed += callback;
+        inputAction.canceled += callback;
+    }
 
-    #region PlayerControls
-        //Sprinting
-        void OnSprintIn(InputAction.CallbackContext ctx){
-            _sprint = !_sprint;
-        }
-
-        //Jump
-        void OnJumpIn(InputAction.CallbackContext ctx){
-            _jump = true;
-        }
-        void OnJumpOut(InputAction.CallbackContext ctx){
-            _jump = false;
-        }
-
-        void OnEnemyLockInOrCycle(InputAction.CallbackContext ctx){
-            if(!_lockIn){
-                PlayerEventSystem._current.CharacterEnemyLockIn();
-                _lockIn = true;
-            }
-            else
-                PlayerEventSystem._current.CharacterEnemyLockCycle();
-        }
-
-        void OnEnemyLockOut(InputAction.CallbackContext ctx){
-            PlayerEventSystem._current.CharacterEnemyLockOut();
-            _lockIn = false;
-        }
-
-        #region Attacks
-            void OnBasicAttackIn(InputAction.CallbackContext ctx){
-                _attack.attack = true;
-                _attack.attackType = 1;
-            }
-            void OnStrongAttackIn(InputAction.CallbackContext ctx){
-                _attack.attack = true;
-                _attack.attackType = 2;
-            }
-            void OnAOEAttackIn(InputAction.CallbackContext ctx){
-                _attack.attack = true;
-                _attack.attackType = 3;
-            }
-            void OnAttackOut(InputAction.CallbackContext ctx){
-                _attack.attack = false;
-                _attack.attackType = 0;
-            }
-        #endregion
-    #endregion
-
-    #region UI
-        void ShowControls(InputAction.CallbackContext ctx){
-            _showPlayerControls = true;
-        }
-        void HideControls(InputAction.CallbackContext ctx){
-            _showPlayerControls = false;
-        }
-    #endregion
+    private void UnbindAction(InputAction inputAction, Action<InputAction.CallbackContext> callback)
+    {
+        inputAction.started -= callback;
+        inputAction.performed -= callback;
+        inputAction.canceled -= callback;
+    }
 }

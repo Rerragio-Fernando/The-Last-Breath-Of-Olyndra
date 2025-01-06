@@ -6,8 +6,10 @@ using UnityEngine.InputSystem;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private GameObject _controlScheme;
-
+    private void Start() {
+        _controlScheme.SetActive(false);
+    }
     private void Update() {
-        _controlScheme.SetActive(PlayerInputHandler.IN_ShowControls);
+        // _controlScheme.SetActive(PlayerInputHandler.IN_ShowControls);
     }
 }

@@ -6,7 +6,7 @@ public class PlayerAnimationScript : AnimatorUtil
 {
     public static PlayerAnimationScript _current;
     [SerializeField] private float _movementLerper = .5f;
-    [SerializeField] AnimationCurve _rumbleFq;
+    // [SerializeField] AnimationCurve _rumbleFq;
 
     private Animator _anim;
     private float _moveVal;
