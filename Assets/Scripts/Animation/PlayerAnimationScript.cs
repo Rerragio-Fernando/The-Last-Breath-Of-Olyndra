@@ -30,10 +30,6 @@ public class PlayerAnimationScript : AnimatorUtil
 
         PlayerEventSystem._current.OnCharacterAttackTriggerEvent += TriggerAttack;
 
-        PlayerEventSystem._current.OnCharacterBasicAttack1Event += Attack1;
-        PlayerEventSystem._current.OnCharacterBasicAttack2Event += Attack2;
-        PlayerEventSystem._current.OnCharacterBasicAttack3Event += Attack3;
-
         PlayerEventSystem._current.OnCharacterAimInEvent += AimIn;
         PlayerEventSystem._current.OnCharacterAimOutEvent += AimOut;
     }
@@ -46,10 +42,6 @@ public class PlayerAnimationScript : AnimatorUtil
         PlayerEventSystem._current.OnCharacterJumpEvent -= Jump;
 
         PlayerEventSystem._current.OnCharacterAttackTriggerEvent -= TriggerAttack;
-
-        PlayerEventSystem._current.OnCharacterBasicAttack1Event -= Attack1;
-        PlayerEventSystem._current.OnCharacterBasicAttack2Event -= Attack2;
-        PlayerEventSystem._current.OnCharacterBasicAttack3Event -= Attack3;
 
         PlayerEventSystem._current.OnCharacterAimInEvent -= AimIn;
         PlayerEventSystem._current.OnCharacterAimOutEvent -= AimOut;
@@ -68,19 +60,7 @@ public class PlayerAnimationScript : AnimatorUtil
         AnimatorTrigger(_anim, "Jump", 0.5f);
     }
     public void TriggerAttack(){
-        _anim.SetBool("IsAttacking", true);
-    }
-    public void Attack1(){
-        TriggerAttack();
-        _anim.SetInteger("Attack Index", 1);
-    }
-    public void Attack2(){
-        TriggerAttack();
-        _anim.SetInteger("Attack Index", 2);
-    }
-    public void Attack3(){
-        TriggerAttack();
-        _anim.SetInteger("Attack Index", 3);
+        AnimatorTrigger(_anim, "Attack", 0.5f);
     }
     public void AimIn(){
         _anim.SetBool("Aiming", true);

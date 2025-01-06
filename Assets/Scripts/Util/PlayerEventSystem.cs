@@ -19,10 +19,6 @@ public class PlayerEventSystem : MonoBehaviour
 
     public event Action OnCharacterAttackTriggerEvent;
 
-    public event Action OnCharacterBasicAttack1Event;
-    public event Action OnCharacterBasicAttack2Event;
-    public event Action OnCharacterBasicAttack3Event;
-
     public event Action OnCharacterAimInEvent;
     public event Action OnCharacterAimOutEvent;
 
@@ -65,21 +61,6 @@ public class PlayerEventSystem : MonoBehaviour
     public void TriggerAttack(){
         if(OnCharacterAttackTriggerEvent != null){
             OnCharacterAttackTriggerEvent();
-        }
-    }
-    public void CharacterAttack1(){
-        if(OnCharacterBasicAttack1Event != null){
-            OnCharacterBasicAttack1Event();
-        }
-    }
-    public void CharacterAttack2(){
-        if(OnCharacterBasicAttack2Event != null){
-            OnCharacterBasicAttack2Event();
-        }
-    }
-    public void CharacterAttack3(){
-        if(OnCharacterBasicAttack3Event != null){
-            OnCharacterBasicAttack3Event();
         }
     }
 

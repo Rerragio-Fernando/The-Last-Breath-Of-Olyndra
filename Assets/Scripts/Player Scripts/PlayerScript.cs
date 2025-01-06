@@ -35,11 +35,14 @@ public class PlayerScript : MonoBehaviour
     private CharacterController _cont;
     private bool _jump = false;
     private Vector3 _velocity;
+    private GameObject _bossEnemy;
 
     private void Start() {
         Cursor.lockState = CursorLockMode.Locked;
         _cont = GetComponent<CharacterController>();
         _playerAnim = GetComponent<PlayerAnimationScript>();
+
+        _bossEnemy = GameObject.FindWithTag("Enemy");
 
         PlayerInputHandler.MoveEvent += MoveInput;
         PlayerInputHandler.LookEvent += LookInput;
@@ -187,8 +190,8 @@ public class PlayerScript : MonoBehaviour
 
     void BoostIn(){
         float l_tempYVelocity = _velocity.y;
-        // _velocity = (PlayerLockOnScript.currentFocusedEnemy.transform.position - transform.position) * 50f;
-        _velocity.y = l_tempYVelocity;
+        _velocity = (_bossEnemy.transform.position - transform.position) * 5f;
+        // _velocity.y = l_tempYVelocity;
     }
 
     void BoostOut(){
