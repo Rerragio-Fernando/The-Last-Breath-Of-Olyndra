@@ -1,8 +1,12 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Materials/Particles/Flame.mat.meta
 guid: d92f40fdbd9a22842a4271907c8ada20
+========
+guid: c2cba32cf918bab49a446ef2719e413f
+>>>>>>>> main:Assets/Data/AIStates/FenmorIdle.asset.meta
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 0
+  mainObjectFileID: 11400000
   userData: 
   assetBundleName: 
   assetBundleVariant: 

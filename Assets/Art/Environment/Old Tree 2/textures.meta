@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Art/Environment/Old Tree 2/textures.meta
 guid: 91f6fde89db2f9849b4695b5471923b9
+========
+guid: db5a62118babeed4fb14694b9bb10b51
+>>>>>>>> main:Assets/Art/3D Models/Effects.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

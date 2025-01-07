@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Art/Environment/Old Tree 3/source/Populus nigra Italica HD_Snag 1 dead_LOD0.fbx.meta
 guid: 891ab1c9a8ea3474cba50db4d220839f
+========
+guid: 32d37fa145f1f6847b2db339a827fb53
+>>>>>>>> main:Assets/Art/3D Models/Effects/SlashMesh.fbx.meta
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []

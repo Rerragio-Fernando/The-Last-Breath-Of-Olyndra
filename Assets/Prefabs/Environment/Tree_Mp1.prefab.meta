@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Prefabs/Environment/Tree_Mp1.prefab.meta
 guid: cccadbe5ad3480f4eb7d3f61ce245859
+========
+guid: 9f50299d904daad4fbc3a138ac5a54a7
+>>>>>>>> main:Assets/Prefabs/Fenmor/FenmorTemp.prefab.meta
 PrefabImporter:
   externalObjects: {}
   userData: 

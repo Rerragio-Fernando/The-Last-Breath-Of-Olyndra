@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Art/Environment/Old Tree 2/source.meta
 guid: 24c23b49bcec5b54294e4e1d82ea1db6
+========
+guid: 025b627d18bbe5f41b5e64a7a2014829
+>>>>>>>> main:Assets/Art/3D Models/Environment.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

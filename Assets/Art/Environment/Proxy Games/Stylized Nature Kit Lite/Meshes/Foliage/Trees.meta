@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Art/Environment/Proxy Games/Stylized Nature Kit Lite/Meshes/Foliage/Trees.meta
 guid: 699d3c29f70460447a433b9ba0d30bd2
+========
+guid: b8d938ae9a37fd24f9b6df7d301b8d71
+>>>>>>>> main:Assets/Art/3D Models/Environment/Trees.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

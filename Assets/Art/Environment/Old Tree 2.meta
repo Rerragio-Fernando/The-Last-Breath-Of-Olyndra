@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Art/Environment/Old Tree 2.meta
 guid: 823a8f3102a926b4eaa4ca4f4c363987
+========
+guid: c8c8d0feff4b1034fb82c649b4dad26b
+>>>>>>>> main:Assets/Art/Shaders.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

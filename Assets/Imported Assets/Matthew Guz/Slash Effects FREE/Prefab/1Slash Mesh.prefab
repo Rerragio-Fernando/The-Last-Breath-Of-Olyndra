@@ -1,6 +1,10 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+<<<<<<<< HEAD:Assets/Imported Assets/Matthew Guz/Slash Effects FREE/Prefab/1Slash Mesh.prefab
 --- !u!1 &539289997039638868
+========
+--- !u!1 &9170486167528315347
+>>>>>>>> main:Assets/Prefabs/Fenmor/FenmorTemp.prefab
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,46 +12,83 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<<< HEAD:Assets/Imported Assets/Matthew Guz/Slash Effects FREE/Prefab/1Slash Mesh.prefab
   - component: {fileID: 1317306748963558672}
   - component: {fileID: 1736899250560216132}
   - component: {fileID: 3048625635581783696}
   m_Layer: 0
   m_Name: 1Slash Mesh
+========
+  - component: {fileID: 9185875304525469507}
+  - component: {fileID: 8230634851768401759}
+  - component: {fileID: 2201790552438973514}
+  - component: {fileID: 4168782650843733464}
+  - component: {fileID: 6531614640154001687}
+  - component: {fileID: 7508922724015577309}
+  m_Layer: 0
+  m_Name: FenmorTemp
+>>>>>>>> main:Assets/Prefabs/Fenmor/FenmorTemp.prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<<< HEAD:Assets/Imported Assets/Matthew Guz/Slash Effects FREE/Prefab/1Slash Mesh.prefab
 --- !u!4 &1317306748963558672
+========
+--- !u!4 &9185875304525469507
+>>>>>>>> main:Assets/Prefabs/Fenmor/FenmorTemp.prefab
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<<< HEAD:Assets/Imported Assets/Matthew Guz/Slash Effects FREE/Prefab/1Slash Mesh.prefab
   m_GameObject: {fileID: 539289997039638868}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+========
+  m_GameObject: {fileID: 9170486167528315347}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.859314, y: 3.27, z: 32.04}
+  m_LocalScale: {x: 3, y: 3, z: 3}
+>>>>>>>> main:Assets/Prefabs/Fenmor/FenmorTemp.prefab
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<<< HEAD:Assets/Imported Assets/Matthew Guz/Slash Effects FREE/Prefab/1Slash Mesh.prefab
 --- !u!33 &1736899250560216132
+========
+--- !u!33 &8230634851768401759
+>>>>>>>> main:Assets/Prefabs/Fenmor/FenmorTemp.prefab
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<<< HEAD:Assets/Imported Assets/Matthew Guz/Slash Effects FREE/Prefab/1Slash Mesh.prefab
   m_GameObject: {fileID: 539289997039638868}
   m_Mesh: {fileID: -4907317404281051548, guid: 9b070b1b446bd0f45b356f1bf631f2fe, type: 3}
 --- !u!23 &3048625635581783696
+========
+  m_GameObject: {fileID: 9170486167528315347}
+  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &2201790552438973514
+>>>>>>>> main:Assets/Prefabs/Fenmor/FenmorTemp.prefab
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<<< HEAD:Assets/Imported Assets/Matthew Guz/Slash Effects FREE/Prefab/1Slash Mesh.prefab
   m_GameObject: {fileID: 539289997039638868}
+========
+  m_GameObject: {fileID: 9170486167528315347}
+>>>>>>>> main:Assets/Prefabs/Fenmor/FenmorTemp.prefab
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -61,7 +102,11 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
+<<<<<<<< HEAD:Assets/Imported Assets/Matthew Guz/Slash Effects FREE/Prefab/1Slash Mesh.prefab
   - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+========
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+>>>>>>>> main:Assets/Prefabs/Fenmor/FenmorTemp.prefab
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -83,3 +128,64 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+<<<<<<<< HEAD:Assets/Imported Assets/Matthew Guz/Slash Effects FREE/Prefab/1Slash Mesh.prefab
+========
+--- !u!136 &4168782650843733464
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9170486167528315347}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!195 &6531614640154001687
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9170486167528315347}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 10
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &7508922724015577309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9170486167528315347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f87c8b728ada6c7418e1a27a68bad522, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRadius: 10
+>>>>>>>> main:Assets/Prefabs/Fenmor/FenmorTemp.prefab

@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Art/Environment/Old Tree 2/Materials.meta
 guid: eb2c857307cdc994eb0568ce26b5185f
+========
+guid: dfb19d1fd2350f74fb351f37f1bf2816
+>>>>>>>> main:Assets/Art/Vfx.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Prefabs/Environment/Populus nigra Italica HD_Snag 1 dead_LOD1.prefab.meta
 guid: d878fd91a9c63d241b9d569cb275a34a
+========
+guid: 025137984951874418f070cc315433a9
+>>>>>>>> main:Assets/Prefabs/Fenmor/Fenmor_Slash.prefab.meta
 PrefabImporter:
   externalObjects: {}
   userData: 

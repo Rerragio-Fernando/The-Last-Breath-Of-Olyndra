@@ -1,8 +1,12 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Materials/Particles/Lock In.mat.meta
 guid: 71bbcbe7a41056b458883f29eecb0467
+========
+guid: 6e51254550dba474b9feb070da4e6746
+>>>>>>>> main:Assets/Data/AIStates/Attacks/BlightBreath.asset.meta
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 11400000
   userData: 
   assetBundleName: 
   assetBundleVariant: 
