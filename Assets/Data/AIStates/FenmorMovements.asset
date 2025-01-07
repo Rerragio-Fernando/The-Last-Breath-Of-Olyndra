@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ec74e72892745741b6714b43ff2135b, type: 3}
   m_Name: FenmorMovements
   m_EditorClassIdentifier: 
-  nextState: {fileID: 11400000, guid: c2cba32cf918bab49a446ef2719e413f, type: 2}
+  nextState: {fileID: 11400000, guid: d14b866e2587ecb41a6af6bb9bc9d207, type: 2}
+  animator: {fileID: 0}

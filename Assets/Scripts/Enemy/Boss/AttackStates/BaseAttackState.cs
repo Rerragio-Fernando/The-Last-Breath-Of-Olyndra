@@ -24,33 +24,94 @@ using UnityEngine;
 
 namespace NPC
 {
-    [CreateAssetMenu(menuName = "AI/States/Movements")]
-    public class MovementState : BossAIState
+    public abstract class BaseAttackState : BossAIState
     {
+        [SerializeField]
+        protected string abilityName;
+        [SerializeField]
+        protected float cooldown;
+        [SerializeField]
+        protected bool comboAttack;
+        [SerializeField]
+        protected int numbOfCombo;
+        private float lastUsedTime = -Mathf.Infinity;
+        [SerializeField]
+        protected float damage;
+
+        protected bool isActive =false;
+
+        protected int abilityUsage = 0;
+
+        private bool cooldownFinished = false;
+
 
         public override BossAIState stateTick(BossAIManager bossAI)
         {
             BossAIState stateToReturn = this;
-            Vector3 bossPositionXZ = new Vector3(bossAI.getBossTransform().position.x, 0, bossAI.getBossTransform().position.z);
-            Vector3 targetPositionXZ = new Vector3(bossAI.getSetCurrentTarget.position.x, 0, bossAI.getSetCurrentTarget.position.z);
-            float distanceToTarget = Vector3.Distance(bossPositionXZ, targetPositionXZ);
-
-            if (distanceToTarget > bossAI.getSetAgentStoppingDistance)
-            {
-                bossAI.updateBossMovements(true);
-            }
-            else
-            {
-                stateToReturn = getNextAttack(bossAI);
-                Debug.Log(bossAI.getSetAttackString);
-                bossAI.updateBossMovements(false);
-            }
+            checkIfCooldownNeedReset(stateToReturn);
             return stateToReturn;
         }
 
-        BossAIState getNextAttack(BossAIManager bossAI)
+        protected void checkIfCooldownNeedReset(BossAIState stateToReturn)
         {
-            return bossAI.findState(bossAI.getSetAttackString);
+            if (stateToReturn != this)
+            {
+                BaseAttackState attackState = stateToReturn as BaseAttackState;
+
+                if (attackState != null && attackState.abilityName != this.abilityName)
+                {
+                    attackState.resetCooldown();
+                }
+            }
         }
+
+        public abstract void Activate();
+        protected abstract void visualizeAbility();
+
+        public abstract void resetValues();
+
+        protected void startCooldown()
+        {
+            Debug.Log($"Cooldown started for {abilityName}, duration: {cooldown}");
+            lastUsedTime = Time.time;
+            abilityUsage++;
+            cooldownFinished = false;
+        }
+
+        protected bool isOnCooldown()
+        {
+            return Time.time < (lastUsedTime + cooldown);
+        }
+
+        protected bool checkCooldownStateChange()
+        {
+            if (cooldown == 0)
+            {
+                cooldownFinished = true;
+                return true;
+            }
+
+            if (!isOnCooldown() && !cooldownFinished)
+            {
+                cooldownFinished = true;
+                return true;
+            }
+            return false;
+        }
+
+        public void resetCooldown()
+        {
+            isActive = false;
+            abilityUsage = 0;
+            lastUsedTime = -Mathf.Infinity;
+        }
+
+        //getters
+        public string getName()
+        {
+            return abilityName;
+        }
+
+
     }
 }
