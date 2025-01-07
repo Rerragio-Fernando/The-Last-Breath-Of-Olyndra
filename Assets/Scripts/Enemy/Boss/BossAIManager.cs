@@ -21,6 +21,7 @@
  * ----------------------------------------------------------------------------------------------
  */
 using UnityEngine;
+using System.Collections.Generic;
 using database;
 using animations;
 
@@ -51,6 +52,7 @@ namespace NPC
 
         StatesManager stageManager;
         AiMovements bossMovements;
+        Brain.Brain AIBrain;
 
         string nextPlannedAttack = "Swipe";
 
@@ -70,6 +72,7 @@ namespace NPC
         {
             data = GameSavingManager.instance.geData;
             cutsceneManager = CutsceneManager.instance;
+            AIBrain = Brain.Brain.instance;
             stageManager = StatesManager.instance;
             cutsceneManager.onCutsceneCompleted += startBossLogic;
             // if the boss is not found in  the database yet add it
@@ -122,6 +125,13 @@ namespace NPC
         public BossAIState findState(string name)
         {
             return stageManager.getAttackState(name);
+        }
+
+        public void findNextAttackUsingANN(double distanceFromPlayer, double playerHealth)
+        {
+            List<double> cooldowns= stageManager.getCooldowns();
+            getSetAttackString = AIBrain.nextActionSelection(distanceFromPlayer, playerHealth, 100.0f, cooldowns);
+            Debug.LogWarning(getSetAttackString);
         }
 
         private void adjustBossPosition()

@@ -22,55 +22,143 @@
  */
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace NPC.Brain
 {
+
+    public class AILearningReplay
+    {
+        public List<double> states;
+        public double reward;
+
+        public AILearningReplay(double distanceFromPlayer, double playerHealth, double AIHealth, List<double> cooldowns, double r)
+        {
+            states = new List<double>();
+            states.Add(distanceFromPlayer);
+            states.Add(playerHealth);
+            states.Add(AIHealth);
+
+            foreach(double cooldown in cooldowns)
+            {
+                states.Add(cooldown);
+            }
+
+        }
+    }
+
     public class Brain : MonoBehaviour
     {
+        public static Brain instance { get; private set; } = null;
         ANN ann;
-        double sumSquareError = 0;
+
+        // reward associated with actions
+        float reward = 0.0f;
+        // memory - list of past actions and rewards
+        List<AILearningReplay> replayMemory = new List<AILearningReplay>();
+        // memory capacity
+        int memoryCapacity = 1000;
+
+        // how much future states affects rewards
+        float discount = 0.99f;
+        // chance of picking random action
+        float exploreRate = 100.0f;
+        // max chance value
+        float maxExplorerRate = 100.0f;
+        // min chance value
+        float minExploreRate = 0.01f;
+        //chance decay amount for each update
+        float exploreDecay = 0.0001f;
+
+        // count of the number of time the ball was dropped
+        int failCount = 0;
+        // max angle to apply to tilting each update, needs to be large enough so that the q value multiplied 
+        // by it is enough to recover balance
+        float tiltSpeed = 0.5f;
+
+        // keep track of the time the ball is kept on balance
+        float timer = 0;
+        // keep track of the the max time the ball was kept on balance
+        float maxBalanceTime = 0;
+
+        private void Awake()
+        {
+            if (instance != null)
+            {
+                Debug.LogWarning(gameObject.name + " attempted to create a second instance of Brain, destroyed");
+                Destroy(gameObject);
+                return;
+            }
+            instance = this;
+        }
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-            ann = new ANN(2, 1, 1, 2, 0.8);
-            List<double> results;
-            for (int i = 0; i < 5000; i++)
-            {
-                sumSquareError = 0;
-                results = Train(1, 1, 0);
-                sumSquareError += Mathf.Pow((float)results[0] - 0, 2);
-                results = Train(1, 0, 1);
-                sumSquareError += Mathf.Pow((float)results[0] - 1, 2);
-                results = Train(0, 1, 1);
-                sumSquareError += Mathf.Pow((float)results[0] - 1, 2);
-                results = Train(0, 0, 0);
-                sumSquareError += Mathf.Pow((float)results[0] - 0, 2);
 
+            ann = new ANN(6, 3, 1, 6, 0.2);
+        }
+
+        public string nextActionSelection(double distanceFromPlayer, double playerHealth, double AIHealth, List<double> cooldowns)
+        {
+            List<double> states = new List<double>();
+            string currentAttack = "Blighted Pounce";
+            states = new List<double>();
+            states.Add(distanceFromPlayer);
+            states.Add(playerHealth);
+            states.Add(AIHealth);
+
+            foreach (int cooldown in cooldowns)
+            {
+                states.Add(cooldown);
             }
 
-            Debug.Log("SSE: " + sumSquareError);
+            List<double> qs = new List<double>();
+            qs = softMax(ann.calcOutput(states));
+            double maxQ = qs.Max();
+            int maxQIndex = qs.ToList().IndexOf(maxQ);
 
-            results = Train(1, 1, 0,false);
-            Debug.Log("1, 1: " + results[0]);
-            results = Train(1, 0, 1, false);
-            Debug.Log("1, 0: " + results[0]);
-            results = Train(0, 1, 1, false);
-            Debug.Log("0, 1: " + results[0]);
-            results = Train(0, 0, 0, false);
-            Debug.Log("0, 0: " + results[0]);
+            exploreRate = Mathf.Clamp(exploreRate - exploreDecay, minExploreRate, maxExplorerRate);
 
+            if (Random.Range(0, 100) < exploreRate)
+                maxQIndex = Random.Range(0, cooldowns.Count);
+
+            // Perform the attack corresponding to maxQIndex
+            switch (maxQIndex)
+            {
+                case 0:
+                    currentAttack = "Swipe";
+                    break;
+                case 1:
+                    currentAttack = "Blighted Pounce";
+                    break;
+                case 2:
+                    currentAttack = "Blight Breath";
+                    break;
+            }
+
+            return currentAttack;
         }
 
-        List<double> Train(double i1, double i2, double o, bool shouldTrain = true)
+
+        List<double> softMax(List<double> values)
         {
-            List<double> inputs = new  List<double>();
-            List<double> outputs = new List<double>();
-            inputs.Add(i1);
-            inputs.Add(i2);
-            outputs.Add(o);
-            return (ann.Train(inputs, outputs));
+            double max = values.Max();
+
+            float scale = 0.0f;
+            for (int i = 0; i < values.Count; ++i)
+            {
+                scale += Mathf.Exp((float)(values[i] - max));
+            }
+
+
+            List<double> result = new List<double>();
+            for (int i = 0; i < values.Count; ++i)
+            {
+                result.Add(Mathf.Exp((float)(values[i] - max)) / scale);
+            }
+
+            return result;
         }
-    
     }
 }

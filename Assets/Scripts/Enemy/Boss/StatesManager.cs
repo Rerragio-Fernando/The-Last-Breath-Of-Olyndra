@@ -17,6 +17,9 @@ namespace NPC
         public static StatesManager instance { get; private set; } = null;
         [SerializeField] private List<BossAIStateReference> AiStates = new List<BossAIStateReference>();
 
+        List<double> cooldowns;
+
+
         private void Awake()
         {
             if (instance != null)
@@ -31,13 +34,26 @@ namespace NPC
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-
+            cooldowns= new List<double>();
+            addAllCooldowns();
         }
 
         // Update is called once per frame
         void Update()
         {
 
+        }
+
+        void addAllCooldowns()
+        {
+            foreach (var stateReference in AiStates)
+            {
+                if (stateReference.stateType == StateType.attack)
+                {
+                    BaseAttackState attackState = stateReference.bossAIState as BaseAttackState;
+                    cooldowns.Add(attackState.getCooldown());
+                }
+            }
         }
 
         public BaseAttackState getAttackState(string name)
@@ -55,6 +71,11 @@ namespace NPC
                 }
             }
             return nextAttack;
+        }
+
+        public List<double> getCooldowns()
+        {
+            return cooldowns;
         }
 
         private void OnApplicationQuit()

@@ -112,6 +112,11 @@ namespace NPC
             return abilityName;
         }
 
+        public double getCooldown()
+        {
+            return cooldown;
+        }
+
 
     }
 }
