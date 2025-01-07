@@ -9,20 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 876bf6a32c5fe00438f51f06f4893fb7, type: 3}
-  m_Name: FenmorSwipe
+  m_Script: {fileID: 11500000, guid: 562c262816819d04ea598953408888a2, type: 3}
+  m_Name: FenmorPounce
   m_EditorClassIdentifier: 
   nextState: {fileID: 11400000, guid: c2cba32cf918bab49a446ef2719e413f, type: 2}
   animator: {fileID: 0}
-  abilityName: Swipe
-  cooldown: 3
+  abilityName: Blighted Pounce
+  cooldown: 5
   comboAttack: 0
   numbOfCombo: 0
-  damage: 10
-  attackRadius: 5
-  attackAngle: 120
+  damage: 50
+  leapSpeed: 10
+  leapDistance: 5
+  impactRadius: 2
   targetLayer:
     serializedVersion: 2
     m_Bits: 64
-  slashParticles: {fileID: 6251945216833507621, guid: 025137984951874418f070cc315433a9,
-    type: 3}
