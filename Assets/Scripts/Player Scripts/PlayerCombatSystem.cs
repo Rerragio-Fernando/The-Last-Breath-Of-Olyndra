@@ -44,8 +44,10 @@ public class PlayerCombatSystem : MonoBehaviour
     
     private void Update() {
         if(_playerCombatState == CombatStates.NotAttacking){
-            if(_basicAtkIN)
+            if(_basicAtkIN){
+                Debug.Log($"ATK");
                 PlayerEventSystem._current.TriggerAttack();
+            }
         }
     }
 
