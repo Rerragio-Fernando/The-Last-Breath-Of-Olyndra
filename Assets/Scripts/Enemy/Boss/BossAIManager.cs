@@ -53,6 +53,10 @@ namespace NPC
         StatesManager stageManager;
         AiMovements bossMovements;
         Brain.Brain AIBrain;
+        PlayerHealth playerHealth;
+
+        double distanceFromPlayerOnAttack;
+        List<double> cooldowns;
 
         string nextPlannedAttack = "Swipe";
 
@@ -74,7 +78,9 @@ namespace NPC
             cutsceneManager = CutsceneManager.instance;
             AIBrain = Brain.Brain.instance;
             stageManager = StatesManager.instance;
+            playerHealth = PlayerHealth.instance;
             cutsceneManager.onCutsceneCompleted += startBossLogic;
+            cooldowns = stageManager.getCooldowns();
             // if the boss is not found in  the database yet add it
             if (!data.getBossesFound.ContainsKey(bossID))
             {
@@ -127,11 +133,18 @@ namespace NPC
             return stageManager.getAttackState(name);
         }
 
-        public void findNextAttackUsingANN(double distanceFromPlayer, double playerHealth)
+        public void findNextAttackUsingANN(double distanceFromPlayer)
         {
-            List<double> cooldowns= stageManager.getCooldowns();
-            getSetAttackString = AIBrain.nextActionSelection(distanceFromPlayer, playerHealth, 100.0f, cooldowns);
+            distanceFromPlayerOnAttack = distanceFromPlayer;
+            cooldowns = cooldowns == null? stageManager.getCooldowns() : cooldowns;
+            getSetAttackString = AIBrain.nextActionSelection(distanceFromPlayerOnAttack, playerHealth.getHealth(),100.0f, cooldowns);
             Debug.LogWarning(getSetAttackString);
+        }
+
+        public void trainAnn()
+        {
+            cooldowns = cooldowns == null ? stageManager.getCooldowns() : cooldowns;
+            AIBrain.trainBrain(playerHealth.didHealthChange(),distanceFromPlayerOnAttack, playerHealth.getHealth(), 100.0f, cooldowns);
         }
 
         private void adjustBossPosition()

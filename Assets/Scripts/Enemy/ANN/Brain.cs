@@ -140,6 +140,46 @@ namespace NPC.Brain
             return currentAttack;
         }
 
+        public void trainBrain(bool wasThePlayerDamaged, double distanceFromPlayer, double playerHealth, double AIHealth, List<double> cooldowns)
+        {
+            reward = wasThePlayerDamaged ? 1.0f : -1.0f;
+            // After selecting the action
+            AILearningReplay currentReplay = new AILearningReplay(distanceFromPlayer, playerHealth, AIHealth, cooldowns, reward);
+
+            // Store in replay memory
+            if (replayMemory.Count > memoryCapacity)
+            {
+                replayMemory.RemoveAt(0);
+            }
+            replayMemory.Add(currentReplay);
+
+            if (!wasThePlayerDamaged)
+            {
+                // Backpropagate and train
+                for (int i = replayMemory.Count - 1; i >= 0; i--)
+                {
+                    List<double> oldOutputs = softMax(ann.calcOutput(replayMemory[i].states));
+                    double maxQOld = oldOutputs.Max();
+                    int action = oldOutputs.ToList().IndexOf(maxQOld);
+
+                    double feedback;
+                    if (i == replayMemory.Count - 1)
+                    {
+                        feedback = replayMemory[i].reward;
+                    }
+                    else
+                    {
+                        List<double> newOutputs = softMax(ann.calcOutput(replayMemory[i + 1].states));
+                        double maxQ = newOutputs.Max();
+                        feedback = replayMemory[i].reward + discount * maxQ;
+                    }
+
+                    oldOutputs[action] = feedback;
+                    ann.Train(replayMemory[i].states, oldOutputs);
+                }
+            }
+        }
+
 
         List<double> softMax(List<double> values)
         {

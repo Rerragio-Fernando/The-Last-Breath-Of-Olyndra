@@ -58,7 +58,7 @@ namespace NPC
                 Vector3 bossPositionXZ = new Vector3(bossAI.getBossTransform().position.x, 0, bossAI.getBossTransform().position.z);
                 Vector3 targetPositionXZ = new Vector3(bossAI.getSetCurrentTarget.position.x, 0, bossAI.getSetCurrentTarget.position.z);
                 float distanceToPlayer = Vector3.Distance(bossPositionXZ, targetPositionXZ);
-                bossAI.findNextAttackUsingANN(distanceToPlayer, 100); //TODO get player health ( either here or in the Manager)
+                bossAI.findNextAttackUsingANN(distanceToPlayer);
                 /*
                 if (distanceToPlayer > 10f)
                 {

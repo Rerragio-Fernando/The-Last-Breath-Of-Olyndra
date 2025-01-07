@@ -18,7 +18,7 @@ MonoBehaviour:
   cooldown: 4
   comboAttack: 0
   numbOfCombo: 0
-  damage: 0
+  damage: 0.5
   exhaleRange: 10
   exhaleAngle: 90
   hazardDuration: 5

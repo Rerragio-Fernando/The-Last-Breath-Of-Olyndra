@@ -41,6 +41,7 @@ namespace NPC
             }
 
             checkIfCooldownNeedReset(stateToReturn);
+            bossAI.trainAnn();
             return stateToReturn;
         }
 
@@ -56,9 +57,12 @@ namespace NPC
 
                 if (angle <= exhaleAngle / 2)
                 {
-                    // Apply toxic gas effect or damage
-                    Debug.Log($"{hit.name} is in the toxic gas!");
-                    applyHazardEffect(hit.gameObject);
+                    PlayerHealth health = hit.gameObject.GetComponent<PlayerHealth>();
+                    if (health)
+                    {
+                        applyDamage(health);
+                    }
+                    
                 }
             }
 
@@ -70,6 +74,18 @@ namespace NPC
         {
             // TODO: Add logic to apply damage-over-time or debuff to the player
             Debug.Log($"Applying toxic effect to {target.name}");
+        }
+
+        public override void applyDamage(PlayerHealth playerHealth)
+        {
+            if (playerHealth)
+            {
+                //apply base damage
+                playerHealth.applyDamage(damage);
+                // add tick damage
+                applyHazardEffect(playerHealth.gameObject);
+            }
+            
         }
 
         protected override void visualizeAbility()

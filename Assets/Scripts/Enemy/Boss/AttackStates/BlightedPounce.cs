@@ -36,6 +36,7 @@ namespace NPC
                 stateToReturn = nextState == null ? stateToReturn : nextState;
             }
             checkIfCooldownNeedReset(stateToReturn);
+            bossAI.trainAnn();
             return stateToReturn;
         }
 
@@ -52,6 +53,15 @@ namespace NPC
                 targetPosition = Vector3.zero;
             }
 
+        }
+
+        public override void applyDamage(PlayerHealth playerHealth)
+        {
+            if(playerHealth)
+            {
+                playerHealth.applyDamage(damage);
+            }
+            // TODO add knockback or other effects here
         }
 
         public override void resetValues()
@@ -94,9 +104,13 @@ namespace NPC
                 if (hit.CompareTag("Player"))
                 {
                     // TODO Apply high damage to Ilyra
-                    Debug.Log("Ilyra hit! Taking high damage!");
-                    // TODO add knockback or other effects here
+                    PlayerHealth health = hit.gameObject.GetComponent<PlayerHealth>();
+                    if (health)
+                    {
+                        applyDamage(health);
+                    }
                     
+
                 }
             }
             startCooldown();

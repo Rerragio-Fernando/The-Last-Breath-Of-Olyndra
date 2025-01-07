@@ -70,6 +70,8 @@ namespace NPC
 
         public abstract void resetValues();
 
+        public abstract void applyDamage(PlayerHealth playerHealth);
+
         protected void startCooldown()
         {
             Debug.Log($"Cooldown started for {abilityName}, duration: {cooldown}");

@@ -38,6 +38,7 @@ namespace NPC
             bossAI.getSetCurrentTarget = null;
 
             checkIfCooldownNeedReset(stateToReturn);
+            bossAI.trainAnn();
             return stateToReturn;
         }
 
@@ -53,13 +54,25 @@ namespace NPC
 
                 if (angle <= attackAngle / 2)
                 {
-                    // TODO damage the player
-                    Debug.Log("Damaging player");
+                    PlayerHealth health = hit.gameObject.GetComponent<PlayerHealth>();
+                    if(health)
+                    {
+                        applyDamage(health);
+                    }
+                    
                 }
             }
             isActive = true;
 
             startCooldown();
+        }
+
+        public override void applyDamage(PlayerHealth playerHealth)
+        {
+            if (playerHealth)
+            {
+                playerHealth.applyDamage(damage);
+            }
         }
 
         public override void resetValues()
