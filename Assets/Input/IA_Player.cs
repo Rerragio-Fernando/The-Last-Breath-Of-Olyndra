@@ -55,15 +55,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Sprint"",
-                    ""type"": ""Button"",
-                    ""id"": ""779a6091-f045-4535-8635-505915368372"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""BasicAttack"",
                     ""type"": ""Button"",
                     ""id"": ""c867f97d-e997-4eec-97d8-d6bb911255ef"",
@@ -116,6 +107,15 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Guard"",
+                    ""type"": ""Button"",
+                    ""id"": ""efae5539-3a47-41ab-b321-4607ee8dd283"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -160,28 +160,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Jump"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ecd92882-b998-42f9-9dda-9d89419dd7c5"",
-                    ""path"": ""<Keyboard>/leftShift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Sprint"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ecde1b9a-e7da-4575-8eb2-d6bf1e6c2c49"",
-                    ""path"": ""<DualShockGamepad>/leftStickPress"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Sprint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -360,6 +338,17 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""action"": ""EnemyLockOut"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1163653d-33d6-4908-9f6a-85678947dcf3"",
+                    ""path"": ""<DualShockGamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Guard"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -427,13 +416,13 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
-        m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_BasicAttack = m_Player.FindAction("BasicAttack", throwIfNotFound: true);
         m_Player_StrongAttack = m_Player.FindAction("StrongAttack", throwIfNotFound: true);
         m_Player_AOEAttack = m_Player.FindAction("AOEAttack", throwIfNotFound: true);
         m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
         m_Player_EnemyLockOn_Cycle = m_Player.FindAction("EnemyLockOn_Cycle", throwIfNotFound: true);
         m_Player_EnemyLockOut = m_Player.FindAction("EnemyLockOut", throwIfNotFound: true);
+        m_Player_Guard = m_Player.FindAction("Guard", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_ShowControls = m_UI.FindAction("ShowControls", throwIfNotFound: true);
@@ -507,13 +496,13 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Movement;
     private readonly InputAction m_Player_Jump;
-    private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_BasicAttack;
     private readonly InputAction m_Player_StrongAttack;
     private readonly InputAction m_Player_AOEAttack;
     private readonly InputAction m_Player_Aim;
     private readonly InputAction m_Player_EnemyLockOn_Cycle;
     private readonly InputAction m_Player_EnemyLockOut;
+    private readonly InputAction m_Player_Guard;
     public struct PlayerActions
     {
         private @IA_Player m_Wrapper;
@@ -521,13 +510,13 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
-        public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @BasicAttack => m_Wrapper.m_Player_BasicAttack;
         public InputAction @StrongAttack => m_Wrapper.m_Player_StrongAttack;
         public InputAction @AOEAttack => m_Wrapper.m_Player_AOEAttack;
         public InputAction @Aim => m_Wrapper.m_Player_Aim;
         public InputAction @EnemyLockOn_Cycle => m_Wrapper.m_Player_EnemyLockOn_Cycle;
         public InputAction @EnemyLockOut => m_Wrapper.m_Player_EnemyLockOut;
+        public InputAction @Guard => m_Wrapper.m_Player_Guard;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -546,9 +535,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
-            @Sprint.started += instance.OnSprint;
-            @Sprint.performed += instance.OnSprint;
-            @Sprint.canceled += instance.OnSprint;
             @BasicAttack.started += instance.OnBasicAttack;
             @BasicAttack.performed += instance.OnBasicAttack;
             @BasicAttack.canceled += instance.OnBasicAttack;
@@ -567,6 +553,9 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @EnemyLockOut.started += instance.OnEnemyLockOut;
             @EnemyLockOut.performed += instance.OnEnemyLockOut;
             @EnemyLockOut.canceled += instance.OnEnemyLockOut;
+            @Guard.started += instance.OnGuard;
+            @Guard.performed += instance.OnGuard;
+            @Guard.canceled += instance.OnGuard;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -580,9 +569,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
-            @Sprint.started -= instance.OnSprint;
-            @Sprint.performed -= instance.OnSprint;
-            @Sprint.canceled -= instance.OnSprint;
             @BasicAttack.started -= instance.OnBasicAttack;
             @BasicAttack.performed -= instance.OnBasicAttack;
             @BasicAttack.canceled -= instance.OnBasicAttack;
@@ -601,6 +587,9 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @EnemyLockOut.started -= instance.OnEnemyLockOut;
             @EnemyLockOut.performed -= instance.OnEnemyLockOut;
             @EnemyLockOut.canceled -= instance.OnEnemyLockOut;
+            @Guard.started -= instance.OnGuard;
+            @Guard.performed -= instance.OnGuard;
+            @Guard.canceled -= instance.OnGuard;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -687,13 +676,13 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnMovement(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
-        void OnSprint(InputAction.CallbackContext context);
         void OnBasicAttack(InputAction.CallbackContext context);
         void OnStrongAttack(InputAction.CallbackContext context);
         void OnAOEAttack(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
         void OnEnemyLockOn_Cycle(InputAction.CallbackContext context);
         void OnEnemyLockOut(InputAction.CallbackContext context);
+        void OnGuard(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

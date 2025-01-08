@@ -18,86 +18,41 @@ public class PlayerEventSystem : MonoBehaviour
     public event Action OnCharacterJumpEvent;
 
     public event Action OnCharacterAttackTriggerEvent;
-
-    public event Action OnCharacterAimInEvent;
-    public event Action OnCharacterAimOutEvent;
+    public event Action<bool> OnCharacterGuardEvent;
 
     public event Action OnCharacterBoostInEvent;
     public event Action OnCharacterBoostOutEvent;
-
-    public event Action OnCharacterEnemyLockInEvent;
-    public event Action OnCharacterEnemyLockOutEvent;
-    public event Action OnCharacterEnemyLockCycleEvent;
 
     public event Action OnAnimationJumpForceEvent;
 
     //Event Method
     public void CharacterIdle(){
-        if(OnCharacterIdleEvent != null){
-            OnCharacterIdleEvent();
-        }
+        OnCharacterIdleEvent?.Invoke();
     }
     public void CharacterWalk(){
-        if(OnCharacterWalkEvent != null){
-            OnCharacterWalkEvent();
-        }
+        OnCharacterWalkEvent?.Invoke();
     }
     public void CharacterRun(){
-        if(OnCharacterRunEvent != null){
-            OnCharacterRunEvent();
-        }
+        OnCharacterRunEvent?.Invoke();
     }
     public void CharacterJump(){
-        if(OnCharacterJumpEvent != null){
-            OnCharacterJumpEvent();
-        }
+        OnCharacterJumpEvent?.Invoke();
     }
     public void AnimationJump(){
-        if(OnAnimationJumpForceEvent != null){
-            OnAnimationJumpForceEvent();
-        }
+        OnAnimationJumpForceEvent?.Invoke();
     }
 
     public void TriggerAttack(){
-        if(OnCharacterAttackTriggerEvent != null){
-            OnCharacterAttackTriggerEvent();
-        }
+        OnCharacterAttackTriggerEvent?.Invoke();
     }
 
-    public void CharacterAimIn(){
-        CharacterEnemyLockOut();
-        if(OnCharacterAimInEvent != null){
-            OnCharacterAimInEvent();
-        }
-    }
-    public void CharacterAimOut(){
-        if(OnCharacterAimOutEvent != null){
-            OnCharacterAimOutEvent();
-        }
+    public void TriggerGuard(bool val){
+        OnCharacterGuardEvent?.Invoke(val);
     }
     public void CharacterBoostIn(){
-        if(OnCharacterBoostInEvent != null){
-            OnCharacterBoostInEvent();
-        }
+        OnCharacterBoostInEvent?.Invoke();
     }
     public void CharacterBoostOut(){
-        if(OnCharacterBoostOutEvent != null){
-            OnCharacterBoostOutEvent();
-        }
-    }
-    public void CharacterEnemyLockIn(){
-        if(OnCharacterEnemyLockInEvent != null){
-            OnCharacterEnemyLockInEvent();
-        }
-    }
-    public void CharacterEnemyLockOut(){
-        if(OnCharacterEnemyLockOutEvent != null){
-            OnCharacterEnemyLockOutEvent();
-        }
-    }
-    public void CharacterEnemyLockCycle(){
-        if(OnCharacterEnemyLockCycleEvent != null){
-            OnCharacterEnemyLockCycleEvent();
-        }
+        OnCharacterBoostOutEvent?.Invoke();
     }
 }

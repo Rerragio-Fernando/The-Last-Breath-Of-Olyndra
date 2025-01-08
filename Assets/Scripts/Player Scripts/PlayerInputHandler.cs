@@ -18,9 +18,8 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler> {
     public static event Action<Vector2, InputActionPhase> LookEvent;
     
     public static event Action<InputActionPhase> JumpEvent;
-    public static event Action<InputActionPhase> SprintEvent;
+    public static event Action<InputActionPhase> GuardEvent;
 
-    public static event Action<InputActionPhase> AimEvent;
     public static event Action<InputActionPhase> BasicAttackEvent;
     public static event Action<InputActionPhase> StrongAttackEvent;
     public static event Action<InputActionPhase> AOEAttackEvent;
@@ -38,9 +37,8 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler> {
         BindAction(_playerInputActions.Player.Look, ctx => InvokeIfCanAct(() => LookEvent?.Invoke(ctx.ReadValue<Vector2>(), ctx.phase)));
 
         BindAction(_playerInputActions.Player.Jump, ctx => InvokeIfCanAct(() => JumpEvent?.Invoke(ctx.phase)));
-        BindAction(_playerInputActions.Player.Sprint, ctx => InvokeIfCanAct(() => SprintEvent?.Invoke(ctx.phase)));
 
-        BindAction(_playerInputActions.Player.Aim, ctx => InvokeIfCanAct(() => AimEvent?.Invoke(ctx.phase)));
+        BindAction(_playerInputActions.Player.Guard, ctx => InvokeIfCanAct(() => GuardEvent?.Invoke(ctx.phase)));
 
         BindAction(_playerInputActions.Player.BasicAttack, ctx => InvokeIfCanAct(() => BasicAttackEvent?.Invoke(ctx.phase)));
         BindAction(_playerInputActions.Player.StrongAttack, ctx => InvokeIfCanAct(() => StrongAttackEvent?.Invoke(ctx.phase)));
@@ -54,9 +52,8 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler> {
         UnbindAction(_playerInputActions.Player.Look, ctx => InvokeIfCanAct(() => LookEvent?.Invoke(ctx.ReadValue<Vector2>(), ctx.phase)));
 
         UnbindAction(_playerInputActions.Player.Jump, ctx => InvokeIfCanAct(() => JumpEvent?.Invoke(ctx.phase)));
-        UnbindAction(_playerInputActions.Player.Sprint, ctx => InvokeIfCanAct(() => SprintEvent?.Invoke(ctx.phase)));
 
-        UnbindAction(_playerInputActions.Player.Aim, ctx => InvokeIfCanAct(() => AimEvent?.Invoke(ctx.phase)));
+        UnbindAction(_playerInputActions.Player.Guard, ctx => InvokeIfCanAct(() => GuardEvent?.Invoke(ctx.phase)));
 
         UnbindAction(_playerInputActions.Player.BasicAttack, ctx => InvokeIfCanAct(() => BasicAttackEvent?.Invoke(ctx.phase)));
         UnbindAction(_playerInputActions.Player.StrongAttack, ctx => InvokeIfCanAct(() => StrongAttackEvent?.Invoke(ctx.phase)));

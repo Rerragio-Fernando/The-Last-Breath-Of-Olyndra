@@ -38,9 +38,6 @@ public class PlayerCameraHandler : MonoBehaviour
         _cineCam = _cinemachineCamera.GetComponent<CinemachineCamera>();
         _cineCamRot = _cinemachineCamera.GetComponent<CinemachineRotationComposer>();
         _cineCamFollow = _cinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
-
-        PlayerEventSystem._current.OnCharacterAimInEvent += ActivateAimCam;
-        PlayerEventSystem._current.OnCharacterAimOutEvent += ActivateMainCam;
     }
 
     public void ActivateMainCam(){

@@ -23,38 +23,29 @@ public class PlayerAnimationScript : AnimatorUtil
         _anim = GetComponent<Animator>();
 
         PlayerEventSystem._current.OnCharacterIdleEvent += Idle;
-        PlayerEventSystem._current.OnCharacterWalkEvent += Walk;
         PlayerEventSystem._current.OnCharacterRunEvent += Run;
 
         PlayerEventSystem._current.OnCharacterJumpEvent += Jump;
+        PlayerEventSystem._current.OnCharacterGuardEvent += Guard;
 
         PlayerEventSystem._current.OnCharacterAttackTriggerEvent += TriggerAttack;
-
-        PlayerEventSystem._current.OnCharacterAimInEvent += AimIn;
-        PlayerEventSystem._current.OnCharacterAimOutEvent += AimOut;
     }
 
     private void OnDisable() {
         PlayerEventSystem._current.OnCharacterIdleEvent -= Idle;
-        PlayerEventSystem._current.OnCharacterWalkEvent -= Walk;
         PlayerEventSystem._current.OnCharacterRunEvent -= Run;
 
         PlayerEventSystem._current.OnCharacterJumpEvent -= Jump;
+        PlayerEventSystem._current.OnCharacterGuardEvent -= Guard;
 
         PlayerEventSystem._current.OnCharacterAttackTriggerEvent -= TriggerAttack;
-
-        PlayerEventSystem._current.OnCharacterAimInEvent -= AimIn;
-        PlayerEventSystem._current.OnCharacterAimOutEvent -= AimOut;
     }
 
     public void Idle(){
         BlendTreeValue(_anim, "Movement", 0f, _movementLerper);
     }
-    public void Walk(){
-        BlendTreeValue(_anim, "Movement", 1f, _movementLerper);
-    }
     public void Run(){
-        BlendTreeValue(_anim, "Movement", 2f, _movementLerper);
+        BlendTreeValue(_anim, "Movement", 1f, _movementLerper);
     }
     public void Jump(){
         AnimatorTrigger(_anim, "Jump", 0.5f);
@@ -62,11 +53,8 @@ public class PlayerAnimationScript : AnimatorUtil
     public void TriggerAttack(){
         AnimatorTrigger(_anim, "Attack", 0.5f);
     }
-    public void AimIn(){
-        _anim.SetBool("Aiming", true);
-    }
-    public void AimOut(){
-        _anim.SetBool("Aiming", false);
+    public void Guard(bool val){
+        _anim.SetBool("Guarding", val);
     }
     public void UpdateCharacterDirection(Vector2 direction){
         BlendTreeValue(_anim, "FrontBack", direction.y, _movementLerper);
@@ -76,10 +64,4 @@ public class PlayerAnimationScript : AnimatorUtil
     public void SetGrounded(bool val){
         _anim.SetBool("Grounded", val);
     }
-
-    //Animation Events
-    public void NotAttacking(){
-        _anim.SetBool("IsAttacking", false);
-    }
-    // Add an event to falsify the Is Attacking parameter
 }
