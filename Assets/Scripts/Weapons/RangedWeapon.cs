@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class RangedWeapon : WeaponScript{
 
@@ -13,13 +14,6 @@ public class RangedWeapon : WeaponScript{
     }
 
     private void Update() {
-        Aim();
-    }
 
-    public void Aim(){
-        if(PlayerInputHandler._current.GetAimValue() > 0f)
-            PlayerCameraHandler._current.ActivateAimCam();
-        else
-            PlayerCameraHandler._current.ActivateMainCam();
     }
 }

@@ -4,67 +4,61 @@ using UnityEngine;
 
 public class PlayerAnimationScript : AnimatorUtil
 {
+    public static PlayerAnimationScript _current;
     [SerializeField] private float _movementLerper = .5f;
-    [SerializeField] AnimationCurve _rumbleFq;
-    [SerializeField] private Animator _anim;
+    // [SerializeField] AnimationCurve _rumbleFq;
 
+    private Animator _anim;
     private float _moveVal;
     private int _activeWeaponIndex;
 
-    //Animator Variables
-    private float _movement;
+    private void Awake() {
+        if(_current == null)
+            _current = this;
+        else
+            Destroy(this);
+    }
 
     private void Start() {
-        GameEventSystem._current.OnCharacterIdleEvent += Idle;
-        GameEventSystem._current.OnCharacterWalkEvent += Walk;
-        GameEventSystem._current.OnCharacterRunEvent += Run;
+        _anim = GetComponent<Animator>();
 
-        GameEventSystem._current.OnCharacterJumpEvent += Jump;
-        GameEventSystem._current.OnCharacterSwitchWeapon += Switch;
+        PlayerEventSystem._current.OnCharacterIdleEvent += Idle;
+        PlayerEventSystem._current.OnCharacterRunEvent += Run;
 
-        GameEventSystem._current.OnCharacterAimInEvent += AimIn;
-        GameEventSystem._current.OnCharacterAimOutEvent += AimOut;
+        PlayerEventSystem._current.OnCharacterJumpEvent += Jump;
+        PlayerEventSystem._current.OnCharacterGuardEvent += Guard;
+
+        PlayerEventSystem._current.OnCharacterAttackTriggerEvent += TriggerAttack;
     }
 
     private void OnDisable() {
-        GameEventSystem._current.OnCharacterIdleEvent -= Idle;
-        GameEventSystem._current.OnCharacterWalkEvent -= Walk;
-        GameEventSystem._current.OnCharacterRunEvent -= Run;
+        PlayerEventSystem._current.OnCharacterIdleEvent -= Idle;
+        PlayerEventSystem._current.OnCharacterRunEvent -= Run;
 
-        GameEventSystem._current.OnCharacterJumpEvent -= Jump;
-        GameEventSystem._current.OnCharacterSwitchWeapon -= Switch;
+        PlayerEventSystem._current.OnCharacterJumpEvent -= Jump;
+        PlayerEventSystem._current.OnCharacterGuardEvent -= Guard;
 
-        GameEventSystem._current.OnCharacterAimInEvent -= AimIn;
-        GameEventSystem._current.OnCharacterAimOutEvent -= AimOut;
+        PlayerEventSystem._current.OnCharacterAttackTriggerEvent -= TriggerAttack;
     }
 
     public void Idle(){
         BlendTreeValue(_anim, "Movement", 0f, _movementLerper);
     }
-    public void Walk(){
-        BlendTreeValue(_anim, "Movement", 1f, _movementLerper);
-    }
     public void Run(){
-        BlendTreeValue(_anim, "Movement", 2f, _movementLerper);
+        BlendTreeValue(_anim, "Movement", 1f, _movementLerper);
     }
     public void Jump(){
         AnimatorTrigger(_anim, "Jump", 0.5f);
     }
-    public void Switch(){
-        AnimatorTrigger(_anim, "Switch Weapon", 0.5f);
+    public void TriggerAttack(){
+        AnimatorTrigger(_anim, "Attack", 0.5f);
     }
-    public void AimIn(){
-        _anim.SetBool("Aiming", true);
-    }
-    public void AimOut(){
-        _anim.SetBool("Aiming", false);
+    public void Guard(bool val){
+        _anim.SetBool("Guarding", val);
     }
     public void UpdateCharacterDirection(Vector2 direction){
         BlendTreeValue(_anim, "FrontBack", direction.y, _movementLerper);
         BlendTreeValue(_anim, "LeftRight", direction.x, _movementLerper);
-    }
-    public void SetActiveWeaponIndex(int val){
-        _activeWeaponIndex = val;
     }
 
     public void SetGrounded(bool val){

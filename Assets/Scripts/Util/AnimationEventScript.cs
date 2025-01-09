@@ -7,9 +7,6 @@ public class AnimationEventScript : MonoBehaviour
 {
     //Event Method
     public void AnimationJump(){
-        GameEventSystem._current.AnimationJump();
-    }
-    public void Test(){
-        Debug.Log($"Hukanawa");
+        PlayerEventSystem._current.AnimationJump();
     }
 }

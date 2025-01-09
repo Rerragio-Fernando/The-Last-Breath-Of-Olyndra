@@ -23,6 +23,6 @@ MonoBehaviour:
   attackAngle: 120
   targetLayer:
     serializedVersion: 2
-    m_Bits: 64
-  slashParticles: {fileID: 6251945216833507621, guid: 025137984951874418f070cc315433a9,
+    m_Bits: 0
+  slashParticles: {fileID: 6251945216833507621, guid: d2de1908065dac24c96d4fbe0a7b1e9f,
     type: 3}

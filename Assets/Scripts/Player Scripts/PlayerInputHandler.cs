@@ -1,134 +1,81 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerInputHandler : MonoBehaviour {
-    public static PlayerInputHandler _current;
+public struct AttackType{
+    public bool attack;
+    public int attackType;//1-basic, 2-strong, 3-AOE
+}
+
+public class PlayerInputHandler : Singleton<PlayerInputHandler> {
     private IA_Player _playerInputActions;
-    private Vector2 _lookInputRaw;
-    private Vector2 _moveInputRaw;
-    private float _fire;
-    private float _aim;
-    private bool _sprint;
-    private bool _jump;
-    private bool _switchWeapon;
-    private bool _showPlayerControls;
+    private bool canAct = true;
 
-    private void Awake() {
+    // Movement Events
+    public static event Action<Vector2, InputActionPhase> MoveEvent;
+    public static event Action<Vector2, InputActionPhase> LookEvent;
+    
+    public static event Action<InputActionPhase> JumpEvent;
+    public static event Action<InputActionPhase> GuardEvent;
+
+    public static event Action<InputActionPhase> BasicAttackEvent;
+    public static event Action<InputActionPhase> StrongAttackEvent;
+    public static event Action<InputActionPhase> AOEAttackEvent;
+
+    public override void Awake(){
+        base.Awake();
         _playerInputActions = new IA_Player();
-
-        if(_current == null)
-            _current = this;
-        else
-            Destroy(this);
-    }
-
-    public IA_Player GetInputActionAsset(){
-        return _playerInputActions;
     }
 
     private void OnEnable() {
-        _playerInputActions.Player.Enable();
-        _playerInputActions.UI.Enable();
+        _playerInputActions.Enable();
+    
+        // Player input bindings
+        BindAction(_playerInputActions.Player.Movement, ctx => InvokeIfCanAct(() => MoveEvent?.Invoke(ctx.ReadValue<Vector2>(), ctx.phase)));
+        BindAction(_playerInputActions.Player.Look, ctx => InvokeIfCanAct(() => LookEvent?.Invoke(ctx.ReadValue<Vector2>(), ctx.phase)));
 
-        _playerInputActions.Player.Sprint.performed += OnSprintIn;
+        BindAction(_playerInputActions.Player.Jump, ctx => InvokeIfCanAct(() => JumpEvent?.Invoke(ctx.phase)));
 
-        _playerInputActions.Player.Jump.performed += OnJumpIn;
-        _playerInputActions.Player.Jump.canceled += OnJumpOut;
+        BindAction(_playerInputActions.Player.Guard, ctx => InvokeIfCanAct(() => GuardEvent?.Invoke(ctx.phase)));
 
-        _playerInputActions.Player.SwitchWeapon.started += OnSwitchWeaponIn;
-        _playerInputActions.Player.SwitchWeapon.canceled += OnSwitchWeaponOut;
-
-        //UI
-        _playerInputActions.UI.ShowControls.performed += ShowControls;
-        _playerInputActions.UI.ShowControls.canceled += HideControls;
+        BindAction(_playerInputActions.Player.BasicAttack, ctx => InvokeIfCanAct(() => BasicAttackEvent?.Invoke(ctx.phase)));
+        BindAction(_playerInputActions.Player.StrongAttack, ctx => InvokeIfCanAct(() => StrongAttackEvent?.Invoke(ctx.phase)));
+        BindAction(_playerInputActions.Player.AOEAttack, ctx => InvokeIfCanAct(() => AOEAttackEvent?.Invoke(ctx.phase)));
     }
 
     private void OnDisable() {
-        _playerInputActions.Player.Disable();
-        _playerInputActions.UI.Disable();
+        _playerInputActions.Disable();
 
-        _playerInputActions.Player.Sprint.performed -= OnSprintIn;
+        UnbindAction(_playerInputActions.Player.Movement, ctx => InvokeIfCanAct(() => MoveEvent?.Invoke(ctx.ReadValue<Vector2>(), ctx.phase)));
+        UnbindAction(_playerInputActions.Player.Look, ctx => InvokeIfCanAct(() => LookEvent?.Invoke(ctx.ReadValue<Vector2>(), ctx.phase)));
 
-        _playerInputActions.Player.Jump.performed -= OnJumpIn;
-        _playerInputActions.Player.Jump.canceled -= OnJumpOut;
+        UnbindAction(_playerInputActions.Player.Jump, ctx => InvokeIfCanAct(() => JumpEvent?.Invoke(ctx.phase)));
 
-        _playerInputActions.Player.SwitchWeapon.started -= OnSwitchWeaponIn;
-        _playerInputActions.Player.SwitchWeapon.canceled -= OnSwitchWeaponOut;
+        UnbindAction(_playerInputActions.Player.Guard, ctx => InvokeIfCanAct(() => GuardEvent?.Invoke(ctx.phase)));
 
-        //UI
-        _playerInputActions.UI.ShowControls.performed -= ShowControls;
-        _playerInputActions.UI.ShowControls.canceled -= HideControls;
+        UnbindAction(_playerInputActions.Player.BasicAttack, ctx => InvokeIfCanAct(() => BasicAttackEvent?.Invoke(ctx.phase)));
+        UnbindAction(_playerInputActions.Player.StrongAttack, ctx => InvokeIfCanAct(() => StrongAttackEvent?.Invoke(ctx.phase)));
+        UnbindAction(_playerInputActions.Player.AOEAttack, ctx => InvokeIfCanAct(() => AOEAttackEvent?.Invoke(ctx.phase)));
     }
 
-    private void Update() {
-        _lookInputRaw = _playerInputActions.Player.Look.ReadValue<Vector2>();
-        _moveInputRaw = _playerInputActions.Player.Movement.ReadValue<Vector2>();
-        _aim = _playerInputActions.Player.Aim.ReadValue<float>();
-        // Debug.Log(_lookInputRaw);
+    private void InvokeIfCanAct(Action action)
+    {
+        if (canAct) action?.Invoke();
     }
 
-    //Events
-
-    #region PlayerControls
-    //Sprinting
-    void OnSprintIn(InputAction.CallbackContext ctx){
-        _sprint = !_sprint;
+    private void BindAction(InputAction inputAction, Action<InputAction.CallbackContext> callback)
+    {
+        inputAction.started += callback;
+        inputAction.performed += callback;
+        inputAction.canceled += callback;
     }
 
-    //Jump
-    void OnJumpIn(InputAction.CallbackContext ctx){
-        _jump = true;
-    }
-    void OnJumpOut(InputAction.CallbackContext ctx){
-        _jump = false;
-    }
-
-    //Switch Weapon
-    void OnSwitchWeaponIn(InputAction.CallbackContext ctx){
-        _switchWeapon = true;
-    }
-    void OnSwitchWeaponOut(InputAction.CallbackContext ctx){
-        _switchWeapon = false;
-    }
-    #endregion
-
-    #region UI
-    void ShowControls(InputAction.CallbackContext ctx){
-        _showPlayerControls = true;
-    }
-    void HideControls(InputAction.CallbackContext ctx){
-        _showPlayerControls = false;
-    }
-    #endregion
-
-    public Vector2 GetLookInputRaw(){
-        return _lookInputRaw;
-    }
-    public Vector2 GetMoveInputRaw(){
-        if(_moveInputRaw.magnitude <= 0f)
-            _sprint = false;
-        return _moveInputRaw;
-    }
-    public bool GetSprint(){
-        return _sprint;
-    }    
-    public bool GetJump(){
-        return _jump;
-    }
-    public bool GetSwitchWeapon(){
-        return _switchWeapon;
-    }
-    public bool GetShowControls(){
-        return _showPlayerControls;
-    }
-    public float GetAimValue(){
-        if(_aim < 0.1f)
-            return 0f;
-        else if(_aim > 0.9f)
-            return 1f;
-        
-        return _aim;
+    private void UnbindAction(InputAction inputAction, Action<InputAction.CallbackContext> callback)
+    {
+        inputAction.started -= callback;
+        inputAction.performed -= callback;
+        inputAction.canceled -= callback;
     }
 }
