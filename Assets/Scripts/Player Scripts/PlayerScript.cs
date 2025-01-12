@@ -35,17 +35,20 @@ public class PlayerScript : MonoBehaviour
     private Vector3 _dodgeDir;
     private bool _isGrounded;
     private int _activeWeaponIndex;
-    private PlayerAnimationScript _playerAnim;
-    private CharacterController _cont;
     private bool _jump = false;
     private bool _isGuarding = false;
+    private bool _isAttacking = false;
     private Vector3 _velocity;
+    private PlayerAnimationScript _playerAnim;
+    private CharacterController _cont;
     private GameObject _bossEnemy;
+    private PlayerCombatSystem _combatSys;
 
     private void Start() {
         Cursor.lockState = CursorLockMode.Locked;
         _cont = GetComponent<CharacterController>();
         _playerAnim = GetComponent<PlayerAnimationScript>();
+        _combatSys = GetComponent<PlayerCombatSystem>();
 
         _bossEnemy = GameObject.FindWithTag("Enemy");
 
@@ -54,9 +57,9 @@ public class PlayerScript : MonoBehaviour
 
         PlayerInputHandler.JumpEvent += JumpInput;
 
-        PlayerEventSystem._current.OnCharacterBoostInEvent += BoostIn;
-        PlayerEventSystem._current.OnCharacterBoostOutEvent += BoostOut;
-        PlayerEventSystem._current.OnCharacterGuardEvent += Guarding;
+        PlayerEventSystem.OnCharacterBoostInEvent += BoostIn;
+        PlayerEventSystem.OnCharacterBoostOutEvent += BoostOut;
+        PlayerEventSystem.OnCharacterGuardEvent += Guarding;
     }
 
     #region Input Functions
@@ -89,6 +92,7 @@ public class PlayerScript : MonoBehaviour
     }
 
     private void Update() {
+        _isAttacking = _combatSys.IsAttacking;
         Grounded();
         PlayerMovement();
         PlayerLookRotation();
@@ -103,55 +107,66 @@ public class PlayerScript : MonoBehaviour
     
     void PlayerMovement(){
         if(!_isGuarding){
-            _movDir = new Vector3(_movementIN.x, 0f, _movementIN.y).normalized;
-            _targAngle = Mathf.Atan2(_movDir.x, _movDir.z) * Mathf.Rad2Deg + _cam.eulerAngles.y;
-        
-            if(!_isGrounded){
-                _velocity.y += -_gravity * _playerMass * Time.deltaTime;
-                _jump = false;
-            }
-            else{
-                if(_jumpIN){
-                    PlayerEventSystem._current.CharacterJump();
+            if(!_isAttacking){
+                // Calculate movement direction and target angle
+                _movDir = new Vector3(_movementIN.x, 0f, _movementIN.y).normalized;
+                _targAngle = Mathf.Atan2(_movDir.x, _movDir.z) * Mathf.Rad2Deg + _cam.eulerAngles.y;
+
+                // Handle vertical velocity
+                if(!_isGrounded){
+                    _velocity.y += -_gravity * _playerMass * Time.deltaTime;
+                    _jump = false;
+                }
+                else if(_jumpIN){
+                    PlayerEventSystem.CharacterJump();
                 }
                 else{
-                    _velocity.y = 0f;
+                    _velocity.y = -1f;
+                }
+
+                // Handle movement and animation states
+                if(_movDir.magnitude > 0f && _isGrounded){
+                    _moveSpeed = _runSpeed;
+                    PlayerEventSystem.CharacterRun();
+
+                    Vector3 movDir = Quaternion.Euler(0f, _targAngle, 0f) * Vector3.forward;
+                    Vector3 adjustedVelocity = movDir.normalized * _moveSpeed;
+                    _velocity = new Vector3(adjustedVelocity.x, _velocity.y, adjustedVelocity.z);
+                }
+                else{
+                    ApplyFriction();
                 }
             }
-            
-            if(_movDir.magnitude > 0f && _isGrounded){
-                _moveSpeed = _runSpeed;
-                PlayerEventSystem._current.CharacterRun();
-
-                Vector3 movDir = Quaternion.Euler(0f, _targAngle, 0f) * Vector3.forward;  
-                Vector3 l_temp = (movDir.normalized * _moveSpeed);
-                _velocity = new Vector3(l_temp.x, _velocity.y, l_temp.z);
-            }
             else{
-                PlayerEventSystem._current.CharacterIdle();
-                float l_friction;
-
-                if(_isGrounded)
-                    l_friction = _playerFriction;
-                else
-                    l_friction = .05f;
-
-                _velocity = Vector3.Lerp(_velocity, new Vector3(0f, _velocity.y, 0f), l_friction * Time.deltaTime);
+                ApplyFriction();
             }
         }
         else{
-            _dodgeDir = new Vector3(_movementIN.x, 0f, _movementIN.y).normalized;
-            if(Time.time > _nextDodge && _dodgeDir.magnitude > 0f){
-                PlayerEventSystem._current.CharacterBoostIn();
-                _nextDodge = Time.time + 1/_dodgeRate;
-            }
-            else{
-                PlayerEventSystem._current.CharacterBoostOut();
-            }
+            HandleGuarding();
         }
 
         if(_jump){
             _velocity.y = _jumpForce;
+        }
+    }
+
+    void ApplyFriction(){
+        PlayerEventSystem.CharacterIdle();
+        float friction = _isGrounded ? _playerFriction : 0.05f;
+        _velocity = Vector3.Lerp(_velocity, new Vector3(0f, _velocity.y, 0f), friction * Time.deltaTime);
+    }
+
+    void HandleGuarding(){
+        PlayerEventSystem.CharacterIdle();
+        // Guarding or dodging logic
+        _dodgeDir = new Vector3(_movementIN.x, 0f, _movementIN.y).normalized;
+
+        if(Time.time > _nextDodge && _dodgeDir.magnitude > 0f){
+            PlayerEventSystem.CharacterBoostIn();
+            _nextDodge = Time.time + 1 / _dodgeRate;
+        }
+        else{
+            PlayerEventSystem.CharacterBoostOut();
         }
     }
 
@@ -160,7 +175,7 @@ public class PlayerScript : MonoBehaviour
         Vector3 l_dir = _bossEnemy.transform.position - transform.position;
         l_dir.y = 0f;
 
-        if (_isGuarding || _movDir.magnitude == 0f)
+        if (_isGuarding || _movDir.magnitude == 0f || _isAttacking)
         {
             transform.rotation = Quaternion.LookRotation(l_dir);
         }
@@ -170,7 +185,7 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    void JumpForce(){//This is being called by animation events
+    public void JumpForce(){//This is being called by animation events
         _jump = true;
     }
 
@@ -181,8 +196,7 @@ public class PlayerScript : MonoBehaviour
     }
 
     void BoostOut(){
-        Vector3 val = Vector3.Lerp(_velocity, Vector3.zero, _dodgeTime * Time.deltaTime);
-        _velocity.x = val.x;
-        _velocity.z = val.z;
+        _velocity = new Vector3(0f, _velocity.y, 0f);
+        // Vector3 val = Vector3.Lerp(_velocity, new Vector3(0f, _velocity.y, 0f), _dodgeTime * Time.deltaTime);
     }
 }

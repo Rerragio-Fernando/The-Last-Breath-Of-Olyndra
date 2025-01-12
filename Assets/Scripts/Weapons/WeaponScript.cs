@@ -3,27 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponScript : MonoBehaviour{
-    
-    [Header("Trigger Profiles")]
-    [SerializeField] private TriggerProfile _atkTriggerProfile;
-    [SerializeField] private TriggerProfile _aimTriggerProfile;
-
     [Header("Weapon Properties")]
-    [SerializeField] private float _damage;
-    [SerializeField] private float _atkRate;
-    
-    private int _weaponIndex;
-    
-    public void SetWeaponIndex(int val){
-        _weaponIndex = val;
+    [SerializeField] private int _damage;
+
+    private Collider _weaponCollider;
+    private bool _hit;
+
+    private void Start() {
+        _weaponCollider = GetComponent<Collider>();
+        _weaponCollider.enabled = false;
+
+        _hit = false;
     }
 
-    // private void OnEnable() {
-    //     UpdateTriggerProfile();
-    // }
+    private void OnDisable() {
+        _hit = false;
+    }
 
-    // public void UpdateTriggerProfile(){
-    //     TriggerManager._current.SetTrigger(_aimTriggerProfile, true);
-    //     TriggerManager._current.SetTrigger(_atkTriggerProfile, false);
-    // }
+    private void OnCollisionEnter(Collision other) {
+        DamageScript l_ds = other.gameObject.GetComponent<DamageScript>();
+        if(l_ds != null && !_hit){
+            _hit = true;
+            l_ds.TakeDamage(_damage);
+        }
+    }
 }

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerAnimationScript : AnimatorUtil
 {
-    public static PlayerAnimationScript _current;
     [SerializeField] private float _movementLerper = .5f;
     // [SerializeField] AnimationCurve _rumbleFq;
 
@@ -12,33 +11,32 @@ public class PlayerAnimationScript : AnimatorUtil
     private float _moveVal;
     private int _activeWeaponIndex;
 
-    private void Awake() {
-        if(_current == null)
-            _current = this;
-        else
-            Destroy(this);
-    }
-
     private void Start() {
         _anim = GetComponent<Animator>();
 
-        PlayerEventSystem._current.OnCharacterIdleEvent += Idle;
-        PlayerEventSystem._current.OnCharacterRunEvent += Run;
+        PlayerEventSystem.OnSpawnInEvent += Spawn;
 
-        PlayerEventSystem._current.OnCharacterJumpEvent += Jump;
-        PlayerEventSystem._current.OnCharacterGuardEvent += Guard;
+        PlayerEventSystem.OnCharacterIdleEvent += Idle;
+        PlayerEventSystem.OnCharacterRunEvent += Run;
 
-        PlayerEventSystem._current.OnCharacterAttackTriggerEvent += TriggerAttack;
+        PlayerEventSystem.OnCharacterJumpEvent += Jump;
+        PlayerEventSystem.OnCharacterGuardEvent += Guard;
+
+        PlayerEventSystem.OnCharacterAttackTriggerEvent += TriggerAttack;
     }
 
     private void OnDisable() {
-        PlayerEventSystem._current.OnCharacterIdleEvent -= Idle;
-        PlayerEventSystem._current.OnCharacterRunEvent -= Run;
+        PlayerEventSystem.OnCharacterIdleEvent -= Idle;
+        PlayerEventSystem.OnCharacterRunEvent -= Run;
 
-        PlayerEventSystem._current.OnCharacterJumpEvent -= Jump;
-        PlayerEventSystem._current.OnCharacterGuardEvent -= Guard;
+        PlayerEventSystem.OnCharacterJumpEvent -= Jump;
+        PlayerEventSystem.OnCharacterGuardEvent -= Guard;
 
-        PlayerEventSystem._current.OnCharacterAttackTriggerEvent -= TriggerAttack;
+        PlayerEventSystem.OnCharacterAttackTriggerEvent -= TriggerAttack;
+    }
+
+    public void Spawn(){
+        Debug.Log($"Spawned In");
     }
 
     public void Idle(){

@@ -64,7 +64,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""StrongAttack"",
+                    ""name"": ""Mana Charge"",
                     ""type"": ""Button"",
                     ""id"": ""0e644b44-6b17-4ac3-ba8a-1e3e67c6e951"",
                     ""expectedControlType"": """",
@@ -258,7 +258,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""StrongAttack"",
+                    ""action"": ""Mana Charge"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -269,7 +269,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""StrongAttack"",
+                    ""action"": ""Mana Charge"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -417,7 +417,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_BasicAttack = m_Player.FindAction("BasicAttack", throwIfNotFound: true);
-        m_Player_StrongAttack = m_Player.FindAction("StrongAttack", throwIfNotFound: true);
+        m_Player_ManaCharge = m_Player.FindAction("Mana Charge", throwIfNotFound: true);
         m_Player_AOEAttack = m_Player.FindAction("AOEAttack", throwIfNotFound: true);
         m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
         m_Player_EnemyLockOn_Cycle = m_Player.FindAction("EnemyLockOn_Cycle", throwIfNotFound: true);
@@ -497,7 +497,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Movement;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_BasicAttack;
-    private readonly InputAction m_Player_StrongAttack;
+    private readonly InputAction m_Player_ManaCharge;
     private readonly InputAction m_Player_AOEAttack;
     private readonly InputAction m_Player_Aim;
     private readonly InputAction m_Player_EnemyLockOn_Cycle;
@@ -511,7 +511,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @BasicAttack => m_Wrapper.m_Player_BasicAttack;
-        public InputAction @StrongAttack => m_Wrapper.m_Player_StrongAttack;
+        public InputAction @ManaCharge => m_Wrapper.m_Player_ManaCharge;
         public InputAction @AOEAttack => m_Wrapper.m_Player_AOEAttack;
         public InputAction @Aim => m_Wrapper.m_Player_Aim;
         public InputAction @EnemyLockOn_Cycle => m_Wrapper.m_Player_EnemyLockOn_Cycle;
@@ -538,9 +538,9 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @BasicAttack.started += instance.OnBasicAttack;
             @BasicAttack.performed += instance.OnBasicAttack;
             @BasicAttack.canceled += instance.OnBasicAttack;
-            @StrongAttack.started += instance.OnStrongAttack;
-            @StrongAttack.performed += instance.OnStrongAttack;
-            @StrongAttack.canceled += instance.OnStrongAttack;
+            @ManaCharge.started += instance.OnManaCharge;
+            @ManaCharge.performed += instance.OnManaCharge;
+            @ManaCharge.canceled += instance.OnManaCharge;
             @AOEAttack.started += instance.OnAOEAttack;
             @AOEAttack.performed += instance.OnAOEAttack;
             @AOEAttack.canceled += instance.OnAOEAttack;
@@ -572,9 +572,9 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @BasicAttack.started -= instance.OnBasicAttack;
             @BasicAttack.performed -= instance.OnBasicAttack;
             @BasicAttack.canceled -= instance.OnBasicAttack;
-            @StrongAttack.started -= instance.OnStrongAttack;
-            @StrongAttack.performed -= instance.OnStrongAttack;
-            @StrongAttack.canceled -= instance.OnStrongAttack;
+            @ManaCharge.started -= instance.OnManaCharge;
+            @ManaCharge.performed -= instance.OnManaCharge;
+            @ManaCharge.canceled -= instance.OnManaCharge;
             @AOEAttack.started -= instance.OnAOEAttack;
             @AOEAttack.performed -= instance.OnAOEAttack;
             @AOEAttack.canceled -= instance.OnAOEAttack;
@@ -677,7 +677,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnBasicAttack(InputAction.CallbackContext context);
-        void OnStrongAttack(InputAction.CallbackContext context);
+        void OnManaCharge(InputAction.CallbackContext context);
         void OnAOEAttack(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
         void OnEnemyLockOn_Cycle(InputAction.CallbackContext context);
