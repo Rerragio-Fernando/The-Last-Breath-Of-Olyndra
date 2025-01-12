@@ -768,7 +768,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Mesh, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"obj":{"fileID":-9132845362894151416,"guid":"32d37fa145f1f6847b2db339a827fb53","type":3}}'
+      m_SerializableObject: '{"obj":{"fileID":-9132845362894151416,"guid":"d25a46a94169950499023903971fa555","type":3}}'
     m_Space: -1
   m_Property:
     name: mesh

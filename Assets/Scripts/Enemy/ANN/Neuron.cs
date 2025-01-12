@@ -1,7 +1,7 @@
 /*
  * ----------------------------------------------------------------------------------------------
  * Project: The Last Breath Of Olyndra                                                          *
- * Script: AiMovements                                                         *
+ * Script: [Script Name or Description]                                                         *
  * Author: Marco Minganna                                                                       *
  * Unit: Digital Studio Project                                                                 *
  * Institution: Kingston University                                                             *
@@ -20,61 +20,94 @@
  * Security Classification: Public                                                              *
  * ----------------------------------------------------------------------------------------------
  */
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
-namespace NPC
+
+namespace NPC.Brain
 {
-    public class AiMovements : MonoBehaviour
+    public class Neuron
     {
-        [SerializeField]
-        float detectionRadius = 10f;
-        Transform currentTarget;
-        private NavMeshAgent agent;
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
-            agent = GetComponent<NavMeshAgent>();
-        }
+        // number of imputs coming in to the neuron
+        [SerializeField] int numInputs;
+        // A constant value added to the weighted sum of inputs to adjust the output
+        [SerializeField] double bias;
+        // The calculated output value of the neuron after applying the activation function
+        [SerializeField] double output;
+        // The error gradient used during the backpropagation process to update weights
+        [SerializeField] double errorGradient;
+        // The list of weights corresponding to each input connection
+        [SerializeField] List<double> weights = new List<double>();
+        // The list of inputs received by this neuron
+        [SerializeField] List<double> inputs = new List<double>();
 
-        // Update is called once per frame
-        public void updateMovementPosition()
+        public Neuron(int nInputs)
         {
-            if (currentTarget == null) return;
-            agent.SetDestination(currentTarget.position);
-
-        }
-
-        public void stopAgent()
-        {
-            agent.ResetPath();
+            bias = Random.Range(-1.0f, 1.0f);
+            numInputs = nInputs;
+            for(int i=0; i< numInputs; i++)
+            {
+                weights.Add(Random.Range(-1.0f, 1.0f));
+            }
         }
 
         //Getter and setters 
-        public Transform getSetCurrentTarget
+        public double getSetOutput
         {
-            get { return currentTarget; }
+            get { return output; }
             set
             {
-                if (currentTarget != value)
+                if (output != value)
                 {
-                    currentTarget = value;
+                    output = value;
+                }
+            }
+        }
+
+        public double getSetErrorGradient
+        {
+            get { return errorGradient; }
+            set
+            {
+                if (errorGradient != value)
+                {
+                    errorGradient = value;
+                }
+            }
+        }
+
+        public double getSetBias
+        {
+            get { return bias; }
+            set
+            {
+                if (bias != value)
+                {
+                    bias = value;
                 }
             }
         }
 
 
-        public float getSetAgentStoppingDistance
+
+        //Getters
+        public List<double> getInputs()
         {
-            get { return agent.stoppingDistance; }
-            set
-            {
-                if (agent.stoppingDistance != value)
-                {
-                    agent.stoppingDistance = value;
-                }
-            }
+            return inputs;
         }
+
+        public int getNumInputs()
+        {
+            return numInputs;
+        }
+
+        public List<double> getWeights()
+        {
+            return weights;
+        }
+
+
+
 
     }
 }

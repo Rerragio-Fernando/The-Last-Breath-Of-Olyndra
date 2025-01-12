@@ -1,3 +1,25 @@
+/*
+ * ----------------------------------------------------------------------------------------------
+ * Project: The Last Breath Of Olyndra                                                          *
+ * Script: BlightedPounce                                                        *
+ * Author: Marco Minganna                                                                       *
+ * Unit: Digital Studio Project                                                                 *
+ * Institution: Kingston University                                                             *
+ *                                                                                              *
+ * Date: September 2024 - January 2025                                                          *
+ *                                                                                              *
+ * Description:                                                                                 *
+ * This script was developed as part of the coursework for the "DSP" unit at                    *
+ * Kingston University.                                                                         *
+ *                                                                                              *
+ * License:                                                                                     *
+ * This script is provided as-is for educational purposes. It is classified as Public and       *
+ * may be shared, modified, or used with proper attribution to the original author, Marco       *
+ * Minganna. Commercial use requires prior written consent.                                     *
+ *                                                                                              *
+ * Security Classification: Public                                                              *
+ * ----------------------------------------------------------------------------------------------
+ */
 using UnityEngine;
 namespace NPC
 {
@@ -36,6 +58,7 @@ namespace NPC
                 stateToReturn = nextState == null ? stateToReturn : nextState;
             }
             checkIfCooldownNeedReset(stateToReturn);
+            bossAI.trainAnn();
             return stateToReturn;
         }
 
@@ -52,6 +75,15 @@ namespace NPC
                 targetPosition = Vector3.zero;
             }
 
+        }
+
+        public override void applyDamage(PlayerHealth playerHealth)
+        {
+            if (playerHealth)
+            {
+                playerHealth.applyDamage(damage);
+            }
+            // TODO add knockback or other effects here
         }
 
         public override void resetValues()
@@ -93,10 +125,13 @@ namespace NPC
             {
                 if (hit.CompareTag("Player"))
                 {
-                    // TODO Apply high damage to Ilyra
-                    Debug.Log("Ilyra hit! Taking high damage!");
-                    // TODO add knockback or other effects here
+                    PlayerHealth health = hit.gameObject.GetComponentInChildren<PlayerHealth>();
+                    if (health)
+                    {
+                        applyDamage(health);
+                    }
                     
+
                 }
             }
             startCooldown();

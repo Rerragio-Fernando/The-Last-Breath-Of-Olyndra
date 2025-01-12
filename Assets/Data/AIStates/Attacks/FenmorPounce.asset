@@ -24,4 +24,4 @@ MonoBehaviour:
   impactRadius: 2
   targetLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
