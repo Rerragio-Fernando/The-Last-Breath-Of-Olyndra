@@ -42,7 +42,6 @@ namespace NPC
             else
             {
                 stateToReturn = getNextAttack(bossAI);
-                Debug.Log(bossAI.getSetAttackString);
                 bossAI.updateBossMovements(false);
             }
             return stateToReturn;

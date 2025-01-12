@@ -130,7 +130,15 @@ namespace NPC
 
         public BossAIState findState(string name)
         {
-            return stageManager.getAttackState(name);
+            if(stageManager)
+            {
+                return stageManager.getAttackState(name);
+            }
+            else
+            {
+                return null;
+            }    
+            
         }
 
         public void findNextAttackUsingANN(double distanceFromPlayer)
