@@ -49,7 +49,7 @@ namespace NPC
             if (!isOnCooldown() && !isActive)
             {
                 Activate();
-                visualizeAbility();
+                visualizeAbility(bossAI);
             }
             if (checkCooldownStateChange())
             {
@@ -129,10 +129,13 @@ namespace NPC
             }
         }
 
-        protected override void visualizeAbility()
+        protected override void visualizeAbility(BossAIManager bossAI)
         {
-            //TODO set animation
-            spawnSwipeEffect();
+            if(bossAI)
+            {
+                bossAI.setAttackAnimationTrigger(abilityName);
+            }
+            //spawnSwipeEffect();
         }
     }
 }

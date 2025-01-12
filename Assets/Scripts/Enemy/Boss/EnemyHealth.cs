@@ -22,13 +22,8 @@
  */
 using UnityEngine;
 
-public class EnemyHealth : MonoBehaviour
+public class EnemyHealth : CommonHealth
 {
-    float maxHealth = 1000;
-    float currentHealth;
-    float previousHealth;
-    float damageTaken = 0;
-
     public static EnemyHealth instance { get; private set; } = null;
 
     private void Awake()
@@ -41,12 +36,7 @@ public class EnemyHealth : MonoBehaviour
         }
         instance = this;
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        currentHealth = maxHealth;
-        previousHealth = currentHealth;
-    }
+
 
     public void applyDamage(float damage)
     {
@@ -67,31 +57,5 @@ public class EnemyHealth : MonoBehaviour
         Debug.Log(" handle death");
     }
 
-    public bool didHealthChange()
-    {
-        bool wasAiDamaged = previousHealth != currentHealth;
-        setDamageTaken();
-        previousHealth = currentHealth;
-        return wasAiDamaged;
-    }
 
-    void setDamageTaken()
-    {
-        damageTaken = previousHealth - currentHealth;
-
-        if (damageTaken < 0)
-        {
-            damageTaken = 0;
-        }
-    }
-
-    public float getDamageTaken()
-    {
-        return damageTaken;
-    }
-
-    public double getHealth()
-    {
-        return currentHealth;
-    }
 }

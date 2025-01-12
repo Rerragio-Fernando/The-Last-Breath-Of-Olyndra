@@ -52,7 +52,7 @@ namespace NPC
             {
                 Activate();
                 bossAI.getSetCurrentTarget = null;
-                visualizeAbility();
+                visualizeAbility(bossAI);
             }
 
             if (checkCooldownStateChange())
@@ -110,8 +110,13 @@ namespace NPC
             
         }
 
-        protected override void visualizeAbility()
+        protected override void visualizeAbility(BossAIManager bossAI)
         {
+            if (bossAI)
+            {
+                bossAI.setAttackAnimationTrigger(abilityName);
+                Debug.Log(abilityName);
+            }
             spawnGasCloudEffect();
         }
 

@@ -22,12 +22,8 @@
  */
 using UnityEngine;
 
-public class PlayerHealth : MonoBehaviour
+public class PlayerHealth : CommonHealth
 {
-    float maxHealth = 100;
-    float currentHealth;
-    float previousHealth;
-    float damageTaken = 0;
 
     public static PlayerHealth instance { get; private set; } = null;
 
@@ -40,12 +36,6 @@ public class PlayerHealth : MonoBehaviour
             return;
         }
         instance = this;
-    }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        currentHealth = maxHealth;
-        previousHealth = currentHealth;
     }
 
     public void applyDamage(float damage)
@@ -67,32 +57,6 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log(" handle death");
     }
 
-    void setDamageTaken()
-    {
-        damageTaken = previousHealth - currentHealth;
-
-        if (damageTaken < 0)
-        {
-            damageTaken = 0;
-        }
-    }
 
 
-    public bool didHealthChange()
-    {
-        bool wasPlayerDamaged = previousHealth != currentHealth;
-        setDamageTaken();
-        previousHealth = currentHealth;
-        return wasPlayerDamaged;
-    }
-
-    public float getDamageTaken()
-    {
-        return damageTaken;
-    }
-
-    public double getHealth()
-    {
-        return currentHealth;
-    }
 }

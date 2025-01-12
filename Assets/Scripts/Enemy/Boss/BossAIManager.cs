@@ -43,6 +43,8 @@ namespace NPC
         [Header("Current State")]
         [SerializeField] BossAIState currentState;
 
+        Animator aiAnimator;
+
         public static BossAIManager instance { get; private set; } = null;
         GameData data;
         bool hasBossBeenFound = false;
@@ -55,6 +57,8 @@ namespace NPC
         Brain.Brain AIBrain;
         PlayerHealth playerHealth;
         EnemyHealth enemyHealth;
+
+
 
         double distanceFromPlayerOnAttack;
         List<double> cooldowns;
@@ -100,6 +104,7 @@ namespace NPC
                 //Spawn the area boss
                 spawnBoss();
                 enemyHealth = EnemyHealth.instance;
+                aiAnimator = bossObject == null ? null : bossObject.gameObject.GetComponentInChildren<Animator>();
                 bossMovements = bossObject == null? null: bossObject.GetComponent<AiMovements>();
             }
             if(hasBossBeenFound)
@@ -113,7 +118,27 @@ namespace NPC
         {
             if (!hasFightStarted) return;
             processStateMachine();
+            updateMovementAnimation();
+
         }    
+
+        void updateMovementAnimation()
+        {
+            if(aiAnimator && bossMovements)
+            {
+                aiAnimator.SetFloat("speed", bossMovements.getCurrentAgentSpeed());
+            }
+        }
+
+        public void setAttackAnimationBool(string attack, bool isActive)
+        {
+            aiAnimator.SetBool(attack, isActive);
+        }
+
+        public void setAttackAnimationTrigger(string attack)
+        {
+            aiAnimator.SetTrigger(attack);
+        }
 
 
         private void spawnBoss()
@@ -147,8 +172,23 @@ namespace NPC
         {
             distanceFromPlayerOnAttack = distanceFromPlayer;
             cooldowns = cooldowns == null? stageManager.getCooldowns() : cooldowns;
-            getSetAttackString = AIBrain.nextActionSelection(distanceFromPlayerOnAttack, playerHealth.getHealth(),100.0f, cooldowns);
-            Debug.LogWarning(getSetAttackString);
+            if (!playerHealth || !enemyHealth)
+            {
+                return;
+            }
+            getSetAttackString = AIBrain.nextActionSelection(distanceFromPlayerOnAttack, playerHealth.getHealth(),enemyHealth.getHealth(), cooldowns);
+            switch(getSetAttackString)
+            {
+                case "Swipe":
+                    getSetAgentStoppingDistance = 2;
+                    break;
+                case "Blighted Pounce":
+                    getSetAgentStoppingDistance = 10;
+                    break;
+                case "Blight Breath":
+                    getSetAgentStoppingDistance = 5;
+                    break;
+            }
         }
 
         public void trainAnn()

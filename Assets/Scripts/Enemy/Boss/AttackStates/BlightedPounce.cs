@@ -28,7 +28,6 @@ namespace NPC
     {
         Transform bossTransform;
         [SerializeField] private float leapSpeed = 10f;
-        [SerializeField] private float leapDistance = 5f; 
         [SerializeField] private float impactRadius = 2f; 
         [SerializeField] private LayerMask targetLayer;
         Vector3 targetPosition = Vector3.zero;
@@ -43,6 +42,7 @@ namespace NPC
                 playerPos = bossAI.getSetCurrentTarget;
                 bossAI.getSetCurrentTarget = null;
                 Activate();
+                visualizeAbility(bossAI);
 
             }
 
@@ -50,7 +50,6 @@ namespace NPC
             {
                 LeapTowardsTarget();
                 checkLeapEnd();
-                visualizeAbility();
             }
             if (checkCooldownStateChange())
             {
@@ -137,9 +136,12 @@ namespace NPC
             startCooldown();
         }
 
-        protected override void visualizeAbility()
+        protected override void visualizeAbility(BossAIManager bossAI)
         {
-            //TODO set animation
+            if (bossAI)
+            {
+                bossAI.setAttackAnimationTrigger(abilityName);
+            }
 
         }
     }
