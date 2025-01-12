@@ -38,17 +38,17 @@ public class EnemyHealth : CommonHealth
     }
 
 
-    public void applyDamage(float damage)
+    public override void applyDamage(float damage)
     {
-        if (currentHealth - damage <= 0)
+        base.applyDamage(damage);
+
+        if (currentHealth == 0)
         {
-            currentHealth = 0;
             enemyDefeat();
         }
         else
         {
-            currentHealth -= damage;
-            Debug.LogWarning(" current health after taking damage: " + currentHealth);
+            Debug.Log("Character took damage!");
         }
     }
 

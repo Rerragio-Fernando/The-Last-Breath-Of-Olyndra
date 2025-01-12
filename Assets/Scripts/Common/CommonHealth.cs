@@ -54,6 +54,18 @@ public class CommonHealth : MonoBehaviour
         }
     }
 
+    public virtual void applyDamage(float damage)
+    {
+        if (currentHealth - damage <= 0)
+        {
+            currentHealth = 0;
+        }
+        else
+        {
+            currentHealth -= damage;
+        }
+    }
+
     public float getDamageTaken()
     {
         return damageTaken;
