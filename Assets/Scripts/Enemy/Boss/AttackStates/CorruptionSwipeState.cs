@@ -1,3 +1,25 @@
+/*
+ * ----------------------------------------------------------------------------------------------
+ * Project: The Last Breath Of Olyndra                                                          *
+ * Script: CorruptionSwipeState                                                        *
+ * Author: Marco Minganna                                                                       *
+ * Unit: Digital Studio Project                                                                 *
+ * Institution: Kingston University                                                             *
+ *                                                                                              *
+ * Date: September 2024 - January 2025                                                          *
+ *                                                                                              *
+ * Description:                                                                                 *
+ * This script was developed as part of the coursework for the "DSP" unit at                    *
+ * Kingston University.                                                                         *
+ *                                                                                              *
+ * License:                                                                                     *
+ * This script is provided as-is for educational purposes. It is classified as Public and       *
+ * may be shared, modified, or used with proper attribution to the original author, Marco       *
+ * Minganna. Commercial use requires prior written consent.                                     *
+ *                                                                                              *
+ * Security Classification: Public                                                              *
+ * ----------------------------------------------------------------------------------------------
+ */
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -36,7 +58,6 @@ namespace NPC
                 stateToReturn = nextState == null ? stateToReturn : nextState;
             }
             bossAI.getSetCurrentTarget = null;
-
             checkIfCooldownNeedReset(stateToReturn);
             bossAI.trainAnn();
             return stateToReturn;
@@ -54,8 +75,8 @@ namespace NPC
 
                 if (angle <= attackAngle / 2)
                 {
-                    PlayerHealth health = hit.gameObject.GetComponent<PlayerHealth>();
-                    if(health)
+                    PlayerHealth health = hit.gameObject.GetComponentInChildren<PlayerHealth>();
+                    if (health)
                     {
                         applyDamage(health);
                     }

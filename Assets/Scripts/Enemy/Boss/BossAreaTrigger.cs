@@ -1,7 +1,7 @@
 /*
  * ----------------------------------------------------------------------------------------------
  * Project: The Last Breath Of Olyndra                                                          *
- * Script: [Script Name or Description]                                                         *
+ * Script: BossAreaTrigger                                                         *
  * Author: Marco Minganna                                                                       *
  * Unit: Digital Studio Project                                                                 *
  * Institution: Kingston University                                                             *

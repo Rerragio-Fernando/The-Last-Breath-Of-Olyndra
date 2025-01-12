@@ -1,7 +1,7 @@
 /*
  * ----------------------------------------------------------------------------------------------
  * Project: The Last Breath Of Olyndra                                                          *
- * Script: [Script Name or Description]                                                         *
+ * Script: Brain                                                        *
  * Author: Marco Minganna                                                                       *
  * Unit: Digital Studio Project                                                                 *
  * Institution: Kingston University                                                             *
@@ -46,6 +46,8 @@ namespace NPC.Brain
 
         }
     }
+
+    public enum rewardStates { positive, negative, neutral }
 
     public class Brain : MonoBehaviour
     {
@@ -140,9 +142,20 @@ namespace NPC.Brain
             return currentAttack;
         }
 
-        public void trainBrain(bool wasThePlayerDamaged, double distanceFromPlayer, double playerHealth, double AIHealth, List<double> cooldowns)
+        public void trainBrain(rewardStates currentReward, double distanceFromPlayer, double playerHealth, double AIHealth, List<double> cooldowns)
         {
-            reward = wasThePlayerDamaged ? 1.0f : -1.0f;
+            switch(currentReward)
+            {
+                case rewardStates.positive:
+                    reward = 1.0f;
+                    break;
+                case rewardStates.negative:
+                    reward = -1.0f;
+                    break;
+                case rewardStates.neutral:
+                    reward = 0.5f;
+                    break;
+            }
             // After selecting the action
             AILearningReplay currentReplay = new AILearningReplay(distanceFromPlayer, playerHealth, AIHealth, cooldowns, reward);
 
@@ -153,7 +166,7 @@ namespace NPC.Brain
             }
             replayMemory.Add(currentReplay);
 
-            if (!wasThePlayerDamaged)
+            if (currentReward == rewardStates.negative)
             {
                 // Backpropagate and train
                 for (int i = replayMemory.Count - 1; i >= 0; i--)

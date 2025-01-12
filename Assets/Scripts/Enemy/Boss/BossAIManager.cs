@@ -1,7 +1,7 @@
 /*
  * ----------------------------------------------------------------------------------------------
  * Project: The Last Breath Of Olyndra                                                          *
- * Script: [Script Name or Description]                                                         *
+ * Script: BossAIManager                                                        *
  * Author: Marco Minganna                                                                       *
  * Unit: Digital Studio Project                                                                 *
  * Institution: Kingston University                                                             *
@@ -54,6 +54,7 @@ namespace NPC
         AiMovements bossMovements;
         Brain.Brain AIBrain;
         PlayerHealth playerHealth;
+        EnemyHealth enemyHealth;
 
         double distanceFromPlayerOnAttack;
         List<double> cooldowns;
@@ -98,6 +99,7 @@ namespace NPC
             {
                 //Spawn the area boss
                 spawnBoss();
+                enemyHealth = EnemyHealth.instance;
                 bossMovements = bossObject == null? null: bossObject.GetComponent<AiMovements>();
             }
             if(hasBossBeenFound)
@@ -151,8 +153,36 @@ namespace NPC
 
         public void trainAnn()
         {
+            if (!playerHealth || !enemyHealth)
+            {
+                return;
+            }
             cooldowns = cooldowns == null ? stageManager.getCooldowns() : cooldowns;
-            AIBrain.trainBrain(playerHealth.didHealthChange(),distanceFromPlayerOnAttack, playerHealth.getHealth(), 100.0f, cooldowns);
+            Brain.rewardStates currentReward = Brain.rewardStates.neutral;
+            bool playerDamaged = playerHealth.didHealthChange();
+            bool enemyDamaged = enemyHealth.didHealthChange();
+
+            if (playerDamaged || enemyDamaged)
+            {
+                if (playerDamaged && enemyDamaged)
+                {
+                    currentReward = playerHealth.getDamageTaken() > enemyHealth.getDamageTaken()
+                        ? Brain.rewardStates.positive
+                        : Brain.rewardStates.negative;
+                }
+                else
+                {
+                    currentReward = playerDamaged
+                        ? Brain.rewardStates.positive
+                        : Brain.rewardStates.negative;
+                }
+            }
+            else
+            {
+                currentReward = Brain.rewardStates.neutral;
+            }
+            AIBrain.trainBrain(currentReward, distanceFromPlayerOnAttack, playerHealth.getHealth(), 100.0f, cooldowns);
+            
         }
 
         private void adjustBossPosition()

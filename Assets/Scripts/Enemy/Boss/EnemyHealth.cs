@@ -1,7 +1,7 @@
 /*
  * ----------------------------------------------------------------------------------------------
  * Project: The Last Breath Of Olyndra                                                          *
- * Script: PlayerHealth                                                        *
+ * Script: EnemyHealth                                                        *
  * Author: Marco Minganna                                                                       *
  * Unit: Digital Studio Project                                                                 *
  * Institution: Kingston University                                                             *
@@ -22,20 +22,20 @@
  */
 using UnityEngine;
 
-public class PlayerHealth : MonoBehaviour
+public class EnemyHealth : MonoBehaviour
 {
-    float maxHealth = 100;
+    float maxHealth = 1000;
     float currentHealth;
     float previousHealth;
     float damageTaken = 0;
 
-    public static PlayerHealth instance { get; private set; } = null;
+    public static EnemyHealth instance { get; private set; } = null;
 
     private void Awake()
     {
         if (instance != null)
         {
-            Debug.LogWarning(gameObject.name + " attempted to create a second instance of PlayerHealth, destroyed");
+            Debug.LogWarning(gameObject.name + " attempted to create a second instance of EnemyHealth, destroyed");
             Destroy(gameObject);
             return;
         }
@@ -50,21 +50,29 @@ public class PlayerHealth : MonoBehaviour
 
     public void applyDamage(float damage)
     {
-        if(currentHealth - damage<=0)
+        if (currentHealth - damage <= 0)
         {
             currentHealth = 0;
-            playerDefeat();
+            enemyDefeat();
         }
         else
         {
             currentHealth -= damage;
-            Debug.LogWarning(" current health after taking damage: "+ currentHealth);
+            Debug.LogWarning(" current health after taking damage: " + currentHealth);
         }
     }
 
-    void playerDefeat()
+    void enemyDefeat()
     {
         Debug.Log(" handle death");
+    }
+
+    public bool didHealthChange()
+    {
+        bool wasAiDamaged = previousHealth != currentHealth;
+        setDamageTaken();
+        previousHealth = currentHealth;
+        return wasAiDamaged;
     }
 
     void setDamageTaken()
@@ -75,15 +83,6 @@ public class PlayerHealth : MonoBehaviour
         {
             damageTaken = 0;
         }
-    }
-
-
-    public bool didHealthChange()
-    {
-        bool wasPlayerDamaged = previousHealth != currentHealth;
-        setDamageTaken();
-        previousHealth = currentHealth;
-        return wasPlayerDamaged;
     }
 
     public float getDamageTaken()
