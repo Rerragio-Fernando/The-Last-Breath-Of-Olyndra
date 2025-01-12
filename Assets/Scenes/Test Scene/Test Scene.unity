@@ -3160,6 +3160,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.x
       value: 40.344
       objectReference: {fileID: 0}
+    - target: {fileID: 1630898119165572817, guid: 5add389df3cc82c4392e4e4458028f9e,
+        type: 3}
+      propertyPath: m_InitialEventName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1630898119165572817, guid: 5add389df3cc82c4392e4e4458028f9e,
+        type: 3}
+      propertyPath: m_InitialEventNameOverriden
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1722401557462455845, guid: 5add389df3cc82c4392e4e4458028f9e,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -3240,21 +3250,71 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3351918184900148064, guid: 5add389df3cc82c4392e4e4458028f9e,
+        type: 3}
+      propertyPath: m_InitialEventName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3351918184900148064, guid: 5add389df3cc82c4392e4e4458028f9e,
+        type: 3}
+      propertyPath: m_InitialEventNameOverriden
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3871744671647301873, guid: 5add389df3cc82c4392e4e4458028f9e,
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4404457957214153718, guid: 5add389df3cc82c4392e4e4458028f9e,
+        type: 3}
+      propertyPath: m_InitialEventName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4404457957214153718, guid: 5add389df3cc82c4392e4e4458028f9e,
+        type: 3}
+      propertyPath: m_InitialEventNameOverriden
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5381149547436011581, guid: 5add389df3cc82c4392e4e4458028f9e,
         type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6093487973061488760, guid: 5add389df3cc82c4392e4e4458028f9e,
+        type: 3}
+      propertyPath: m_InitialEventName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6093487973061488760, guid: 5add389df3cc82c4392e4e4458028f9e,
+        type: 3}
+      propertyPath: m_InitialEventNameOverriden
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7033491279973764951, guid: 5add389df3cc82c4392e4e4458028f9e,
         type: 3}
       propertyPath: _cineBrain
       value: 
       objectReference: {fileID: 330585548}
+    - target: {fileID: 7478619577717497347, guid: 5add389df3cc82c4392e4e4458028f9e,
+        type: 3}
+      propertyPath: m_InitialEventName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7478619577717497347, guid: 5add389df3cc82c4392e4e4458028f9e,
+        type: 3}
+      propertyPath: m_InitialEventNameOverriden
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8377137497977835822, guid: 5add389df3cc82c4392e4e4458028f9e,
+        type: 3}
+      propertyPath: m_InitialEventName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8377137497977835822, guid: 5add389df3cc82c4392e4e4458028f9e,
+        type: 3}
+      propertyPath: m_InitialEventNameOverriden
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8609161968070299329, guid: 5add389df3cc82c4392e4e4458028f9e,
         type: 3}
       propertyPath: m_LocalPosition.x
