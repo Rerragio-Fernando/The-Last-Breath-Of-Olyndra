@@ -3375,11 +3375,6 @@ PrefabInstance:
       propertyPath: _cam
       value: 
       objectReference: {fileID: 330585546}
-    - target: {fileID: 766984915038834646, guid: 5add389df3cc82c4392e4e4458028f9e,
-        type: 3}
-      propertyPath: _groundLayer.m_Bits
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2612152010503578504, guid: 5add389df3cc82c4392e4e4458028f9e,
         type: 3}
       propertyPath: m_LocalPosition.x
