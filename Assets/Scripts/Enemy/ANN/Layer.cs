@@ -1,7 +1,7 @@
 /*
  * ----------------------------------------------------------------------------------------------
  * Project: The Last Breath Of Olyndra                                                          *
- * Script: BossAreaTrigger                                                         *
+ * Script: [Script Name or Description]                                                         *
  * Author: Marco Minganna                                                                       *
  * Unit: Digital Studio Project                                                                 *
  * Institution: Kingston University                                                             *
@@ -20,29 +20,44 @@
  * Security Classification: Public                                                              *
  * ----------------------------------------------------------------------------------------------
  */
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace NPC
+namespace NPC.Brain
 {
-    public class BossAreaTrigger : MonoBehaviour
+    public class Layer
     {
-        BossAIManager aiManager;
+        // Number of neurons contained in this layer
+        [SerializeField] int numNeurons;
+        // The list of neurons that make up this layer
+        [SerializeField] List<Neuron> neurons = new List<Neuron>();
 
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
+        /* <summary>
+         * Initializes a new layer with the specified number of neurons, 
+         * each configured with the given number of inputs.
+         * </summary>
+         * <param name="nNeurons">The number of neurons in the layer.</param>
+         * <param name="numNeuronInputs">The number of inputs for each neuron in the layer, this will also match the number of neuron in the previous layer .</param>
+         */
+        public Layer(int nNeurons, int numNeuronInputs)
         {
-            aiManager = BossAIManager.instance;
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (aiManager == null) return;
-                
-            if(other.gameObject.tag=="Player" && !aiManager.getIsBossDefeated())
+            numNeurons = nNeurons;
+            for (int i = 0; i < numNeurons; i++)
             {
-                aiManager.playerEnteredArena = true;
-                aiManager.startBossFight();
+                neurons.Add(new Neuron(numNeuronInputs));
             }
         }
+
+        //Getters
+        public int getNumNeurons()
+        {
+            return numNeurons;
+        }
+
+        public List<Neuron> GetNeurons()
+        {
+            return neurons;
+        }
+
     }
 }

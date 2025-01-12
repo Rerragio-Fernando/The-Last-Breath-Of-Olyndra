@@ -1,7 +1,7 @@
 /*
  * ----------------------------------------------------------------------------------------------
  * Project: The Last Breath Of Olyndra                                                          *
- * Script: BossAreaTrigger                                                         *
+ * Script: EnemyHealth                                                        *
  * Author: Marco Minganna                                                                       *
  * Unit: Digital Studio Project                                                                 *
  * Institution: Kingston University                                                             *
@@ -22,27 +22,76 @@
  */
 using UnityEngine;
 
-namespace NPC
+public class EnemyHealth : MonoBehaviour
 {
-    public class BossAreaTrigger : MonoBehaviour
+    float maxHealth = 1000;
+    float currentHealth;
+    float previousHealth;
+    float damageTaken = 0;
+
+    public static EnemyHealth instance { get; private set; } = null;
+
+    private void Awake()
     {
-        BossAIManager aiManager;
-
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
+        if (instance != null)
         {
-            aiManager = BossAIManager.instance;
+            Debug.LogWarning(gameObject.name + " attempted to create a second instance of EnemyHealth, destroyed");
+            Destroy(gameObject);
+            return;
         }
+        instance = this;
+    }
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        currentHealth = maxHealth;
+        previousHealth = currentHealth;
+    }
 
-        private void OnTriggerEnter(Collider other)
+    public void applyDamage(float damage)
+    {
+        if (currentHealth - damage <= 0)
         {
-            if (aiManager == null) return;
-                
-            if(other.gameObject.tag=="Player" && !aiManager.getIsBossDefeated())
-            {
-                aiManager.playerEnteredArena = true;
-                aiManager.startBossFight();
-            }
+            currentHealth = 0;
+            enemyDefeat();
         }
+        else
+        {
+            currentHealth -= damage;
+            Debug.LogWarning(" current health after taking damage: " + currentHealth);
+        }
+    }
+
+    void enemyDefeat()
+    {
+        Debug.Log(" handle death");
+    }
+
+    public bool didHealthChange()
+    {
+        bool wasAiDamaged = previousHealth != currentHealth;
+        setDamageTaken();
+        previousHealth = currentHealth;
+        return wasAiDamaged;
+    }
+
+    void setDamageTaken()
+    {
+        damageTaken = previousHealth - currentHealth;
+
+        if (damageTaken < 0)
+        {
+            damageTaken = 0;
+        }
+    }
+
+    public float getDamageTaken()
+    {
+        return damageTaken;
+    }
+
+    public double getHealth()
+    {
+        return currentHealth;
     }
 }

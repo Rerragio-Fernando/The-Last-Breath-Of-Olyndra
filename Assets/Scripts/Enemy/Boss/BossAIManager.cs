@@ -1,7 +1,7 @@
 /*
  * ----------------------------------------------------------------------------------------------
  * Project: The Last Breath Of Olyndra                                                          *
- * Script: [Script Name or Description]                                                         *
+ * Script: BossAIManager                                                        *
  * Author: Marco Minganna                                                                       *
  * Unit: Digital Studio Project                                                                 *
  * Institution: Kingston University                                                             *
@@ -21,6 +21,7 @@
  * ----------------------------------------------------------------------------------------------
  */
 using UnityEngine;
+using System.Collections.Generic;
 using database;
 using animations;
 
@@ -51,6 +52,12 @@ namespace NPC
 
         StatesManager stageManager;
         AiMovements bossMovements;
+        Brain.Brain AIBrain;
+        PlayerHealth playerHealth;
+        EnemyHealth enemyHealth;
+
+        double distanceFromPlayerOnAttack;
+        List<double> cooldowns;
 
         string nextPlannedAttack = "Swipe";
 
@@ -70,8 +77,11 @@ namespace NPC
         {
             data = GameSavingManager.instance.geData;
             cutsceneManager = CutsceneManager.instance;
+            AIBrain = Brain.Brain.instance;
             stageManager = StatesManager.instance;
+            playerHealth = PlayerHealth.instance;
             cutsceneManager.onCutsceneCompleted += startBossLogic;
+            cooldowns = stageManager.getCooldowns();
             // if the boss is not found in  the database yet add it
             if (!data.getBossesFound.ContainsKey(bossID))
             {
@@ -89,6 +99,7 @@ namespace NPC
             {
                 //Spawn the area boss
                 spawnBoss();
+                enemyHealth = EnemyHealth.instance;
                 bossMovements = bossObject == null? null: bossObject.GetComponent<AiMovements>();
             }
             if(hasBossBeenFound)
@@ -129,6 +140,48 @@ namespace NPC
             {
                 return null;
             }    
+            
+        }
+
+        public void findNextAttackUsingANN(double distanceFromPlayer)
+        {
+            distanceFromPlayerOnAttack = distanceFromPlayer;
+            cooldowns = cooldowns == null? stageManager.getCooldowns() : cooldowns;
+            getSetAttackString = AIBrain.nextActionSelection(distanceFromPlayerOnAttack, playerHealth.getHealth(),100.0f, cooldowns);
+            Debug.LogWarning(getSetAttackString);
+        }
+
+        public void trainAnn()
+        {
+            if (!playerHealth || !enemyHealth)
+            {
+                return;
+            }
+            cooldowns = cooldowns == null ? stageManager.getCooldowns() : cooldowns;
+            Brain.rewardStates currentReward = Brain.rewardStates.neutral;
+            bool playerDamaged = playerHealth.didHealthChange();
+            bool enemyDamaged = enemyHealth.didHealthChange();
+
+            if (playerDamaged || enemyDamaged)
+            {
+                if (playerDamaged && enemyDamaged)
+                {
+                    currentReward = playerHealth.getDamageTaken() > enemyHealth.getDamageTaken()
+                        ? Brain.rewardStates.positive
+                        : Brain.rewardStates.negative;
+                }
+                else
+                {
+                    currentReward = playerDamaged
+                        ? Brain.rewardStates.positive
+                        : Brain.rewardStates.negative;
+                }
+            }
+            else
+            {
+                currentReward = Brain.rewardStates.neutral;
+            }
+            AIBrain.trainBrain(currentReward, distanceFromPlayerOnAttack, playerHealth.getHealth(), 100.0f, cooldowns);
             
         }
 

@@ -1,7 +1,7 @@
 /*
  * ----------------------------------------------------------------------------------------------
  * Project: The Last Breath Of Olyndra                                                          *
- * Script: [Script Name or Description]                                                         *
+ * Script: IdleState                                                         *
  * Author: Marco Minganna                                                                       *
  * Unit: Digital Studio Project                                                                 *
  * Institution: Kingston University                                                             *
@@ -58,6 +58,8 @@ namespace NPC
                 Vector3 bossPositionXZ = new Vector3(bossAI.getBossTransform().position.x, 0, bossAI.getBossTransform().position.z);
                 Vector3 targetPositionXZ = new Vector3(bossAI.getSetCurrentTarget.position.x, 0, bossAI.getSetCurrentTarget.position.z);
                 float distanceToPlayer = Vector3.Distance(bossPositionXZ, targetPositionXZ);
+                bossAI.findNextAttackUsingANN(distanceToPlayer);
+                /*
                 if (distanceToPlayer > 10f)
                 {
                     bossAI.getSetAgentStoppingDistance = 10;
@@ -75,6 +77,7 @@ namespace NPC
                     bossAI.getSetAgentStoppingDistance = 5;
                     bossAI.getSetAttackString = "Swipe";
                 }
+                */
                 
                 stateToReturn = nextState == null ? this : nextState;
             }
