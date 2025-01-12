@@ -31,7 +31,9 @@ namespace NPC
         public override BossAIState stateTick(BossAIManager bossAI)
         {
             BossAIState stateToReturn = this;
-            float distanceToTarget = Vector3.Distance(bossAI.getBossTransform().position, bossAI.getSetCurrentTarget.position);
+            Vector3 bossPositionXZ = new Vector3(bossAI.getBossTransform().position.x, 0, bossAI.getBossTransform().position.z);
+            Vector3 targetPositionXZ = new Vector3(bossAI.getSetCurrentTarget.position.x, 0, bossAI.getSetCurrentTarget.position.z);
+            float distanceToTarget = Vector3.Distance(bossPositionXZ, targetPositionXZ);
 
             if (distanceToTarget > bossAI.getSetAgentStoppingDistance)
             {
@@ -39,12 +41,15 @@ namespace NPC
             }
             else
             {
-
-                // TODO add logic to add an attack using ANN
-                stateToReturn = nextState == null ? this : nextState;
+                stateToReturn = getNextAttack(bossAI);
                 bossAI.updateBossMovements(false);
             }
             return stateToReturn;
+        }
+
+        BossAIState getNextAttack(BossAIManager bossAI)
+        {
+            return bossAI.findState(bossAI.getSetAttackString);
         }
     }
 }

@@ -49,9 +49,11 @@ namespace NPC
         bool hasPlayerEnteredArena = false;
         bool hasFightStarted = false;
 
-        
-
+        StatesManager stageManager;
         AiMovements bossMovements;
+
+        string nextPlannedAttack = "Swipe";
+
 
         private void Awake()
         {
@@ -68,6 +70,7 @@ namespace NPC
         {
             data = GameSavingManager.instance.geData;
             cutsceneManager = CutsceneManager.instance;
+            stageManager = StatesManager.instance;
             cutsceneManager.onCutsceneCompleted += startBossLogic;
             // if the boss is not found in  the database yet add it
             if (!data.getBossesFound.ContainsKey(bossID))
@@ -114,6 +117,19 @@ namespace NPC
             adjustBossPosition();
 
             bossObject.transform.rotation = spawningPoint.rotation;
+        }
+
+        public BossAIState findState(string name)
+        {
+            if(stageManager)
+            {
+                return stageManager.getAttackState(name);
+            }
+            else
+            {
+                return null;
+            }    
+            
         }
 
         private void adjustBossPosition()
@@ -177,8 +193,22 @@ namespace NPC
             
         }
 
+        private void OnApplicationQuit()
+        {
+            if (currentState != this)
+            {
+                BaseAttackState attackState = currentState as BaseAttackState;
+
+                if (attackState != null)
+                {
+                    attackState.resetCooldown();
+                    attackState.resetValues();
+                }
+            }
+        }
+
         //Getter and setters 
-        public int getBossID
+        public int getSetBossID
         {
             get { return bossID; }
             set
@@ -186,6 +216,18 @@ namespace NPC
                 if (bossID != value)
                 {
                     bossID = value;
+                }
+            }
+        }
+
+        public string getSetAttackString
+        {
+            get { return nextPlannedAttack; }
+            set
+            {
+                if (nextPlannedAttack != value)
+                {
+                    nextPlannedAttack = value;
                 }
             }
         }
