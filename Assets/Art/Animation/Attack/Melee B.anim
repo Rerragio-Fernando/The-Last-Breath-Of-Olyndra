@@ -35910,28 +35910,14 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.4
-    functionName: EnableScytheCollider
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.4
     functionName: AttackBManaVFX
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.6
+  - time: 0.5
     functionName: NotAttacking
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.6
-    functionName: DisableScytheCollider
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.VFX;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class PlayerCombatSystem : MonoBehaviour
 {
@@ -10,42 +12,67 @@ public class PlayerCombatSystem : MonoBehaviour
     [SerializeField] private float _manaChargeDuration;
     [SerializeField] private float _manaChargeRate;
 
-    [Header("Weapon Colliders")]
-    [SerializeField] private Collider _scytheCollider;
-    [SerializeField] private Collider _daggerCollider;
+    [Header("Attack Properties")]
+    [SerializeField] private Transform _raycastTrans;
+    [SerializeField] private LayerMask layerMask;
+    [SerializeField] private float _playerNormalAtkRange;
+    [SerializeField] private float _playerManaAtkRange;
+
+    [Header("Ultimate Properties")]
+    [SerializeField] private GameObject _ultimatePrefab;
+    [SerializeField] private float _playerUltimateHoldDownTime;
+    [SerializeField] private float _ultimateDuration;
+
+    [Header("Mana Properties")]
+    [SerializeField] private Slider _manaSlider;
+    [SerializeField] private int _maxMana;
+    [SerializeField] private float _manaRechargeRate;
 
     [Header("VFX")]
-    [SerializeField] private VisualEffect[] _manaFXAssets;
+    [SerializeField] private AttackProfile[] _attackProfile;
+    [SerializeField] private GameObject _hitFX;
     [SerializeField] private GameObject _manaChargeFXPrefab;
+    [SerializeField] private GameObject _ultLoadPrefab;
     [SerializeField] private Transform _manaChargeTrans;
+    [SerializeField] private Transform _atkFXParent;
 
-    private float _nextMove = 0f;
-    private float _nextManaCharge = 0f;
     private bool _isAttacking = false;
     private bool _manaActive = false;
+    private bool _enteringUltState = false;
+    private bool _ulted = false;
+    private int _playerMana;
     private GameObject _manaFX;
+    private GameObject _ultimateLoadFX;
+    private GameObject _enemyObj;
+    private RaycastHit _hit;
+
+    //Timer Variables
+    private float _nextMove = 0f;
+    private float _nextManaRegen = 0f;
+    private float _nextManaCharge = 0f;
+    private float _manaChargeTimer = 0f;
+    private float _ultTimeHoldEnd = 0f;
+
+
     public bool IsAttacking {
         get{return _isAttacking;}
-    }
-    public enum CombatState{
-        Anticipation,
-        Attacking,
-        NotAttacking,
-        Guarding
     }
 
     private CombatState _playerCombatState;
 
     private void Start() {
+        _enemyObj = GameObject.FindWithTag("Enemy");
         NotAttacking();
+
         PlayerInputHandler.GuardEvent += GuardInput;
         PlayerInputHandler.BasicAttackEvent += BasicAttackInput;
         PlayerInputHandler.ManaChargeEvent += ManaChargeInput;
-        PlayerInputHandler.AOEAttackEvent += AOEAttackInput;
+        PlayerInputHandler.UltimateEvent += UltimateInput;
     }
 
     #region Input Functions
-        bool _basicAtkIN, _manaChargeIN, _aoeAtkIN, _guardIN;
+        bool _basicAtkIN, _manaChargeIN, _guardIN;
+        public bool _ultimateHoldIN, _ultimateStartedIN;
         void BasicAttackInput(InputActionPhase phase){
             if(phase == InputActionPhase.Started)
                 _basicAtkIN = true;
@@ -64,32 +91,109 @@ public class PlayerCombatSystem : MonoBehaviour
             else
                 _manaChargeIN = false;
         }
-        void AOEAttackInput(InputActionPhase phase){
-            if(phase == InputActionPhase.Performed)
-                _aoeAtkIN = true;
+        void UltimateInput(InputActionPhase phase){
+            if(phase == InputActionPhase.Started)
+                _ultimateStartedIN = true;
             else
-                _aoeAtkIN = false;
+                _ultimateStartedIN = false;
+
+            if(phase == InputActionPhase.Performed)
+                _ultimateHoldIN = true;
+            else
+                _ultimateHoldIN = false;
         }
     #endregion
     
-    private void Update() {
-        ManaFunction();
-        if(_playerCombatState == CombatState.NotAttacking){
-            if(_basicAtkIN){
-                PlayerEventSystem.TriggerAttack();
+    private void Update(){
+        //If Ulti button held down for "n" seconds then perform ult
+        // The player can only ult within this time frame
+        if(_ultimateStartedIN && !_enteringUltState){
+            _enteringUltState = true;
+            _ulted = false;
+            _ultTimeHoldEnd = Time.time + _playerUltimateHoldDownTime;
+            _ultimateLoadFX = Instantiate(_ultLoadPrefab, transform);
+        }
+
+        if(_ultimateHoldIN && _playerCombatState != CombatState.Ultimate){
+            if((Time.time >= _ultTimeHoldEnd)){
+                //If player keeps holding down the button till after x amount of seconds then player enters ultimate state
+                _playerCombatState = CombatState.Ultimate;
+                PlayerEventSystem.TriggerUltimateIn();
             }
         }
 
-        PlayerEventSystem.TriggerGuard(_guardIN);
+        //Checks if the state is in "Ultimate"
+        if(_playerCombatState != CombatState.Ultimate){
+            ManaFunction();
+            ManaChargeTimerFunction();
+            if(_playerCombatState == CombatState.NotAttacking){
+                if(_basicAtkIN){
+                    PlayerEventSystem.TriggerAttack();
+                }
+            }
+            PlayerEventSystem.TriggerGuard(_guardIN);
+        }
+        else{
+            _isAttacking = true;
+            UltimateFunctionality();
+        }
     }
 
     private void ManaFunction(){
         if(_manaChargeIN){
             if(Time.time > _nextManaCharge){
                 _nextManaCharge = Time.time + 1/_manaChargeRate;
-                StartCoroutine(ManaCharge());
+                _manaChargeTimer = Time.time + _manaChargeDuration;
+                _manaActive = true;
+                _manaFX = Instantiate(_manaChargeFXPrefab, _manaChargeTrans);
             }
         }
+    }
+
+    void UltimateFunctionality(){
+        if(_basicAtkIN && !_ulted){
+            PlayerEventSystem.TriggerUltimateAttack();
+            Destroy(_ultimateLoadFX);
+            _ulted = true;
+            _enteringUltState = false;
+        }
+    }
+
+    void ManaChargeTimerFunction(){
+        if(_manaActive){
+            if(Time.time > _manaChargeTimer)// if time exceeds the charge timer then deactivate mana
+                _manaActive = false;
+        }
+    }
+
+    private void AttackLogic(int indx){
+        int l_damage = _manaActive ? _attackProfile[indx]._manaAttackDamage : _attackProfile[indx]._normalAttackDamage;
+        GameObject l_atkFXPrefab = _manaActive ? _attackProfile[indx]._manaAttackFX : _attackProfile[indx]._normalAttackFX;
+        float range = _manaActive ? _playerManaAtkRange : _playerNormalAtkRange;
+        float force = _manaActive ? _attackProfile[indx]._manaAttackForce : _attackProfile[indx]._normalAttackForce;
+        
+        CheckHit(l_damage, range, force);
+        GameObject l_fx = Instantiate(l_atkFXPrefab, _atkFXParent.position, Quaternion.LookRotation(transform.forward));
+        Destroy(l_fx, 1f);
+    }
+
+    private void CheckHit(int damage, float range, float force){
+        if (Physics.Raycast(_raycastTrans.position, transform.forward, out _hit, range, layerMask)){
+            var l_hitFx = Instantiate(_hitFX, _hit.point, Quaternion.LookRotation(_hit.normal));//Spawn Hit Effect
+            Destroy(l_hitFx, 1f);
+
+            GameObject l_hitObj = _hit.transform.gameObject;
+            
+            DamageScript l_ds = l_hitObj.GetComponent<DamageScript>();
+            if(l_ds != null){
+                l_ds.TakeDamage(damage);
+            }
+
+            Rigidbody l_rb = l_hitObj.GetComponent<Rigidbody>();
+            if(l_rb != null){
+                l_rb.AddForce(force * transform.forward, ForceMode.Impulse);
+            }
+        }  
     }
 
     #region Animation Events
@@ -101,6 +205,7 @@ public class PlayerCombatSystem : MonoBehaviour
 
         public void Attacking(){
             _playerCombatState = CombatState.Attacking;
+            PlayerEventSystem.TriggerForwardStep();
         }
 
         public void NotAttacking(){
@@ -112,47 +217,37 @@ public class PlayerCombatSystem : MonoBehaviour
                 _isAttacking = false;
         }
 
-        public void EnableScytheCollider(){
-            _scytheCollider.enabled = true;
-        }
-        public void DisableScytheCollider(){
-            _scytheCollider.enabled = false;
-        }
-
-        public void EnableDaggerCollider(){
-            _daggerCollider.enabled = true;
-        }
-        public void DisableDaggerCollider(){
-            _daggerCollider.enabled = false;
-        }
-
         public void AttackAManaVFX(){
-            _manaFXAssets[0].Play();
+            AttackLogic(0);
         }
         public void AttackBManaVFX(){
-            _manaFXAssets[1].Play();
+            AttackLogic(1);
         }
         public void AttackCManaVFX(){
-            _manaFXAssets[2].Play();
+            AttackLogic(2);
         }
         public void AttackDManaVFX(){
-            _manaFXAssets[3].Play();
+            AttackLogic(3);
         }
         public void AttackEManaVFX(){
-            _manaFXAssets[4].Play();
+            AttackLogic(4);
         }
         public void AttackFManaVFX(){
-            _manaFXAssets[5].Play();
+            AttackLogic(5);
         }
 
+        public void UltiAttackVFX(){
+            GameObject l_ultFX = Instantiate(_ultimatePrefab, _atkFXParent.position, Quaternion.LookRotation(transform.forward));
+            Destroy(l_ultFX, _ultimateDuration);
+        }
+        
     #endregion
+}
 
-    IEnumerator ManaCharge(){
-        _manaActive = true;
-        _manaFX = Instantiate(_manaChargeFXPrefab, _manaChargeTrans);
-
-        yield return new WaitForSeconds(_manaChargeDuration);
-
-        _manaActive = false;
-    }
+public enum CombatState{
+    Anticipation,
+    Attacking,
+    NotAttacking,
+    Guarding,
+    Ultimate
 }

@@ -64,7 +64,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Mana Charge"",
+                    ""name"": ""ManaCharge"",
                     ""type"": ""Button"",
                     ""id"": ""0e644b44-6b17-4ac3-ba8a-1e3e67c6e951"",
                     ""expectedControlType"": """",
@@ -73,7 +73,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""AOEAttack"",
+                    ""name"": ""Ultimate"",
                     ""type"": ""Button"",
                     ""id"": ""923fca4e-af35-4005-835a-4e021370463f"",
                     ""expectedControlType"": """",
@@ -85,24 +85,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""name"": ""Aim"",
                     ""type"": ""Button"",
                     ""id"": ""c37b63f4-43ce-4cde-8867-223ab30767b2"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""EnemyLockOn_Cycle"",
-                    ""type"": ""Button"",
-                    ""id"": ""0cef1f79-5f8c-4545-87ce-16de9c44435e"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""EnemyLockOut"",
-                    ""type"": ""Button"",
-                    ""id"": ""c3edbe30-d994-4607-a8b3-308306a80e12"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -258,7 +240,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Mana Charge"",
+                    ""action"": ""ManaCharge"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -269,18 +251,18 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Mana Charge"",
+                    ""action"": ""ManaCharge"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""b859207a-99be-49bd-b391-b98f0788f897"",
-                    ""path"": ""<DualShockGamepad>/buttonWest"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AOEAttack"",
+                    ""action"": ""Ultimate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -291,7 +273,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AOEAttack"",
+                    ""action"": ""Ultimate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -314,28 +296,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Aim"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e9a4e20e-b6cd-40fa-9e1b-c1219125b908"",
-                    ""path"": ""<DualShockGamepad>/leftShoulder"",
-                    ""interactions"": ""Tap"",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""EnemyLockOn_Cycle"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""899b1e61-e75d-4579-baf3-8f054642c6a5"",
-                    ""path"": ""<DualShockGamepad>/leftShoulder"",
-                    ""interactions"": ""Hold"",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""EnemyLockOut"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -417,11 +377,9 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_BasicAttack = m_Player.FindAction("BasicAttack", throwIfNotFound: true);
-        m_Player_ManaCharge = m_Player.FindAction("Mana Charge", throwIfNotFound: true);
-        m_Player_AOEAttack = m_Player.FindAction("AOEAttack", throwIfNotFound: true);
+        m_Player_ManaCharge = m_Player.FindAction("ManaCharge", throwIfNotFound: true);
+        m_Player_Ultimate = m_Player.FindAction("Ultimate", throwIfNotFound: true);
         m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
-        m_Player_EnemyLockOn_Cycle = m_Player.FindAction("EnemyLockOn_Cycle", throwIfNotFound: true);
-        m_Player_EnemyLockOut = m_Player.FindAction("EnemyLockOut", throwIfNotFound: true);
         m_Player_Guard = m_Player.FindAction("Guard", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
@@ -498,10 +456,8 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_BasicAttack;
     private readonly InputAction m_Player_ManaCharge;
-    private readonly InputAction m_Player_AOEAttack;
+    private readonly InputAction m_Player_Ultimate;
     private readonly InputAction m_Player_Aim;
-    private readonly InputAction m_Player_EnemyLockOn_Cycle;
-    private readonly InputAction m_Player_EnemyLockOut;
     private readonly InputAction m_Player_Guard;
     public struct PlayerActions
     {
@@ -512,10 +468,8 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @BasicAttack => m_Wrapper.m_Player_BasicAttack;
         public InputAction @ManaCharge => m_Wrapper.m_Player_ManaCharge;
-        public InputAction @AOEAttack => m_Wrapper.m_Player_AOEAttack;
+        public InputAction @Ultimate => m_Wrapper.m_Player_Ultimate;
         public InputAction @Aim => m_Wrapper.m_Player_Aim;
-        public InputAction @EnemyLockOn_Cycle => m_Wrapper.m_Player_EnemyLockOn_Cycle;
-        public InputAction @EnemyLockOut => m_Wrapper.m_Player_EnemyLockOut;
         public InputAction @Guard => m_Wrapper.m_Player_Guard;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
@@ -541,18 +495,12 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @ManaCharge.started += instance.OnManaCharge;
             @ManaCharge.performed += instance.OnManaCharge;
             @ManaCharge.canceled += instance.OnManaCharge;
-            @AOEAttack.started += instance.OnAOEAttack;
-            @AOEAttack.performed += instance.OnAOEAttack;
-            @AOEAttack.canceled += instance.OnAOEAttack;
+            @Ultimate.started += instance.OnUltimate;
+            @Ultimate.performed += instance.OnUltimate;
+            @Ultimate.canceled += instance.OnUltimate;
             @Aim.started += instance.OnAim;
             @Aim.performed += instance.OnAim;
             @Aim.canceled += instance.OnAim;
-            @EnemyLockOn_Cycle.started += instance.OnEnemyLockOn_Cycle;
-            @EnemyLockOn_Cycle.performed += instance.OnEnemyLockOn_Cycle;
-            @EnemyLockOn_Cycle.canceled += instance.OnEnemyLockOn_Cycle;
-            @EnemyLockOut.started += instance.OnEnemyLockOut;
-            @EnemyLockOut.performed += instance.OnEnemyLockOut;
-            @EnemyLockOut.canceled += instance.OnEnemyLockOut;
             @Guard.started += instance.OnGuard;
             @Guard.performed += instance.OnGuard;
             @Guard.canceled += instance.OnGuard;
@@ -575,18 +523,12 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @ManaCharge.started -= instance.OnManaCharge;
             @ManaCharge.performed -= instance.OnManaCharge;
             @ManaCharge.canceled -= instance.OnManaCharge;
-            @AOEAttack.started -= instance.OnAOEAttack;
-            @AOEAttack.performed -= instance.OnAOEAttack;
-            @AOEAttack.canceled -= instance.OnAOEAttack;
+            @Ultimate.started -= instance.OnUltimate;
+            @Ultimate.performed -= instance.OnUltimate;
+            @Ultimate.canceled -= instance.OnUltimate;
             @Aim.started -= instance.OnAim;
             @Aim.performed -= instance.OnAim;
             @Aim.canceled -= instance.OnAim;
-            @EnemyLockOn_Cycle.started -= instance.OnEnemyLockOn_Cycle;
-            @EnemyLockOn_Cycle.performed -= instance.OnEnemyLockOn_Cycle;
-            @EnemyLockOn_Cycle.canceled -= instance.OnEnemyLockOn_Cycle;
-            @EnemyLockOut.started -= instance.OnEnemyLockOut;
-            @EnemyLockOut.performed -= instance.OnEnemyLockOut;
-            @EnemyLockOut.canceled -= instance.OnEnemyLockOut;
             @Guard.started -= instance.OnGuard;
             @Guard.performed -= instance.OnGuard;
             @Guard.canceled -= instance.OnGuard;
@@ -678,10 +620,8 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnBasicAttack(InputAction.CallbackContext context);
         void OnManaCharge(InputAction.CallbackContext context);
-        void OnAOEAttack(InputAction.CallbackContext context);
+        void OnUltimate(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
-        void OnEnemyLockOn_Cycle(InputAction.CallbackContext context);
-        void OnEnemyLockOut(InputAction.CallbackContext context);
         void OnGuard(InputAction.CallbackContext context);
     }
     public interface IUIActions

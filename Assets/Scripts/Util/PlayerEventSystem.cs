@@ -15,6 +15,13 @@ public class PlayerEventSystem : GameCharacterEventSystem
     public static event Action OnCharacterManaChargeTriggerEvent;
     public static event Action<bool> OnCharacterGuardEvent;
 
+    public static event Action OnUltimateTriggeredIn;
+    public static event Action OnUltimateAttackEvent;
+    public static event Action OnUltimateTriggeredOut;
+
+    public static event Action<int> OnUseManaEvent;
+
+    public static event Action OnForwardStepEvent;
     public static event Action OnCharacterBoostInEvent;
     public static event Action OnCharacterBoostOutEvent;
 
@@ -44,8 +51,21 @@ public class PlayerEventSystem : GameCharacterEventSystem
         OnCharacterManaChargeTriggerEvent?.Invoke();
     }
 
+    public static void TriggerUltimateIn(){
+        OnUltimateTriggeredIn?.Invoke();
+    }
+    public static void TriggerUltimateAttack(){
+        OnUltimateAttackEvent?.Invoke();
+    }
+    public static void TriggerUltimateOut(){
+        OnUltimateTriggeredOut?.Invoke();
+    }
+
     public static void TriggerGuard(bool val){
         OnCharacterGuardEvent?.Invoke(val);
+    }
+    public static void TriggerForwardStep(){
+        OnForwardStepEvent?.Invoke();
     }
     public static void CharacterBoostIn(){
         OnCharacterBoostInEvent?.Invoke();

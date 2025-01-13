@@ -19,6 +19,10 @@ public class PlayerAnimationScript : AnimatorUtil
         PlayerEventSystem.OnCharacterIdleEvent += Idle;
         PlayerEventSystem.OnCharacterRunEvent += Run;
 
+        PlayerEventSystem.OnUltimateTriggeredIn += EnterUltimateState;
+        PlayerEventSystem.OnUltimateAttackEvent += UltimateAttack;
+        PlayerEventSystem.OnUltimateTriggeredOut += LeaveUltimateState;
+
         PlayerEventSystem.OnCharacterJumpEvent += Jump;
         PlayerEventSystem.OnCharacterGuardEvent += Guard;
 
@@ -26,8 +30,14 @@ public class PlayerAnimationScript : AnimatorUtil
     }
 
     private void OnDisable() {
+        PlayerEventSystem.OnSpawnInEvent -= Spawn;
+
         PlayerEventSystem.OnCharacterIdleEvent -= Idle;
         PlayerEventSystem.OnCharacterRunEvent -= Run;
+
+        PlayerEventSystem.OnUltimateTriggeredIn -= EnterUltimateState;
+        PlayerEventSystem.OnUltimateAttackEvent -= UltimateAttack;
+        PlayerEventSystem.OnUltimateTriggeredOut -= LeaveUltimateState;
 
         PlayerEventSystem.OnCharacterJumpEvent -= Jump;
         PlayerEventSystem.OnCharacterGuardEvent -= Guard;
@@ -53,6 +63,17 @@ public class PlayerAnimationScript : AnimatorUtil
     }
     public void Guard(bool val){
         _anim.SetBool("Guarding", val);
+    }
+    public void EnterUltimateState(){
+        AnimatorTrigger(_anim, "EnterUltimateTrigger", 0.5f);
+        _anim.SetBool("EnterUltimate", true);
+    }
+    public void LeaveUltimateState(){
+        _anim.SetBool("EnterUltimate", false);
+    }
+    public void UltimateAttack(){
+        AnimatorTrigger(_anim, "UltimateAttack", 0.5f);
+        PlayerEventSystem.TriggerUltimateOut();
     }
     public void UpdateCharacterDirection(Vector2 direction){
         BlendTreeValue(_anim, "FrontBack", direction.y, _movementLerper);

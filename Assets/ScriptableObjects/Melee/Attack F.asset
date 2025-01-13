@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c935eeb63de43b04491c187984285f90, type: 3}
+  m_Name: Attack F
+  m_EditorClassIdentifier: 
+  _manaAttackFX: {fileID: 2142275784067066224, guid: f1bc5e7b4cd8e88439cfe59de682a32b,
+    type: 3}
+  _normalAttackFX: {fileID: 2142275784067066224, guid: 71bdaf2e488d76a4db6190599c35a1d9,
+    type: 3}
+  _normalAttackDamage: 10
+  _manaAttackDamage: 20
+  _normalAttackForce: 10
+  _manaAttackForce: 20

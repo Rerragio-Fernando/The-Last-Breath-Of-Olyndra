@@ -14,11 +14,9 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private float _dodgeSpeed;
     [SerializeField] private float _dodgeTime;
     [SerializeField] private float _dodgeRate;
-    [SerializeField] private float _aimMoveSpeed;
+    [SerializeField] private float _forwardStepSpeed;
     [SerializeField] private float _playerFriction;
     [SerializeField] private float _jumpForce;
-    [SerializeField] private float _aimToMainMovementSwitchDelay;
-    [SerializeField] private float _aimSensitivity;
     [SerializeField] private float _distanceToGround;
     [SerializeField] private LayerMask _groundLayer;
     [SerializeField] private Transform _groundTrans;
@@ -57,6 +55,7 @@ public class PlayerScript : MonoBehaviour
 
         PlayerInputHandler.JumpEvent += JumpInput;
 
+        PlayerEventSystem.OnForwardStepEvent += ForwardStep;
         PlayerEventSystem.OnCharacterBoostInEvent += BoostIn;
         PlayerEventSystem.OnCharacterBoostOutEvent += BoostOut;
         PlayerEventSystem.OnCharacterGuardEvent += Guarding;
@@ -187,6 +186,10 @@ public class PlayerScript : MonoBehaviour
 
     public void JumpForce(){//This is being called by animation events
         _jump = true;
+    }
+
+    public void ForwardStep(){
+        _velocity += transform.forward * _forwardStepSpeed;
     }
 
     void BoostIn(){
