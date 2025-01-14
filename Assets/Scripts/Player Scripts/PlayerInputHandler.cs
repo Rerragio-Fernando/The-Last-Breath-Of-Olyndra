@@ -21,8 +21,8 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler> {
     public static event Action<InputActionPhase> GuardEvent;
 
     public static event Action<InputActionPhase> BasicAttackEvent;
-    public static event Action<InputActionPhase> StrongAttackEvent;
-    public static event Action<InputActionPhase> AOEAttackEvent;
+    public static event Action<InputActionPhase> ManaChargeEvent;
+    public static event Action<InputActionPhase> UltimateEvent;
 
     public override void Awake(){
         base.Awake();
@@ -41,8 +41,8 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler> {
         BindAction(_playerInputActions.Player.Guard, ctx => InvokeIfCanAct(() => GuardEvent?.Invoke(ctx.phase)));
 
         BindAction(_playerInputActions.Player.BasicAttack, ctx => InvokeIfCanAct(() => BasicAttackEvent?.Invoke(ctx.phase)));
-        BindAction(_playerInputActions.Player.StrongAttack, ctx => InvokeIfCanAct(() => StrongAttackEvent?.Invoke(ctx.phase)));
-        BindAction(_playerInputActions.Player.AOEAttack, ctx => InvokeIfCanAct(() => AOEAttackEvent?.Invoke(ctx.phase)));
+        BindAction(_playerInputActions.Player.ManaCharge, ctx => InvokeIfCanAct(() => ManaChargeEvent?.Invoke(ctx.phase)));
+        BindAction(_playerInputActions.Player.Ultimate, ctx => InvokeIfCanAct(() => UltimateEvent?.Invoke(ctx.phase)));
     }
 
     private void OnDisable() {
@@ -56,8 +56,8 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler> {
         UnbindAction(_playerInputActions.Player.Guard, ctx => InvokeIfCanAct(() => GuardEvent?.Invoke(ctx.phase)));
 
         UnbindAction(_playerInputActions.Player.BasicAttack, ctx => InvokeIfCanAct(() => BasicAttackEvent?.Invoke(ctx.phase)));
-        UnbindAction(_playerInputActions.Player.StrongAttack, ctx => InvokeIfCanAct(() => StrongAttackEvent?.Invoke(ctx.phase)));
-        UnbindAction(_playerInputActions.Player.AOEAttack, ctx => InvokeIfCanAct(() => AOEAttackEvent?.Invoke(ctx.phase)));
+        UnbindAction(_playerInputActions.Player.ManaCharge, ctx => InvokeIfCanAct(() => ManaChargeEvent?.Invoke(ctx.phase)));
+        UnbindAction(_playerInputActions.Player.Ultimate, ctx => InvokeIfCanAct(() => UltimateEvent?.Invoke(ctx.phase)));
     }
 
     private void InvokeIfCanAct(Action action)
