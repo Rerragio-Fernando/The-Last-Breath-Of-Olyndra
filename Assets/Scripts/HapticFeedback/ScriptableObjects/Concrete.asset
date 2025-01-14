@@ -1,0 +1,111 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa36eaaf0556ca648a76fadefeebd12b, type: 3}
+  m_Name: Concrete
+  m_EditorClassIdentifier: 
+  mapType: 2
+  type: 0
+  duration: 0.5
+  lowSpeedIntensity: 0.2
+  lowSpeedMotor:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: -0
+      outSlope: -0.46533573
+      tangentMode: 5
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.4257425
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.7675574
+      outSlope: -0.7675574
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.17821789
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  highSpeedIntensity: 0.3
+  highSpeedMotor:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.50891083
+      value: 1
+      inSlope: -1.0181451
+      outSlope: -1.0181451
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.5955184
+      outSlope: -0.5955184
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.13709687
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  variesWithDistance: 0
+  maxDistance: 25
+  fallOffCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -0.20225161
+      outSlope: -0.20225161
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.10495049
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.3053941
+      outSlope: -0.3053941
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.07722777
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

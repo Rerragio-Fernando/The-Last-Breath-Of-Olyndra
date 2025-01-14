@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 ## [Unreleased] - yyyy-mm-dd
 
 ### Added
+[SCRUM-26](https://github.com/Rerragio-Fernando/The-Last-Breath-Of-Olyndra/issues/15) Added gamepad rumble effect on enemy pound attack !15 \
 [SCRUM-25](https://github.com/Rerragio-Fernando/The-Last-Breath-Of-Olyndra/issues/13) Added mixamo model and animations for the enemy and poison effect to enemy ability !13 \
 [SCRUM-24](https://github.com/Rerragio-Fernando/The-Last-Breath-Of-Olyndra/issues/9) Started working on adding an ANN to the enemy AI !9 \
 [SCRUM-23] Worked on the player abilities \
