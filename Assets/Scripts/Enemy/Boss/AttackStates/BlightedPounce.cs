@@ -28,7 +28,7 @@ namespace NPC
     {
         Transform bossTransform;
         [SerializeField] private float leapSpeed = 10f;
-        [SerializeField] private float impactRadius = 2f; 
+        [SerializeField] private float impactRadius = 2f;
         [SerializeField] private LayerMask targetLayer;
         Vector3 targetPosition = Vector3.zero;
         Transform playerPos;
@@ -37,25 +37,30 @@ namespace NPC
         {
             BossAIState stateToReturn = this;
             bossTransform = bossAI.getBossTransform();
-            if (!isOnCooldown()&& !isActive)
+            if (!isOnCooldown() && !isActive)
             {
                 playerPos = bossAI.getSetCurrentTarget;
-                bossAI.getSetCurrentTarget = null;
-                Activate();
-                visualizeAbility(bossAI);
 
+                if (playerPos != null)
+                {
+                    bossAI.getSetCurrentTarget = null;
+                    Activate();
+                    visualizeAbility(bossAI);
+                }
             }
 
-            if(isActive)
+            if (isActive)
             {
                 LeapTowardsTarget();
                 checkLeapEnd();
             }
+
             if (checkCooldownStateChange())
             {
                 Debug.Log("cooldown done pounce");
                 stateToReturn = nextState == null ? stateToReturn : nextState;
             }
+
             checkIfCooldownNeedReset(stateToReturn);
             bossAI.trainAnn();
             return stateToReturn;
@@ -64,16 +69,17 @@ namespace NPC
         public override void Activate()
         {
             Debug.Log($"{abilityName} activated!");
-            if(playerPos)
+            if (playerPos)
             {
                 targetPosition = playerPos.position;
-                isActive = true;
             }
             else
             {
+                Debug.LogWarning("Player position not set, defaulting to zero.");
                 targetPosition = Vector3.zero;
             }
 
+            isActive = true;
         }
 
         public override void applyDamage(PlayerHealth playerHealth)
@@ -99,7 +105,17 @@ namespace NPC
                 Debug.LogWarning("Player position is null!");
                 return;
             }
+
             Vector3 direction = (targetPosition - bossTransform.position).normalized;
+
+            // Ensure the target is not behind the boss
+            if (Vector3.Dot(direction, bossTransform.forward) < 0)
+            {
+                Debug.LogWarning("Target is behind the boss, adjusting target direction.");
+                targetPosition = bossTransform.position + bossTransform.forward * 2f; // Redirect to a forward position
+                direction = (targetPosition - bossTransform.position).normalized;
+            }
+
             Vector3 leapMovement = direction * leapSpeed * Time.deltaTime;
             bossTransform.position = Vector3.MoveTowards(bossTransform.position, targetPosition, leapMovement.magnitude);
         }
@@ -111,9 +127,9 @@ namespace NPC
 
             if (Vector3.Distance(bossPositionXZ, targetPositionXZ) <= impactRadius)
             {
+                bossTransform.position = targetPositionXZ; // Snap to target position
                 isActive = false;
                 checkImpact();
-                
             }
         }
 
@@ -129,8 +145,6 @@ namespace NPC
                     {
                         applyDamage(health);
                     }
-                    
-
                 }
             }
             startCooldown();
@@ -142,7 +156,6 @@ namespace NPC
             {
                 bossAI.setAttackAnimationTrigger(abilityName);
             }
-
         }
     }
 }

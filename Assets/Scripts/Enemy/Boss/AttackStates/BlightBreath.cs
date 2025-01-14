@@ -95,7 +95,12 @@ namespace NPC
         private void applyHazardEffect(GameObject target)
         {
             // TODO: Add logic to apply damage-over-time or debuff to the player
-            Debug.Log($"Applying toxic effect to {target.name}");
+            PlayerStatusEffects status = target.GetComponentInChildren<PlayerStatusEffects>();
+            if (status)
+            {
+                status.ApplyPoison(0.5f, hazardDuration * 2);
+            }
+
         }
 
         public override void applyDamage(PlayerHealth playerHealth)
@@ -115,7 +120,6 @@ namespace NPC
             if (bossAI)
             {
                 bossAI.setAttackAnimationTrigger(abilityName);
-                Debug.Log(abilityName);
             }
             spawnGasCloudEffect();
         }
