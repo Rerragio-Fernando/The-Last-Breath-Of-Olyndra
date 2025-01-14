@@ -128,6 +128,7 @@ namespace NPC.Brain
                     break;
             }
 
+
             return currentAttack;
         }
 

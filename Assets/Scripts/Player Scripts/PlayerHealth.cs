@@ -21,11 +21,15 @@
  * ----------------------------------------------------------------------------------------------
  */
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerHealth : CommonHealth
 {
 
     public static PlayerHealth instance { get; private set; } = null;
+
+    bool poisoned = false;
+    Image fillImage;
 
     private void Awake()
     {
@@ -38,6 +42,38 @@ public class PlayerHealth : CommonHealth
         instance = this;
     }
 
+    private new void Start()
+    {
+        base.Start();
+        healthBar = GameObject.Find("Health Slider").GetComponent<Slider>();
+        if (healthBar)
+        {
+            healthBar.maxValue = maxHealth;
+            findFillAreaColor();
+            if (fillImage)
+            {
+                fillImage.color = Color.green;
+            }
+        }
+    }
+
+    private void findFillAreaColor()
+    {
+        Transform fillArea = healthBar.transform.Find("Fill Area");
+        if (fillArea)
+        {
+            fillImage = fillArea.Find("Fill").GetComponent<Image>();
+        }
+    }
+
+    private void Update()
+    {
+        if (healthBar)
+        {
+            healthBar.value = currentHealth;
+        }
+
+    }
     public override void applyDamage(float damage)
     {
         base.applyDamage(damage);
@@ -55,6 +91,22 @@ public class PlayerHealth : CommonHealth
     void playerDefeat()
     {
         Debug.Log(" handle death");
+    }
+
+    public void setIsPoisoned(bool isPoisoned)
+    {
+        Debug.Log("I am poisoned");
+        poisoned = isPoisoned;
+        if (!fillImage) return;
+
+        if (poisoned)
+        {
+            fillImage.color = new Color(0.5f, 0f, 0.5f);
+        }
+        else
+        {
+            fillImage.color = Color.green;
+        }
     }
 
 

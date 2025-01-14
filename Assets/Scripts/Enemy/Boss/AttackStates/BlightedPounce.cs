@@ -37,6 +37,7 @@ namespace NPC
 
         public override BossAIState stateTick(BossAIManager bossAI)
         {
+            bossAI.activateDeactivateCollider(true);
             BossAIState stateToReturn = this;
             bossTransform = bossAI.getBossTransform();
             if (!isOnCooldown() && !isActive)
@@ -64,6 +65,7 @@ namespace NPC
             if (checkCooldownStateChange())
             {
                 Debug.Log("cooldown done pounce");
+                bossAI.activateDeactivateCollider(false);
                 stateToReturn = nextState == null ? stateToReturn : nextState;
             }
 
@@ -143,7 +145,8 @@ namespace NPC
 
         private void checkImpact()
         {
-            Collider[] hitTargets = Physics.OverlapSphere(bossTransform.position, impactRadius * 2f, targetLayer);
+            Vector3 bossPositionXZ = new Vector3(bossTransform.position.x, 0, bossTransform.position.z);
+            Collider[] hitTargets = Physics.OverlapSphere(bossPositionXZ, impactRadius * 3f, targetLayer);
             foreach (var hit in hitTargets)
             {
                 if (hit.CompareTag("Player"))

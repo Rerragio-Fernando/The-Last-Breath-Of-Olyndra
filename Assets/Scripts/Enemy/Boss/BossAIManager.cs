@@ -37,6 +37,8 @@ namespace NPC
         GameObject bossObject;
         [SerializeField]
         Transform spawningPoint;
+        CapsuleCollider enemyCollider;
+
 
         CutsceneManager cutsceneManager;
 
@@ -57,6 +59,8 @@ namespace NPC
         Brain.Brain AIBrain;
         PlayerHealth playerHealth;
         EnemyHealth enemyHealth;
+
+        
 
 
 
@@ -112,6 +116,7 @@ namespace NPC
                 enemyHealth = EnemyHealth.instance;
                 aiAnimator = bossObject == null ? null : bossObject.gameObject.GetComponentInChildren<Animator>();
                 bossMovements = bossObject == null? null: bossObject.GetComponent<AiMovements>();
+                enemyCollider = bossObject == null ? null: bossObject.GetComponent<CapsuleCollider>();
             }
             if(hasBossBeenFound)
             {
@@ -163,10 +168,8 @@ namespace NPC
 
         public void playHapticEffect()
         {
-            Debug.Log("in here");
             if (impactEffect)
             {
-                Debug.Log("in here again");
                 HapticManager.PlayEffect(impactEffect, this.transform.position);
             }
         }
@@ -300,6 +303,14 @@ namespace NPC
                 bossMovements.stopAgent();
             }
             
+        }
+
+        public void activateDeactivateCollider(bool isTrigger)
+        {
+            if(enemyCollider)
+            {
+                enemyCollider.isTrigger=isTrigger;
+            }
         }
 
         private void OnApplicationQuit()

@@ -54,6 +54,8 @@ public class PlayerStatusEffects : MonoBehaviour
         }
 
         isPoisoned = true;
+        playerHealth = playerHealth == null ? PlayerHealth.instance : playerHealth;
+        playerHealth.setIsPoisoned(isPoisoned);
         poisonTickTimer = new WaitForSeconds(tickInterval);
 
 
@@ -100,6 +102,8 @@ public class PlayerStatusEffects : MonoBehaviour
     private void HealFromPoison()
     {
         isPoisoned = false;
+        playerHealth = playerHealth == null ? PlayerHealth.instance : playerHealth;
+        playerHealth.setIsPoisoned(isPoisoned);
 
     }
 }

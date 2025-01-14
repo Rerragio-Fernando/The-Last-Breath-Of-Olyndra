@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6914732928552022801}
   - component: {fileID: 1753314555123013224}
+  - component: {fileID: 6621288804200773507}
   m_Layer: 0
   m_Name: Health
   m_TagString: Untagged
@@ -45,6 +46,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 1000
+--- !u!114 &6621288804200773507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1548323542410795969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f33984d399df8344eac85e4f95839552, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _healthBar: {fileID: 0}
+  _maxHealth: 1000
+  _damageInfluence: 0.1
+  _comboInfluence: 0.5
 --- !u!1 &9170486167528315347
 GameObject:
   m_ObjectHideFlags: 0
@@ -59,7 +76,7 @@ GameObject:
   - component: {fileID: 7508922724015577309}
   m_Layer: 0
   m_Name: FenmorTemp
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

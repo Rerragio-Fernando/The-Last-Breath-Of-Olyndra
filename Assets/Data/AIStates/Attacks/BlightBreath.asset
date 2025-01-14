@@ -23,6 +23,6 @@ MonoBehaviour:
   hazardDuration: 5
   targetLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 4294967295
   gasParticlesPrefab: {fileID: 3833452777892178912, guid: ff411a7e5e0a6ae4f92d6bb16d08856e,
     type: 3}
