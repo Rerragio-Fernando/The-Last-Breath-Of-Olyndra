@@ -65,6 +65,12 @@ namespace NPC
 
         string nextPlannedAttack = "Swipe";
 
+        /// <summary>
+        /// reference to a OneShot haptic effect
+        /// </summary>
+        [Tooltip("Reference to a OneShot haptic effect")]
+        [SerializeField] HapticEffectSO impactEffect;
+
 
         private void Awake()
         {
@@ -153,6 +159,16 @@ namespace NPC
             adjustBossPosition();
 
             bossObject.transform.rotation = spawningPoint.rotation;
+        }
+
+        public void playHapticEffect()
+        {
+            Debug.Log("in here");
+            if (impactEffect)
+            {
+                Debug.Log("in here again");
+                HapticManager.PlayEffect(impactEffect, this.transform.position);
+            }
         }
 
         public BossAIState findState(string name)

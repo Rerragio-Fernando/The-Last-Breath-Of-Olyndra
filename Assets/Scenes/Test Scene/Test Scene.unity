@@ -4727,7 +4727,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1967643081}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -4782,7 +4782,7 @@ Transform:
   m_GameObject: {fileID: 1967643081}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.859314, y: 5, z: 12.31}
+  m_LocalPosition: {x: -0.08, y: 5, z: 0.23}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5224,6 +5224,7 @@ GameObject:
   - component: {fileID: 2091179889}
   - component: {fileID: 2091179890}
   - component: {fileID: 2091179891}
+  - component: {fileID: 2091179892}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -5433,6 +5434,18 @@ MonoBehaviour:
   _mainBattleCam: {fileID: 1176767617}
   _ultiCam: {fileID: 1610811107}
   _focusCam: {fileID: 2065606775}
+--- !u!114 &2091179892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2091179876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45166351051a2a9449d5bc3ca2578eb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2102106734
 GameObject:
   m_ObjectHideFlags: 0
@@ -5486,6 +5499,7 @@ MonoBehaviour:
     type: 3}
   spawningPoint: {fileID: 0}
   currentState: {fileID: 11400000, guid: c2cba32cf918bab49a446ef2719e413f, type: 2}
+  impactEffect: {fileID: 11400000, guid: f4ec3db11bf4ed64abf25bbbd378bbcd, type: 2}
 --- !u!114 &2102106737
 MonoBehaviour:
   m_ObjectHideFlags: 0

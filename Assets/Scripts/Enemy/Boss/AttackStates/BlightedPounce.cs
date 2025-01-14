@@ -33,6 +33,8 @@ namespace NPC
         Vector3 targetPosition = Vector3.zero;
         Transform playerPos;
 
+        bool impactReached = false;
+
         public override BossAIState stateTick(BossAIManager bossAI)
         {
             BossAIState stateToReturn = this;
@@ -53,6 +55,10 @@ namespace NPC
             {
                 LeapTowardsTarget();
                 checkLeapEnd();
+                if(impactReached)
+                {
+                    bossAI.playHapticEffect();
+                }
             }
 
             if (checkCooldownStateChange())
@@ -95,6 +101,7 @@ namespace NPC
         {
             isActive = false;
             targetPosition = Vector3.zero;
+            impactReached = false;
             resetCooldown();
         }
 
@@ -122,6 +129,7 @@ namespace NPC
 
         private void checkLeapEnd()
         {
+
             Vector3 bossPositionXZ = new Vector3(bossTransform.position.x, 0, bossTransform.position.z);
             Vector3 targetPositionXZ = new Vector3(targetPosition.x, 0, targetPosition.z);
 
@@ -147,6 +155,7 @@ namespace NPC
                     }
                 }
             }
+            impactReached = true;
             startCooldown();
         }
 
