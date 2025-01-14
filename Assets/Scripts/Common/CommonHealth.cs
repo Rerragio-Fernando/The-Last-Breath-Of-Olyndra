@@ -21,6 +21,7 @@
  * ----------------------------------------------------------------------------------------------
  */
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CommonHealth : MonoBehaviour
 {
@@ -28,13 +29,24 @@ public class CommonHealth : MonoBehaviour
     protected float currentHealth;
     protected float previousHealth;
     protected float damageTaken = 0;
+    protected Slider healthBar;
+    protected Image fillImage;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void Start()
     {
         currentHealth = maxHealth;
         previousHealth = currentHealth;
     }
+    private void Update()
+    {
+        if (healthBar)
+        {
+            healthBar.value = currentHealth;
+        }
+
+    }
+
 
     public bool didHealthChange()
     {
@@ -42,6 +54,15 @@ public class CommonHealth : MonoBehaviour
         setDamageTaken();
         previousHealth = currentHealth;
         return wasUnitDamaged;
+    }
+
+    protected void findFillAreaColor()
+    {
+        Transform fillArea = healthBar.transform.Find("Fill Area");
+        if (fillArea)
+        {
+            fillImage = fillArea.Find("Fill").GetComponent<Image>();
+        }
     }
 
     void setDamageTaken()
@@ -74,5 +95,17 @@ public class CommonHealth : MonoBehaviour
     public double getHealth()
     {
         return currentHealth;
+    }
+
+    public Slider getSetHealthBar
+    {
+        get { return healthBar; }
+        set
+        {
+            if (healthBar != value)
+            {
+                healthBar = value;
+            }
+        }
     }
 }

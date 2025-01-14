@@ -21,6 +21,7 @@
  * ----------------------------------------------------------------------------------------------
  */
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyHealth : CommonHealth
 {
@@ -35,6 +36,22 @@ public class EnemyHealth : CommonHealth
             return;
         }
         instance = this;
+    }
+
+    private new void Start()
+    {
+        base.Start();
+
+        healthBar = GameObject.Find("FenmorHealth").GetComponent<Slider>();
+        if (healthBar)
+        {
+            healthBar.maxValue = maxHealth;
+            findFillAreaColor();
+            if (fillImage)
+            {
+                fillImage.color = Color.red;
+            }
+        }
     }
 
 

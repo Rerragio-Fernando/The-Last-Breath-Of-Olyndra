@@ -13,15 +13,13 @@ MonoBehaviour:
   m_Name: FenmorPounce
   m_EditorClassIdentifier: 
   nextState: {fileID: 11400000, guid: c2cba32cf918bab49a446ef2719e413f, type: 2}
-  animator: {fileID: 0}
   abilityName: Blighted Pounce
   cooldown: 5
   comboAttack: 0
   numbOfCombo: 0
-  damage: 50
+  damage: 25
   leapSpeed: 10
-  leapDistance: 5
   impactRadius: 2
   targetLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 4294967295

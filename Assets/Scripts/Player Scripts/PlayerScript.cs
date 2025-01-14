@@ -171,6 +171,7 @@ public class PlayerScript : MonoBehaviour
 
     void PlayerLookRotation(){
         float l_angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targAngle, ref _turnSmoothVelocity, _turnSmoothTime);
+        _bossEnemy = _bossEnemy == null ? GameObject.FindWithTag("Enemy") : _bossEnemy;
         Vector3 l_dir = _bossEnemy.transform.position - transform.position;
         l_dir.y = 0f;
 

@@ -12,7 +12,10 @@ public class DamageScript : MonoBehaviour
 
     private void Start() {
         _health = _maxHealth;
-        _healthBar.maxValue = _maxHealth;
+        if (_healthBar)
+        {
+            _healthBar.maxValue = _maxHealth;
+        }
     }
 
     public void TakeDamage(int val){
@@ -20,7 +23,10 @@ public class DamageScript : MonoBehaviour
     }
 
     private void Update() {
-        _healthBar.value = _health;
+        if(_healthBar)
+        {
+            _healthBar.value = _health;
+        }   
     }
 
 }
