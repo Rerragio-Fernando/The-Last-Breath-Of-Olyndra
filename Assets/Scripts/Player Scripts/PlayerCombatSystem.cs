@@ -198,8 +198,8 @@ public class PlayerCombatSystem : MonoBehaviour
             Destroy(l_hitFx, 1f);
 
             GameObject l_hitObj = _hit.transform.gameObject;
-            
-            EnemyDamageScript l_ds = l_hitObj.GetComponent<EnemyDamageScript>();
+
+            EnemyDamageScript l_ds = l_hitObj.GetComponentInChildren<EnemyDamageScript>();
             if(l_ds != null){
                 PlayerEventSystem.TriggerSuccessfulHit();                                                       //EVENT TRIGGERED
                 _manaHandler.GainMana(l_ds.TakeDamage(damage, _comboScript.Combo));

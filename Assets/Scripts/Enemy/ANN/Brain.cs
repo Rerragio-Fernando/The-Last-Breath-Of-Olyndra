@@ -93,7 +93,7 @@ namespace NPC.Brain
         public string nextActionSelection(double distanceFromPlayer, double playerHealth, double AIHealth, List<double> cooldowns)
         {
             List<double> states = new List<double>();
-            string currentAttack = "Blighted Pounce";
+            string currentAttack = "Swipe";
             states = new List<double>();
             states.Add(distanceFromPlayer);
             states.Add(playerHealth);
@@ -127,7 +127,6 @@ namespace NPC.Brain
                     currentAttack = "Blight Breath";
                     break;
             }
-
 
             return currentAttack;
         }

@@ -29,7 +29,6 @@ public class PlayerHealth : CommonHealth
     public static PlayerHealth instance { get; private set; } = null;
 
     bool poisoned = false;
-    Image fillImage;
 
     private void Awake()
     {
@@ -57,23 +56,9 @@ public class PlayerHealth : CommonHealth
         }
     }
 
-    private void findFillAreaColor()
-    {
-        Transform fillArea = healthBar.transform.Find("Fill Area");
-        if (fillArea)
-        {
-            fillImage = fillArea.Find("Fill").GetComponent<Image>();
-        }
-    }
 
-    private void Update()
-    {
-        if (healthBar)
-        {
-            healthBar.value = currentHealth;
-        }
 
-    }
+
     public override void applyDamage(float damage)
     {
         base.applyDamage(damage);

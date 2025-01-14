@@ -30,6 +30,7 @@ public class CommonHealth : MonoBehaviour
     protected float previousHealth;
     protected float damageTaken = 0;
     protected Slider healthBar;
+    protected Image fillImage;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Start()
@@ -37,6 +38,15 @@ public class CommonHealth : MonoBehaviour
         currentHealth = maxHealth;
         previousHealth = currentHealth;
     }
+    private void Update()
+    {
+        if (healthBar)
+        {
+            healthBar.value = currentHealth;
+        }
+
+    }
+
 
     public bool didHealthChange()
     {
@@ -44,6 +54,15 @@ public class CommonHealth : MonoBehaviour
         setDamageTaken();
         previousHealth = currentHealth;
         return wasUnitDamaged;
+    }
+
+    protected void findFillAreaColor()
+    {
+        Transform fillArea = healthBar.transform.Find("Fill Area");
+        if (fillArea)
+        {
+            fillImage = fillArea.Find("Fill").GetComponent<Image>();
+        }
     }
 
     void setDamageTaken()
