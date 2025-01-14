@@ -511,8 +511,8 @@ GameObject:
   - component: {fileID: 7175249907118744104}
   - component: {fileID: 3156140343965305865}
   - component: {fileID: 2599378221235287288}
-  - component: {fileID: 8143929438886436159}
   - component: {fileID: 3950660598710783163}
+  - component: {fileID: 5334995135213432675}
   m_Layer: 7
   m_Name: Enemy Dummy
   m_TagString: Enemy
@@ -550,7 +550,7 @@ CapsuleCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -609,7 +609,26 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &8143929438886436159
+--- !u!114 &3950660598710783163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9152192536952593543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f33984d399df8344eac85e4f95839552, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _healthBar: {fileID: 423346421210357215}
+  _maxHealth: 1000
+  _manaOrbsPrefab: {fileID: 4410103429708213581, guid: 303fa2f1a2cf97745ba8309d95dd42ac,
+    type: 3}
+  _maxNumberOfOrbsDropped: 20
+  _damageInfluence: 0.1
+  _comboInfluence: 0.5
+--- !u!114 &5334995135213432675
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -621,17 +640,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb683ab360d4eff4bab1ae52464b0893, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3950660598710783163
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9152192536952593543}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c620665f7e803674db24827914dd7a45, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _healthBar: {fileID: 423346421210357215}
-  _maxHealth: 100

@@ -1497,9 +1497,11 @@ GameObject:
   - component: {fileID: 4529155689017475178}
   - component: {fileID: 766984915038834646}
   - component: {fileID: 1734898269661109104}
+  - component: {fileID: 2007507536457620255}
+  - component: {fileID: 6316660037215336612}
   - component: {fileID: 6770556703467177254}
   - component: {fileID: 1671064715969784647}
-  - component: {fileID: 2007507536457620255}
+  - component: {fileID: 3025614519939941280}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -1621,6 +1623,61 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movementLerper: 50
+--- !u!114 &2007507536457620255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5381149547436011581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95ebaa7ab7ddc3941b7ef78be9471bf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _movementTimeDelay: 0.25
+  _manaChargeDuration: 2
+  _manaChargeRate: 2
+  _raycastTrans: {fileID: 3322489009751324424}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _playerNormalAtkRange: 2
+  _playerManaAtkRange: 4
+  _ultimatePrefab: {fileID: 8670710735420589670, guid: f36c20d41c4875d4386df78cf505ddd8,
+    type: 3}
+  _playerUltimateHoldDownTime: 2
+  _ultimateDuration: 2
+  _attackProfile:
+  - {fileID: 11400000, guid: 9b369ec8a2c82cf47b7cd2a9a9e9ae46, type: 2}
+  - {fileID: 11400000, guid: 1ecb00721f3d44d4680493019323ddab, type: 2}
+  - {fileID: 11400000, guid: cfef6db9e4258ae43b24eddfdf6ce177, type: 2}
+  - {fileID: 11400000, guid: d1c8595c09b2f334b97e25d16c4dfaf0, type: 2}
+  - {fileID: 11400000, guid: 8180d3fd23053be4c8e6c7c6569607c0, type: 2}
+  - {fileID: 11400000, guid: 7d7f502300a7d4a409871c53b6436a3f, type: 2}
+  _hitFX: {fileID: 5750413289089472753, guid: 84a510fdb60d92e42a1c6d8b96e04fbf, type: 3}
+  _manaChargeFXPrefab: {fileID: 493735384106541507, guid: 527c7b03fc74c6749b4cbea54d1e39b2,
+    type: 3}
+  _ultLoadPrefab: {fileID: 318621678383230091, guid: 173c05c5b9cf26345aa862043223af4b,
+    type: 3}
+  _manaChargeTrans: {fileID: 2848872285768212436}
+  _atkFXParent: {fileID: 337599613979984721}
+  _ultimateHoldIN: 0
+  _ultimateStartedIN: 0
+--- !u!114 &6316660037215336612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5381149547436011581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d5495aeaa4d0bd46a98d63f118ab384, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _manaSlider: {fileID: 0}
+  _maxMana: 210
 --- !u!114 &6770556703467177254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1738,7 +1795,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &2007507536457620255
+--- !u!114 &3025614519939941280
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1747,41 +1804,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5381149547436011581}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95ebaa7ab7ddc3941b7ef78be9471bf8, type: 3}
+  m_Script: {fileID: 11500000, guid: 728ad3c5e67b30c4c921ceb2320b330f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movementTimeDelay: 0.25
-  _manaChargeDuration: 2
-  _manaChargeRate: 2
-  _raycastTrans: {fileID: 3322489009751324424}
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 64
-  _playerNormalAtkRange: 2
-  _playerManaAtkRange: 4
-  _ultimatePrefab: {fileID: 8670710735420589670, guid: f36c20d41c4875d4386df78cf505ddd8,
-    type: 3}
-  _playerUltimateHoldDownTime: 2
-  _ultimateDuration: 2
-  _manaSlider: {fileID: 0}
-  _maxMana: 0
-  _manaRechargeRate: 0
-  _attackProfile:
-  - {fileID: 11400000, guid: 9b369ec8a2c82cf47b7cd2a9a9e9ae46, type: 2}
-  - {fileID: 11400000, guid: 1ecb00721f3d44d4680493019323ddab, type: 2}
-  - {fileID: 11400000, guid: cfef6db9e4258ae43b24eddfdf6ce177, type: 2}
-  - {fileID: 11400000, guid: d1c8595c09b2f334b97e25d16c4dfaf0, type: 2}
-  - {fileID: 11400000, guid: 8180d3fd23053be4c8e6c7c6569607c0, type: 2}
-  - {fileID: 11400000, guid: 7d7f502300a7d4a409871c53b6436a3f, type: 2}
-  _hitFX: {fileID: 5750413289089472753, guid: 84a510fdb60d92e42a1c6d8b96e04fbf, type: 3}
-  _manaChargeFXPrefab: {fileID: 493735384106541507, guid: 527c7b03fc74c6749b4cbea54d1e39b2,
-    type: 3}
-  _ultLoadPrefab: {fileID: 318621678383230091, guid: 173c05c5b9cf26345aa862043223af4b,
-    type: 3}
-  _manaChargeTrans: {fileID: 2848872285768212436}
-  _atkFXParent: {fileID: 337599613979984721}
-  _ultimateHoldIN: 0
-  _ultimateStartedIN: 0
+  _comboPanel: {fileID: 0}
+  _minCombo: 3
+  _comboRetainmentTime: 2
 --- !u!1 &5466433203054357862
 GameObject:
   m_ObjectHideFlags: 0

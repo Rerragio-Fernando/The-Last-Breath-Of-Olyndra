@@ -20,3 +20,4 @@ MonoBehaviour:
   _manaAttackDamage: 20
   _normalAttackForce: 10
   _manaAttackForce: 20
+  _manaCost: 30

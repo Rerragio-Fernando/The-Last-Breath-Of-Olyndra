@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5174001926039076540}
+  - component: {fileID: 3797521558572178619}
   m_Layer: 0
   m_Name: Normal Attack
   m_TagString: Untagged
@@ -32,6 +33,46 @@ Transform:
   - {fileID: 7214402337384482094}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3797521558572178619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2142275784067066224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a3151eb84131846b8a9638bef98147, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundFx:
+  - name: Sword 1
+    clip: {fileID: 8300000, guid: b22bfc7206c281e4bb4a2d3396a665ce, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    spatialBlend: 0
+    priority: 120
+    spatialSoundMaxDistance: 0
+    source: {fileID: 0}
+  - name: Sword 1
+    clip: {fileID: 8300000, guid: 53386e6e47ed3814fbc71b906d4fd016, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    spatialBlend: 0
+    priority: 120
+    spatialSoundMaxDistance: 0
+    source: {fileID: 0}
+  - name: Sword 1
+    clip: {fileID: 8300000, guid: 6067f322773994346867f4675855c4e9, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    spatialBlend: 0
+    priority: 120
+    spatialSoundMaxDistance: 0
+    source: {fileID: 0}
 --- !u!1 &7265074322078463920
 GameObject:
   m_ObjectHideFlags: 0

@@ -23,11 +23,6 @@ public class PlayerCombatSystem : MonoBehaviour
     [SerializeField] private float _playerUltimateHoldDownTime;
     [SerializeField] private float _ultimateDuration;
 
-    [Header("Mana Properties")]
-    [SerializeField] private Slider _manaSlider;
-    [SerializeField] private int _maxMana;
-    [SerializeField] private float _manaRechargeRate;
-
     [Header("VFX")]
     [SerializeField] private AttackProfile[] _attackProfile;
     [SerializeField] private GameObject _hitFX;
@@ -40,10 +35,12 @@ public class PlayerCombatSystem : MonoBehaviour
     private bool _manaActive = false;
     private bool _enteringUltState = false;
     private bool _ulted = false;
-    private int _playerMana;
+    private int _minManaAmount;//Minimum amount of mana needed to make a charge
     private GameObject _manaFX;
     private GameObject _ultimateLoadFX;
     private GameObject _enemyObj;
+    private ManaHandler _manaHandler;
+    private PlayerComboScript _comboScript;
     private RaycastHit _hit;
 
     //Timer Variables
@@ -62,12 +59,26 @@ public class PlayerCombatSystem : MonoBehaviour
 
     private void Start() {
         _enemyObj = GameObject.FindWithTag("Enemy");
+        _manaHandler = GetComponent<ManaHandler>();
+        _comboScript = GetComponent<PlayerComboScript>();
+
+        FindMinimumSufficientMana();
         NotAttacking();
 
         PlayerInputHandler.GuardEvent += GuardInput;
         PlayerInputHandler.BasicAttackEvent += BasicAttackInput;
         PlayerInputHandler.ManaChargeEvent += ManaChargeInput;
         PlayerInputHandler.UltimateEvent += UltimateInput;
+    }
+
+    void FindMinimumSufficientMana(){
+        //Used to find the minimum amount of mana required to make a charge
+        _minManaAmount = _manaHandler.PlayerMaxMana;
+        foreach (AttackProfile item in _attackProfile)
+        {
+            if(item._manaCost < _minManaAmount)
+                _minManaAmount = item._manaCost;
+        }
     }
 
     #region Input Functions
@@ -118,20 +129,26 @@ public class PlayerCombatSystem : MonoBehaviour
             if((Time.time >= _ultTimeHoldEnd)){
                 //If player keeps holding down the button till after x amount of seconds then player enters ultimate state
                 _playerCombatState = CombatState.Ultimate;
-                PlayerEventSystem.TriggerUltimateIn();
+                PlayerEventSystem.TriggerUltimateIn();                                                      //EVENT TRIGGERED
             }
         }
 
         //Checks if the state is in "Ultimate"
         if(_playerCombatState != CombatState.Ultimate){
-            ManaFunction();
-            ManaChargeTimerFunction();
+            ManaChargeFunction();
+
+            //This deactivates mana-charge after "_manaChargeTimer"
+            if(_manaActive){
+                if(Time.time > _manaChargeTimer)// if time exceeds the charge timer then deactivate mana
+                    _manaActive = false;
+            }
+
             if(_playerCombatState == CombatState.NotAttacking){
                 if(_basicAtkIN){
-                    PlayerEventSystem.TriggerAttack();
+                    PlayerEventSystem.TriggerAttack();                                                      //EVENT TRIGGERED
                 }
             }
-            PlayerEventSystem.TriggerGuard(_guardIN);
+            PlayerEventSystem.TriggerGuard(_guardIN);                                                     //EVENT TRIGGERED
         }
         else{
             _isAttacking = true;
@@ -139,9 +156,9 @@ public class PlayerCombatSystem : MonoBehaviour
         }
     }
 
-    private void ManaFunction(){
+    private void ManaChargeFunction(){
         if(_manaChargeIN){
-            if(Time.time > _nextManaCharge){
+            if(Time.time > _nextManaCharge && (_manaHandler.PlayerMana >= _minManaAmount)){
                 _nextManaCharge = Time.time + 1/_manaChargeRate;
                 _manaChargeTimer = Time.time + _manaChargeDuration;
                 _manaActive = true;
@@ -152,25 +169,23 @@ public class PlayerCombatSystem : MonoBehaviour
 
     void UltimateFunctionality(){
         if(_basicAtkIN && !_ulted){
-            PlayerEventSystem.TriggerUltimateAttack();
+            PlayerEventSystem.TriggerUltimateAttack();                                                      //EVENT TRIGGERED
             Destroy(_ultimateLoadFX);
             _ulted = true;
             _enteringUltState = false;
         }
     }
 
-    void ManaChargeTimerFunction(){
-        if(_manaActive){
-            if(Time.time > _manaChargeTimer)// if time exceeds the charge timer then deactivate mana
-                _manaActive = false;
-        }
-    }
-
     private void AttackLogic(int indx){
-        int l_damage = _manaActive ? _attackProfile[indx]._manaAttackDamage : _attackProfile[indx]._normalAttackDamage;
-        GameObject l_atkFXPrefab = _manaActive ? _attackProfile[indx]._manaAttackFX : _attackProfile[indx]._normalAttackFX;
-        float range = _manaActive ? _playerManaAtkRange : _playerNormalAtkRange;
-        float force = _manaActive ? _attackProfile[indx]._manaAttackForce : _attackProfile[indx]._normalAttackForce;
+        bool l_manaAttack = _manaActive && (_attackProfile[indx]._manaCost <= _manaHandler.PlayerMana);// if mana is active AND if there is sufficient mana
+
+        if(l_manaAttack)
+            _manaHandler.UseMana(_attackProfile[indx]._manaCost);
+
+        int l_damage = l_manaAttack ? _attackProfile[indx]._manaAttackDamage : _attackProfile[indx]._normalAttackDamage;
+        GameObject l_atkFXPrefab = l_manaAttack ? _attackProfile[indx]._manaAttackFX : _attackProfile[indx]._normalAttackFX;
+        float range = l_manaAttack ? _playerManaAtkRange : _playerNormalAtkRange;
+        float force = l_manaAttack ? _attackProfile[indx]._manaAttackForce : _attackProfile[indx]._normalAttackForce;
         
         CheckHit(l_damage, range, force);
         GameObject l_fx = Instantiate(l_atkFXPrefab, _atkFXParent.position, Quaternion.LookRotation(transform.forward));
@@ -184,9 +199,10 @@ public class PlayerCombatSystem : MonoBehaviour
 
             GameObject l_hitObj = _hit.transform.gameObject;
             
-            DamageScript l_ds = l_hitObj.GetComponent<DamageScript>();
+            EnemyDamageScript l_ds = l_hitObj.GetComponent<EnemyDamageScript>();
             if(l_ds != null){
-                l_ds.TakeDamage(damage);
+                PlayerEventSystem.TriggerSuccessfulHit();                                                       //EVENT TRIGGERED
+                _manaHandler.GainMana(l_ds.TakeDamage(damage, _comboScript.Combo));
             }
 
             Rigidbody l_rb = l_hitObj.GetComponent<Rigidbody>();
@@ -205,7 +221,7 @@ public class PlayerCombatSystem : MonoBehaviour
 
         public void Attacking(){
             _playerCombatState = CombatState.Attacking;
-            PlayerEventSystem.TriggerForwardStep();
+            PlayerEventSystem.TriggerForwardStep();                                                     //EVENT TRIGGERED
         }
 
         public void NotAttacking(){
