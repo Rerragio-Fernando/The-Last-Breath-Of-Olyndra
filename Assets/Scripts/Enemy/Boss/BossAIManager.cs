@@ -1,7 +1,7 @@
 /*
  * ----------------------------------------------------------------------------------------------
  * Project: The Last Breath Of Olyndra                                                          *
- * Script: [Script Name or Description]                                                         *
+ * Script: BossAIManager                                                        *
  * Author: Marco Minganna                                                                       *
  * Unit: Digital Studio Project                                                                 *
  * Institution: Kingston University                                                             *
@@ -21,6 +21,7 @@
  * ----------------------------------------------------------------------------------------------
  */
 using UnityEngine;
+using System.Collections.Generic;
 using database;
 using animations;
 
@@ -42,6 +43,8 @@ namespace NPC
         [Header("Current State")]
         [SerializeField] BossAIState currentState;
 
+        Animator aiAnimator;
+
         public static BossAIManager instance { get; private set; } = null;
         GameData data;
         bool hasBossBeenFound = false;
@@ -51,6 +54,14 @@ namespace NPC
 
         StatesManager stageManager;
         AiMovements bossMovements;
+        Brain.Brain AIBrain;
+        PlayerHealth playerHealth;
+        EnemyHealth enemyHealth;
+
+
+
+        double distanceFromPlayerOnAttack;
+        List<double> cooldowns;
 
         string nextPlannedAttack = "Swipe";
 
@@ -70,8 +81,11 @@ namespace NPC
         {
             data = GameSavingManager.instance.geData;
             cutsceneManager = CutsceneManager.instance;
+            AIBrain = Brain.Brain.instance;
             stageManager = StatesManager.instance;
+            playerHealth = PlayerHealth.instance;
             cutsceneManager.onCutsceneCompleted += startBossLogic;
+            cooldowns = stageManager.getCooldowns();
             // if the boss is not found in  the database yet add it
             if (!data.getBossesFound.ContainsKey(bossID))
             {
@@ -89,6 +103,8 @@ namespace NPC
             {
                 //Spawn the area boss
                 spawnBoss();
+                enemyHealth = EnemyHealth.instance;
+                aiAnimator = bossObject == null ? null : bossObject.gameObject.GetComponentInChildren<Animator>();
                 bossMovements = bossObject == null? null: bossObject.GetComponent<AiMovements>();
             }
             if(hasBossBeenFound)
@@ -102,7 +118,27 @@ namespace NPC
         {
             if (!hasFightStarted) return;
             processStateMachine();
+            updateMovementAnimation();
+
         }    
+
+        void updateMovementAnimation()
+        {
+            if(aiAnimator && bossMovements)
+            {
+                aiAnimator.SetFloat("speed", bossMovements.getCurrentAgentSpeed());
+            }
+        }
+
+        public void setAttackAnimationBool(string attack, bool isActive)
+        {
+            aiAnimator.SetBool(attack, isActive);
+        }
+
+        public void setAttackAnimationTrigger(string attack)
+        {
+            aiAnimator.SetTrigger(attack);
+        }
 
 
         private void spawnBoss()
@@ -129,6 +165,63 @@ namespace NPC
             {
                 return null;
             }    
+            
+        }
+
+        public void findNextAttackUsingANN(double distanceFromPlayer)
+        {
+            distanceFromPlayerOnAttack = distanceFromPlayer;
+            cooldowns = cooldowns == null? stageManager.getCooldowns() : cooldowns;
+            if (!playerHealth || !enemyHealth)
+            {
+                return;
+            }
+            getSetAttackString = AIBrain.nextActionSelection(distanceFromPlayerOnAttack, playerHealth.getHealth(),enemyHealth.getHealth(), cooldowns);
+            switch(getSetAttackString)
+            {
+                case "Swipe":
+                    getSetAgentStoppingDistance = 2;
+                    break;
+                case "Blighted Pounce":
+                    getSetAgentStoppingDistance = 10;
+                    break;
+                case "Blight Breath":
+                    getSetAgentStoppingDistance = 5;
+                    break;
+            }
+        }
+
+        public void trainAnn()
+        {
+            if (!playerHealth || !enemyHealth)
+            {
+                return;
+            }
+            cooldowns = cooldowns == null ? stageManager.getCooldowns() : cooldowns;
+            Brain.rewardStates currentReward = Brain.rewardStates.neutral;
+            bool playerDamaged = playerHealth.didHealthChange();
+            bool enemyDamaged = enemyHealth.didHealthChange();
+
+            if (playerDamaged || enemyDamaged)
+            {
+                if (playerDamaged && enemyDamaged)
+                {
+                    currentReward = playerHealth.getDamageTaken() > enemyHealth.getDamageTaken()
+                        ? Brain.rewardStates.positive
+                        : Brain.rewardStates.negative;
+                }
+                else
+                {
+                    currentReward = playerDamaged
+                        ? Brain.rewardStates.positive
+                        : Brain.rewardStates.negative;
+                }
+            }
+            else
+            {
+                currentReward = Brain.rewardStates.neutral;
+            }
+            AIBrain.trainBrain(currentReward, distanceFromPlayerOnAttack, playerHealth.getHealth(), 100.0f, cooldowns);
             
         }
 

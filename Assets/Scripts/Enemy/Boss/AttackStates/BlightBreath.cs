@@ -1,3 +1,25 @@
+/*
+ * ----------------------------------------------------------------------------------------------
+ * Project: The Last Breath Of Olyndra                                                          *
+ * Script: BlightBreath                                                        *
+ * Author: Marco Minganna                                                                       *
+ * Unit: Digital Studio Project                                                                 *
+ * Institution: Kingston University                                                             *
+ *                                                                                              *
+ * Date: September 2024 - January 2025                                                          *
+ *                                                                                              *
+ * Description:                                                                                 *
+ * This script was developed as part of the coursework for the "DSP" unit at                    *
+ * Kingston University.                                                                         *
+ *                                                                                              *
+ * License:                                                                                     *
+ * This script is provided as-is for educational purposes. It is classified as Public and       *
+ * may be shared, modified, or used with proper attribution to the original author, Marco       *
+ * Minganna. Commercial use requires prior written consent.                                     *
+ *                                                                                              *
+ * Security Classification: Public                                                              *
+ * ----------------------------------------------------------------------------------------------
+ */
 using UnityEngine;
 namespace NPC
 {
@@ -30,7 +52,7 @@ namespace NPC
             {
                 Activate();
                 bossAI.getSetCurrentTarget = null;
-                visualizeAbility();
+                visualizeAbility(bossAI);
             }
 
             if (checkCooldownStateChange())
@@ -41,6 +63,7 @@ namespace NPC
             }
 
             checkIfCooldownNeedReset(stateToReturn);
+            bossAI.trainAnn();
             return stateToReturn;
         }
 
@@ -56,9 +79,12 @@ namespace NPC
 
                 if (angle <= exhaleAngle / 2)
                 {
-                    // Apply toxic gas effect or damage
-                    Debug.Log($"{hit.name} is in the toxic gas!");
-                    applyHazardEffect(hit.gameObject);
+                    PlayerHealth health = hit.gameObject.GetComponentInChildren<PlayerHealth>();
+                    if (health)
+                    {
+                        applyDamage(health);
+                    }
+                    
                 }
             }
 
@@ -69,11 +95,32 @@ namespace NPC
         private void applyHazardEffect(GameObject target)
         {
             // TODO: Add logic to apply damage-over-time or debuff to the player
-            Debug.Log($"Applying toxic effect to {target.name}");
+            PlayerStatusEffects status = target.GetComponentInChildren<PlayerStatusEffects>();
+            if (status)
+            {
+                status.ApplyPoison(0.5f, hazardDuration * 2);
+            }
+
         }
 
-        protected override void visualizeAbility()
+        public override void applyDamage(PlayerHealth playerHealth)
         {
+            if (playerHealth)
+            {
+                //apply base damage
+                playerHealth.applyDamage(damage);
+                // add tick damage
+                applyHazardEffect(playerHealth.gameObject);
+            }
+            
+        }
+
+        protected override void visualizeAbility(BossAIManager bossAI)
+        {
+            if (bossAI)
+            {
+                bossAI.setAttackAnimationTrigger(abilityName);
+            }
             spawnGasCloudEffect();
         }
 

@@ -1,7 +1,7 @@
 /*
  * ----------------------------------------------------------------------------------------------
  * Project: The Last Breath Of Olyndra                                                          *
- * Script: [Script Name or Description]                                                         *
+ * Script: BaseAttackState                                                         *
  * Author: Marco Minganna                                                                       *
  * Unit: Digital Studio Project                                                                 *
  * Institution: Kingston University                                                             *
@@ -52,23 +52,28 @@ namespace NPC
             return stateToReturn;
         }
 
-        protected void checkIfCooldownNeedReset(BossAIState stateToReturn)
+        protected bool checkIfCooldownNeedReset(BossAIState stateToReturn)
         {
+            bool isDifferentState = false;
             if (stateToReturn != this)
             {
                 BaseAttackState attackState = stateToReturn as BaseAttackState;
 
                 if (attackState != null && attackState.abilityName != this.abilityName)
                 {
+                    isDifferentState = true;
                     attackState.resetCooldown();
                 }
             }
+            return isDifferentState;
         }
 
         public abstract void Activate();
-        protected abstract void visualizeAbility();
+        protected abstract void visualizeAbility(BossAIManager bossAI);
 
         public abstract void resetValues();
+
+        public abstract void applyDamage(PlayerHealth playerHealth);
 
         protected void startCooldown()
         {
@@ -110,6 +115,11 @@ namespace NPC
         public string getName()
         {
             return abilityName;
+        }
+
+        public double getCooldown()
+        {
+            return cooldown;
         }
 
 

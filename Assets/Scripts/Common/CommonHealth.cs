@@ -1,0 +1,78 @@
+/*
+ * ----------------------------------------------------------------------------------------------
+ * Project: The Last Breath Of Olyndra                                                          *
+ * Script: CommonHealth                                                       *
+ * Author: Marco Minganna                                                                       *
+ * Unit: Digital Studio Project                                                                 *
+ * Institution: Kingston University                                                             *
+ *                                                                                              *
+ * Date: September 2024 - January 2025                                                          *
+ *                                                                                              *
+ * Description:                                                                                 *
+ * This script was developed as part of the coursework for the "DSP" unit at                    *
+ * Kingston University.                                                                         *
+ *                                                                                              *
+ * License:                                                                                     *
+ * This script is provided as-is for educational purposes. It is classified as Public and       *
+ * may be shared, modified, or used with proper attribution to the original author, Marco       *
+ * Minganna. Commercial use requires prior written consent.                                     *
+ *                                                                                              *
+ * Security Classification: Public                                                              *
+ * ----------------------------------------------------------------------------------------------
+ */
+using UnityEngine;
+
+public class CommonHealth : MonoBehaviour
+{
+    [SerializeField] protected float maxHealth = 1000;
+    protected float currentHealth;
+    protected float previousHealth;
+    protected float damageTaken = 0;
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        currentHealth = maxHealth;
+        previousHealth = currentHealth;
+    }
+
+    public bool didHealthChange()
+    {
+        bool wasUnitDamaged = previousHealth != currentHealth;
+        setDamageTaken();
+        previousHealth = currentHealth;
+        return wasUnitDamaged;
+    }
+
+    void setDamageTaken()
+    {
+        damageTaken = previousHealth - currentHealth;
+
+        if (damageTaken < 0)
+        {
+            damageTaken = 0;
+        }
+    }
+
+    public virtual void applyDamage(float damage)
+    {
+        if (currentHealth - damage <= 0)
+        {
+            currentHealth = 0;
+        }
+        else
+        {
+            currentHealth -= damage;
+        }
+    }
+
+    public float getDamageTaken()
+    {
+        return damageTaken;
+    }
+
+    public double getHealth()
+    {
+        return currentHealth;
+    }
+}
