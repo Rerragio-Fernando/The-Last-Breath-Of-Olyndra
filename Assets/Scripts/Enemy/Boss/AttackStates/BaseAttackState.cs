@@ -69,7 +69,7 @@ namespace NPC
         }
 
         public abstract void Activate();
-        protected abstract void visualizeAbility();
+        protected abstract void visualizeAbility(BossAIManager bossAI);
 
         public abstract void resetValues();
 

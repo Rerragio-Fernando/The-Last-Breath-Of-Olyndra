@@ -21,7 +21,7 @@
  * ----------------------------------------------------------------------------------------------
  */
 using UnityEngine;
-using UnityEngine.VFX;
+
 
 namespace NPC
 {
@@ -38,8 +38,6 @@ namespace NPC
         /// <summary>
         /// Reference to the particle system prefab used for the slash
         /// </summary>
-        [SerializeField]
-        GameObject slashParticles;
 
         public override BossAIState stateTick(BossAIManager bossAI)
         {
@@ -49,7 +47,7 @@ namespace NPC
             if (!isOnCooldown() && !isActive)
             {
                 Activate();
-                visualizeAbility();
+                visualizeAbility(bossAI);
             }
             if (checkCooldownStateChange())
             {
@@ -102,37 +100,12 @@ namespace NPC
         }
 
 
-        private void spawnSwipeEffect()
+        protected override void visualizeAbility(BossAIManager bossAI)
         {
-            if (slashParticles)
+            if(bossAI)
             {
-                GameObject tmpSlash = GameObject.Instantiate(slashParticles);
-                tmpSlash.transform.position = bossTransform.position;
-
-                float effectScale = attackRadius / 5f; 
-                tmpSlash.transform.localScale = new Vector3(effectScale, effectScale, effectScale);
-
-                VisualEffect visualEffect = tmpSlash.GetComponentInChildren<VisualEffect>();
-                if (visualEffect != null)
-                {
-                    float effectDuration = 0.3f;
-                    Destroy(tmpSlash, effectDuration + 1);
-                }
-                else
-                {
-                    Destroy(tmpSlash, 5f);
-                }
+                bossAI.setAttackAnimationTrigger(abilityName);
             }
-            else
-            {
-                Debug.LogError("SlashParticles prefab is null!");
-            }
-        }
-
-        protected override void visualizeAbility()
-        {
-            //TODO set animation
-            spawnSwipeEffect();
         }
     }
 }

@@ -59,25 +59,6 @@ namespace NPC
                 Vector3 targetPositionXZ = new Vector3(bossAI.getSetCurrentTarget.position.x, 0, bossAI.getSetCurrentTarget.position.z);
                 float distanceToPlayer = Vector3.Distance(bossPositionXZ, targetPositionXZ);
                 bossAI.findNextAttackUsingANN(distanceToPlayer);
-                /*
-                if (distanceToPlayer > 10f)
-                {
-                    bossAI.getSetAgentStoppingDistance = 10;
-                    if (Random.Range(0, 2) == 0)
-                    {
-                        bossAI.getSetAttackString = "Blighted Pounce";
-                    }
-                    else
-                    {
-                        bossAI.getSetAttackString = "Blight Breath";
-                    }
-                }
-                else
-                {
-                    bossAI.getSetAgentStoppingDistance = 5;
-                    bossAI.getSetAttackString = "Swipe";
-                }
-                */
                 
                 stateToReturn = nextState == null ? this : nextState;
             }
