@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5174001926039076540}
   - component: {fileID: 3797521558572178619}
+  - component: {fileID: -2461141161484771475}
   m_Layer: 0
   m_Name: Normal Attack
   m_TagString: Untagged
@@ -73,6 +74,19 @@ MonoBehaviour:
     priority: 120
     spatialSoundMaxDistance: 0
     source: {fileID: 0}
+--- !u!114 &-2461141161484771475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2142275784067066224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a3151eb84131846b8a9638bef98147, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundFx: []
 --- !u!1 &7265074322078463920
 GameObject:
   m_ObjectHideFlags: 0

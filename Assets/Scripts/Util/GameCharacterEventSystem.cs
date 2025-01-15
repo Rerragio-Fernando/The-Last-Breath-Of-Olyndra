@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameCharacterEventSystem : Singleton<GameCharacterEventSystem>
+public class GameCharacterEventSystem : SingletonBehaviour<GameCharacterEventSystem>
 {
     public static event Action OnSpawnInEvent;
     public static event Action OnDeathEvent;

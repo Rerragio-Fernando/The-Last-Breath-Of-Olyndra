@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2927471094859387381}
+  - component: {fileID: -2545524436101923429}
   m_Layer: 0
   m_Name: Ultimate Load Effect
   m_TagString: Untagged
@@ -30,8 +31,31 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2457085362012793177}
+  - {fileID: 4319221289150431818}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!114 &-2545524436101923429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 318621678383230091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a3151eb84131846b8a9638bef98147, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundFx:
+  - name: Ult Battle Cry
+    clip: {fileID: 0}
+    volume: 0
+    pitch: 0
+    loop: 0
+    spatialBlend: 0
+    priority: 0
+    spatialSoundMaxDistance: 0
+    source: {fileID: 0}
 --- !u!1 &1651378294620892117
 GameObject:
   m_ObjectHideFlags: 0
@@ -4923,3 +4947,82 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!1001 &6752139065980465391
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2927471094859387381}
+    m_Modifications:
+    - target: {fileID: 5364305720568486620, guid: ceb7017b4f9bd40429c1bd4e04c38b78,
+        type: 3}
+      propertyPath: m_Name
+      value: Wind Swirl
+      objectReference: {fileID: 0}
+    - target: {fileID: 6293890023977898476, guid: ceb7017b4f9bd40429c1bd4e04c38b78,
+        type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7369188974231843493, guid: ceb7017b4f9bd40429c1bd4e04c38b78,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7369188974231843493, guid: ceb7017b4f9bd40429c1bd4e04c38b78,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7369188974231843493, guid: ceb7017b4f9bd40429c1bd4e04c38b78,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7369188974231843493, guid: ceb7017b4f9bd40429c1bd4e04c38b78,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7369188974231843493, guid: ceb7017b4f9bd40429c1bd4e04c38b78,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7369188974231843493, guid: ceb7017b4f9bd40429c1bd4e04c38b78,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7369188974231843493, guid: ceb7017b4f9bd40429c1bd4e04c38b78,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7369188974231843493, guid: ceb7017b4f9bd40429c1bd4e04c38b78,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7369188974231843493, guid: ceb7017b4f9bd40429c1bd4e04c38b78,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7369188974231843493, guid: ceb7017b4f9bd40429c1bd4e04c38b78,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ceb7017b4f9bd40429c1bd4e04c38b78, type: 3}
+--- !u!4 &4319221289150431818 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7369188974231843493, guid: ceb7017b4f9bd40429c1bd4e04c38b78,
+    type: 3}
+  m_PrefabInstance: {fileID: 6752139065980465391}
+  m_PrefabAsset: {fileID: 0}

@@ -27,7 +27,7 @@ public class PlayerCombatSystem : MonoBehaviour
     [SerializeField] private AttackProfile[] _attackProfile;
     [SerializeField] private GameObject _hitFX;
     [SerializeField] private GameObject _manaChargeFXPrefab;
-    [SerializeField] private GameObject _ultLoadPrefab;
+    [SerializeField] private GameObject _ultVFXPrefab;
     [SerializeField] private Transform _manaChargeTrans;
     [SerializeField] private Transform _atkFXParent;
 
@@ -37,8 +37,7 @@ public class PlayerCombatSystem : MonoBehaviour
     private bool _ulted = false;
     private int _minManaAmount;//Minimum amount of mana needed to make a charge
     private GameObject _manaFX;
-    private GameObject _ultimateLoadFX;
-    private GameObject _enemyObj;
+    private GameObject _ultimateFX;
     private ManaHandler _manaHandler;
     private PlayerComboScript _comboScript;
     private RaycastHit _hit;
@@ -58,7 +57,6 @@ public class PlayerCombatSystem : MonoBehaviour
     private CombatState _playerCombatState;
 
     private void Start() {
-        _enemyObj = GameObject.FindWithTag("Enemy");
         _manaHandler = GetComponent<ManaHandler>();
         _comboScript = GetComponent<PlayerComboScript>();
 
@@ -122,7 +120,6 @@ public class PlayerCombatSystem : MonoBehaviour
             _enteringUltState = true;
             _ulted = false;
             _ultTimeHoldEnd = Time.time + _playerUltimateHoldDownTime;
-            _ultimateLoadFX = Instantiate(_ultLoadPrefab, transform);
         }
 
         if(_ultimateHoldIN && _playerCombatState != CombatState.Ultimate){
@@ -130,6 +127,7 @@ public class PlayerCombatSystem : MonoBehaviour
                 //If player keeps holding down the button till after x amount of seconds then player enters ultimate state
                 _playerCombatState = CombatState.Ultimate;
                 PlayerEventSystem.TriggerUltimateIn();                                                      //EVENT TRIGGERED
+                _ultimateFX = Instantiate(_ultVFXPrefab, transform);
             }
         }
 
@@ -170,7 +168,7 @@ public class PlayerCombatSystem : MonoBehaviour
     void UltimateFunctionality(){
         if(_basicAtkIN && !_ulted){
             PlayerEventSystem.TriggerUltimateAttack();                                                      //EVENT TRIGGERED
-            Destroy(_ultimateLoadFX);
+            Destroy(_ultimateFX);
             _ulted = true;
             _enteringUltState = false;
         }

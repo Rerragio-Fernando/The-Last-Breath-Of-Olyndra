@@ -6,6 +6,7 @@ public class Sound
 {
     public string name;
     public AudioClip clip;
+    public AudioMixerGroup mixer;
 
     [Range(0f, 2f)]
     public float volume;

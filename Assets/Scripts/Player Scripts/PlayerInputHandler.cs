@@ -9,7 +9,7 @@ public struct AttackType{
     public int attackType;//1-basic, 2-strong, 3-AOE
 }
 
-public class PlayerInputHandler : Singleton<PlayerInputHandler> {
+public class PlayerInputHandler : SingletonBehaviour<PlayerInputHandler> {
     private IA_Player _playerInputActions;
     private bool canAct = true;
 
@@ -24,7 +24,7 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler> {
     public static event Action<InputActionPhase> ManaChargeEvent;
     public static event Action<InputActionPhase> UltimateEvent;
 
-    public override void Awake(){
+    protected override void Awake(){
         base.Awake();
         _playerInputActions = new IA_Player();
     }
