@@ -21,15 +21,14 @@
  * ----------------------------------------------------------------------------------------------
  */
 using UnityEngine;
+using UnityEngine.UI;
 
-public class PlayerHealth : MonoBehaviour
+public class PlayerHealth : CommonHealth
 {
-    float maxHealth = 100;
-    float currentHealth;
-    float previousHealth;
-    float damageTaken = 0;
 
     public static PlayerHealth instance { get; private set; } = null;
+
+    bool poisoned = false;
 
     private void Awake()
     {
@@ -41,24 +40,36 @@ public class PlayerHealth : MonoBehaviour
         }
         instance = this;
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    private new void Start()
     {
-        currentHealth = maxHealth;
-        previousHealth = currentHealth;
+        base.Start();
+        healthBar = GameObject.Find("Health Slider").GetComponent<Slider>();
+        if (healthBar)
+        {
+            healthBar.maxValue = maxHealth;
+            findFillAreaColor();
+            if (fillImage)
+            {
+                fillImage.color = Color.green;
+            }
+        }
     }
 
-    public void applyDamage(float damage)
+
+
+
+    public override void applyDamage(float damage)
     {
-        if(currentHealth - damage<=0)
+        base.applyDamage(damage);
+
+        if (currentHealth == 0)
         {
-            currentHealth = 0;
             playerDefeat();
         }
         else
         {
-            currentHealth -= damage;
-            Debug.LogWarning(" current health after taking damage: "+ currentHealth);
+            Debug.Log("Character took damage!");
         }
     }
 
@@ -67,32 +78,22 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log(" handle death");
     }
 
-    void setDamageTaken()
+    public void setIsPoisoned(bool isPoisoned)
     {
-        damageTaken = previousHealth - currentHealth;
+        Debug.Log("I am poisoned");
+        poisoned = isPoisoned;
+        if (!fillImage) return;
 
-        if (damageTaken < 0)
+        if (poisoned)
         {
-            damageTaken = 0;
+            fillImage.color = new Color(0.5f, 0f, 0.5f);
+        }
+        else
+        {
+            fillImage.color = Color.green;
         }
     }
 
 
-    public bool didHealthChange()
-    {
-        bool wasPlayerDamaged = previousHealth != currentHealth;
-        setDamageTaken();
-        previousHealth = currentHealth;
-        return wasPlayerDamaged;
-    }
 
-    public float getDamageTaken()
-    {
-        return damageTaken;
-    }
-
-    public double getHealth()
-    {
-        return currentHealth;
-    }
 }

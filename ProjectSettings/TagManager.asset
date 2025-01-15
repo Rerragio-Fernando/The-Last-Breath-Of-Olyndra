@@ -5,7 +5,6 @@ TagManager:
   serializedVersion: 3
   tags:
   - Enemy
-  - Walkable
   layers:
   - Default
   - TransparentFX
@@ -13,6 +12,7 @@ TagManager:
   - Ground
   - Water
   - UI
+  - Enemy
   - Player
   - 
   - 

@@ -17,4 +17,8 @@ public class TestEnemyScript : MonoBehaviour
     private void Update() {
         _agent.SetDestination(_player.position);
     }
+
+    private void OnCollisionEnter(Collision other) {
+        Debug.Log($"Collided");
+    }
 }

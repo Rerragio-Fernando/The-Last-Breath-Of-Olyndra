@@ -27,8 +27,6 @@ namespace NPC
 {
     public class AiMovements : MonoBehaviour
     {
-        [SerializeField]
-        float detectionRadius = 10f;
         Transform currentTarget;
         private NavMeshAgent agent;
         // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -48,6 +46,11 @@ namespace NPC
         public void stopAgent()
         {
             agent.ResetPath();
+        }
+
+        public float getCurrentAgentSpeed()
+        {
+            return agent.velocity.magnitude;
         }
 
         //Getter and setters 

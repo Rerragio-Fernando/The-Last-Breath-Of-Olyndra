@@ -37,11 +37,15 @@ namespace NPC
         GameObject bossObject;
         [SerializeField]
         Transform spawningPoint;
+        CapsuleCollider enemyCollider;
+
 
         CutsceneManager cutsceneManager;
 
         [Header("Current State")]
         [SerializeField] BossAIState currentState;
+
+        Animator aiAnimator;
 
         public static BossAIManager instance { get; private set; } = null;
         GameData data;
@@ -56,10 +60,20 @@ namespace NPC
         PlayerHealth playerHealth;
         EnemyHealth enemyHealth;
 
+        
+
+
+
         double distanceFromPlayerOnAttack;
         List<double> cooldowns;
 
         string nextPlannedAttack = "Swipe";
+
+        /// <summary>
+        /// reference to a OneShot haptic effect
+        /// </summary>
+        [Tooltip("Reference to a OneShot haptic effect")]
+        [SerializeField] HapticEffectSO impactEffect;
 
 
         private void Awake()
@@ -100,7 +114,9 @@ namespace NPC
                 //Spawn the area boss
                 spawnBoss();
                 enemyHealth = EnemyHealth.instance;
+                aiAnimator = bossObject == null ? null : bossObject.gameObject.GetComponentInChildren<Animator>();
                 bossMovements = bossObject == null? null: bossObject.GetComponent<AiMovements>();
+                enemyCollider = bossObject == null ? null: bossObject.GetComponent<CapsuleCollider>();
             }
             if(hasBossBeenFound)
             {
@@ -113,7 +129,27 @@ namespace NPC
         {
             if (!hasFightStarted) return;
             processStateMachine();
+            updateMovementAnimation();
+
         }    
+
+        void updateMovementAnimation()
+        {
+            if(aiAnimator && bossMovements)
+            {
+                aiAnimator.SetFloat("speed", bossMovements.getCurrentAgentSpeed());
+            }
+        }
+
+        public void setAttackAnimationBool(string attack, bool isActive)
+        {
+            aiAnimator.SetBool(attack, isActive);
+        }
+
+        public void setAttackAnimationTrigger(string attack)
+        {
+            aiAnimator.SetTrigger(attack);
+        }
 
 
         private void spawnBoss()
@@ -128,6 +164,14 @@ namespace NPC
             adjustBossPosition();
 
             bossObject.transform.rotation = spawningPoint.rotation;
+        }
+
+        public void playHapticEffect()
+        {
+            if (impactEffect)
+            {
+                HapticManager.PlayEffect(impactEffect, this.transform.position);
+            }
         }
 
         public BossAIState findState(string name)
@@ -147,8 +191,23 @@ namespace NPC
         {
             distanceFromPlayerOnAttack = distanceFromPlayer;
             cooldowns = cooldowns == null? stageManager.getCooldowns() : cooldowns;
-            getSetAttackString = AIBrain.nextActionSelection(distanceFromPlayerOnAttack, playerHealth.getHealth(),100.0f, cooldowns);
-            Debug.LogWarning(getSetAttackString);
+            if (!playerHealth || !enemyHealth)
+            {
+                return;
+            }
+            getSetAttackString = AIBrain.nextActionSelection(distanceFromPlayerOnAttack, playerHealth.getHealth(),enemyHealth.getHealth(), cooldowns);
+            switch(getSetAttackString)
+            {
+                case "Swipe":
+                    getSetAgentStoppingDistance = 2;
+                    break;
+                case "Blighted Pounce":
+                    getSetAgentStoppingDistance = 10;
+                    break;
+                case "Blight Breath":
+                    getSetAgentStoppingDistance = 5;
+                    break;
+            }
         }
 
         public void trainAnn()
@@ -244,6 +303,14 @@ namespace NPC
                 bossMovements.stopAgent();
             }
             
+        }
+
+        public void activateDeactivateCollider(bool isTrigger)
+        {
+            if(enemyCollider)
+            {
+                enemyCollider.isTrigger=isTrigger;
+            }
         }
 
         private void OnApplicationQuit()

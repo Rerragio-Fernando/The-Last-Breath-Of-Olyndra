@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: BlightBreath
   m_EditorClassIdentifier: 
   nextState: {fileID: 11400000, guid: c2cba32cf918bab49a446ef2719e413f, type: 2}
-  animator: {fileID: 0}
   abilityName: Blight Breath
   cooldown: 4
   comboAttack: 0
   numbOfCombo: 0
   damage: 0.5
-  exhaleRange: 10
+  exhaleRange: 5
   exhaleAngle: 90
   hazardDuration: 5
   targetLayer:
     serializedVersion: 2
-    m_Bits: 64
-  gasParticlesPrefab: {fileID: 0}
+    m_Bits: 4294967295
+  gasParticlesPrefab: {fileID: 3833452777892178912, guid: ff411a7e5e0a6ae4f92d6bb16d08856e,
+    type: 3}

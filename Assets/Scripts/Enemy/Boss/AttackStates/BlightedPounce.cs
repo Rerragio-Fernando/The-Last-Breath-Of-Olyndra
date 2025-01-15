@@ -28,35 +28,47 @@ namespace NPC
     {
         Transform bossTransform;
         [SerializeField] private float leapSpeed = 10f;
-        [SerializeField] private float leapDistance = 5f; 
-        [SerializeField] private float impactRadius = 2f; 
+        [SerializeField] private float impactRadius = 2f;
         [SerializeField] private LayerMask targetLayer;
         Vector3 targetPosition = Vector3.zero;
         Transform playerPos;
 
+        bool impactReached = false;
+
         public override BossAIState stateTick(BossAIManager bossAI)
         {
+            bossAI.activateDeactivateCollider(true);
             BossAIState stateToReturn = this;
             bossTransform = bossAI.getBossTransform();
-            if (!isOnCooldown()&& !isActive)
+            if (!isOnCooldown() && !isActive)
             {
                 playerPos = bossAI.getSetCurrentTarget;
-                bossAI.getSetCurrentTarget = null;
-                Activate();
 
+                if (playerPos != null)
+                {
+                    bossAI.getSetCurrentTarget = null;
+                    Activate();
+                    visualizeAbility(bossAI);
+                }
             }
 
-            if(isActive)
+            if (isActive)
             {
                 LeapTowardsTarget();
                 checkLeapEnd();
-                visualizeAbility();
+                if(impactReached)
+                {
+                    bossAI.playHapticEffect();
+                }
             }
+
             if (checkCooldownStateChange())
             {
                 Debug.Log("cooldown done pounce");
+                bossAI.activateDeactivateCollider(false);
                 stateToReturn = nextState == null ? stateToReturn : nextState;
             }
+
             checkIfCooldownNeedReset(stateToReturn);
             bossAI.trainAnn();
             return stateToReturn;
@@ -65,16 +77,17 @@ namespace NPC
         public override void Activate()
         {
             Debug.Log($"{abilityName} activated!");
-            if(playerPos)
+            if (playerPos)
             {
                 targetPosition = playerPos.position;
-                isActive = true;
             }
             else
             {
+                Debug.LogWarning("Player position not set, defaulting to zero.");
                 targetPosition = Vector3.zero;
             }
 
+            isActive = true;
         }
 
         public override void applyDamage(PlayerHealth playerHealth)
@@ -90,6 +103,7 @@ namespace NPC
         {
             isActive = false;
             targetPosition = Vector3.zero;
+            impactReached = false;
             resetCooldown();
         }
 
@@ -100,27 +114,39 @@ namespace NPC
                 Debug.LogWarning("Player position is null!");
                 return;
             }
+
             Vector3 direction = (targetPosition - bossTransform.position).normalized;
+
+            // Ensure the target is not behind the boss
+            if (Vector3.Dot(direction, bossTransform.forward) < 0)
+            {
+                Debug.LogWarning("Target is behind the boss, adjusting target direction.");
+                targetPosition = bossTransform.position + bossTransform.forward * 2f; // Redirect to a forward position
+                direction = (targetPosition - bossTransform.position).normalized;
+            }
+
             Vector3 leapMovement = direction * leapSpeed * Time.deltaTime;
             bossTransform.position = Vector3.MoveTowards(bossTransform.position, targetPosition, leapMovement.magnitude);
         }
 
         private void checkLeapEnd()
         {
+
             Vector3 bossPositionXZ = new Vector3(bossTransform.position.x, 0, bossTransform.position.z);
             Vector3 targetPositionXZ = new Vector3(targetPosition.x, 0, targetPosition.z);
 
             if (Vector3.Distance(bossPositionXZ, targetPositionXZ) <= impactRadius)
             {
+                bossTransform.position = targetPositionXZ; // Snap to target position
                 isActive = false;
                 checkImpact();
-                
             }
         }
 
         private void checkImpact()
         {
-            Collider[] hitTargets = Physics.OverlapSphere(bossTransform.position, impactRadius * 2f, targetLayer);
+            Vector3 bossPositionXZ = new Vector3(bossTransform.position.x, 0, bossTransform.position.z);
+            Collider[] hitTargets = Physics.OverlapSphere(bossPositionXZ, impactRadius * 3f, targetLayer);
             foreach (var hit in hitTargets)
             {
                 if (hit.CompareTag("Player"))
@@ -130,17 +156,18 @@ namespace NPC
                     {
                         applyDamage(health);
                     }
-                    
-
                 }
             }
+            impactReached = true;
             startCooldown();
         }
 
-        protected override void visualizeAbility()
+        protected override void visualizeAbility(BossAIManager bossAI)
         {
-            //TODO set animation
-
+            if (bossAI)
+            {
+                bossAI.setAttackAnimationTrigger(abilityName);
+            }
         }
     }
 }

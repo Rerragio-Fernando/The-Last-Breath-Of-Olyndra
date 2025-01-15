@@ -42,7 +42,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "StrongAttack",
+                    "name": "ManaCharge",
                     "type": "Button",
                     "id": "0e644b44-6b17-4ac3-ba8a-1e3e67c6e951",
                     "expectedControlType": "",
@@ -51,7 +51,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "AOEAttack",
+                    "name": "Ultimate",
                     "type": "Button",
                     "id": "923fca4e-af35-4005-835a-4e021370463f",
                     "expectedControlType": "",
@@ -63,24 +63,6 @@
                     "name": "Aim",
                     "type": "Button",
                     "id": "c37b63f4-43ce-4cde-8867-223ab30767b2",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "EnemyLockOn_Cycle",
-                    "type": "Button",
-                    "id": "0cef1f79-5f8c-4545-87ce-16de9c44435e",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "EnemyLockOut",
-                    "type": "Button",
-                    "id": "c3edbe30-d994-4607-a8b3-308306a80e12",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -236,7 +218,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "StrongAttack",
+                    "action": "ManaCharge",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -247,18 +229,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "StrongAttack",
+                    "action": "ManaCharge",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "b859207a-99be-49bd-b391-b98f0788f897",
-                    "path": "<DualShockGamepad>/buttonWest",
+                    "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AOEAttack",
+                    "action": "Ultimate",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -269,7 +251,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AOEAttack",
+                    "action": "Ultimate",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -292,28 +274,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Aim",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e9a4e20e-b6cd-40fa-9e1b-c1219125b908",
-                    "path": "<DualShockGamepad>/leftShoulder",
-                    "interactions": "Tap",
-                    "processors": "",
-                    "groups": "",
-                    "action": "EnemyLockOn_Cycle",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "899b1e61-e75d-4579-baf3-8f054642c6a5",
-                    "path": "<DualShockGamepad>/leftShoulder",
-                    "interactions": "Hold",
-                    "processors": "",
-                    "groups": "",
-                    "action": "EnemyLockOut",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

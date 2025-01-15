@@ -72,17 +72,6 @@ namespace NPC.Brain
         //chance decay amount for each update
         float exploreDecay = 0.0001f;
 
-        // count of the number of time the ball was dropped
-        int failCount = 0;
-        // max angle to apply to tilting each update, needs to be large enough so that the q value multiplied 
-        // by it is enough to recover balance
-        float tiltSpeed = 0.5f;
-
-        // keep track of the time the ball is kept on balance
-        float timer = 0;
-        // keep track of the the max time the ball was kept on balance
-        float maxBalanceTime = 0;
-
         private void Awake()
         {
             if (instance != null)
@@ -104,7 +93,7 @@ namespace NPC.Brain
         public string nextActionSelection(double distanceFromPlayer, double playerHealth, double AIHealth, List<double> cooldowns)
         {
             List<double> states = new List<double>();
-            string currentAttack = "Blighted Pounce";
+            string currentAttack = "Swipe";
             states = new List<double>();
             states.Add(distanceFromPlayer);
             states.Add(playerHealth);
