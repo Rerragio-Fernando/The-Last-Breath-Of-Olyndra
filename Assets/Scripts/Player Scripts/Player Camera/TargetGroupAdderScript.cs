@@ -19,11 +19,6 @@ public class TargetGroupAdderScript : MonoBehaviour
     private Transform _enemyTrans;
     private Transform _playerTrans;
 
-    private void Start() {
-        _enemyTrans = GameObject.FindWithTag("Enemy").transform;
-        _playerTrans = GameObject.FindWithTag("Player").transform;
-    }
-
     private void Update() {
         AddObjectsToGroup();
     }
