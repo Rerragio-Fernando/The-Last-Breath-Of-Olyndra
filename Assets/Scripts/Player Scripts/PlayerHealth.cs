@@ -22,6 +22,8 @@
  */
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class PlayerHealth : CommonHealth
 {
@@ -76,6 +78,7 @@ public class PlayerHealth : CommonHealth
     void playerDefeat()
     {
         PlayerEventSystem.TriggerDeathEvent();
+        StartCoroutine(WaitAndReloadScene());
     }
 
     public void setIsPoisoned(bool isPoisoned)
@@ -92,6 +95,12 @@ public class PlayerHealth : CommonHealth
         {
             fillImage.color = Color.green;
         }
+    }
+
+    private IEnumerator WaitAndReloadScene()
+    {
+        yield return new WaitForSeconds(3f);
+        StartCoroutine(waitAndLoadScene(1));
     }
 
 

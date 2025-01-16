@@ -17,7 +17,7 @@ MonoBehaviour:
   cooldown: 5
   comboAttack: 0
   numbOfCombo: 0
-  damage: 25
+  damage: 15
   leapSpeed: 10
   impactRadius: 2
   targetLayer:

@@ -23,6 +23,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class EnemyHealth : CommonHealth
 {
     public static EnemyHealth instance { get; private set; } = null;
@@ -71,8 +72,7 @@ public class EnemyHealth : CommonHealth
 
     void enemyDefeat()
     {
-        Debug.Log(" handle death");
+        StartCoroutine(waitAndLoadScene(2));
     }
-
 
 }

@@ -42,10 +42,12 @@ public class SoundHandler : MonoBehaviour
         }
     }
     public void PlaySound(int x){
+        if (x >= soundFx.Length) return;
         var s = soundFx[x];
         s.source.Play();
     }
     public void PlaySound(int x, float p){
+        if (x >= soundFx.Length) return;
         var s = soundFx[x];
         s.source.pitch = p;
         s.source.Play();

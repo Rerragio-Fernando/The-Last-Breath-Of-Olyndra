@@ -22,6 +22,8 @@
  */
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class CommonHealth : MonoBehaviour
 {
@@ -107,5 +109,11 @@ public class CommonHealth : MonoBehaviour
                 healthBar = value;
             }
         }
+    }
+
+    protected IEnumerator waitAndLoadScene(int sceneToLoad, float waitTime=3f)
+    {
+        yield return new WaitForSeconds(waitTime);
+        SceneManager.LoadScene(sceneToLoad, LoadSceneMode.Single);
     }
 }
