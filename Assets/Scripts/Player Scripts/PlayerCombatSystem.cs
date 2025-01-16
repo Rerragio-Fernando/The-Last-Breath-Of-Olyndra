@@ -253,9 +253,21 @@ public class PlayerCombatSystem : MonoBehaviour
         public void UltiAttackVFX(){
             GameObject l_ultFX = Instantiate(_ultimatePrefab, _atkFXParent.position, Quaternion.LookRotation(transform.forward));
             Destroy(l_ultFX, _ultimateDuration);
+            StartCoroutine(UltiDamageInfliction(5));
         }
         
     #endregion
+
+    IEnumerator UltiDamageInfliction(int count){
+        int _count = 0;
+        float delay = _ultimateDuration/count;
+
+        while(_count < count){
+            CheckHit(10, 100f, 20f);
+            yield return new WaitForSeconds(delay);
+            _count ++;
+        }
+    }
 }
 
 public enum CombatState{
