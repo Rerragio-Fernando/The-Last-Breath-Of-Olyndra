@@ -9,8 +9,11 @@ EditorBuildSettings:
     path: Assets/Scenes/Game Scene/Main_Menu.unity
     guid: 458e04136a196e0418e73d5ec5287917
   - enabled: 1
-    path: Assets/Scenes/Test Scene/Test Scene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Scenes/Game Scene/Main_Game_new.unity
+    guid: 0bf83a9006fb0314b97ab0c361ce66b8
+  - enabled: 1
+    path: Assets/Scenes/Game Scene/Ending_Scene.unity
+    guid: d378b9b81bda29448af7bacc461bea93
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 16b4bb7f5d22df94c907491e7b2230a2,
       type: 2}

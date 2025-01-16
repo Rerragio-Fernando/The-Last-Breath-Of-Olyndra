@@ -58,6 +58,8 @@ public class MainMenuManager : MonoBehaviour
 
     private void Start()
     {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         Color innerColor = new Color32(0, 100, 0, 255);
         Color outerColor = new Color32(184, 134, 11,255);
 
