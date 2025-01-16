@@ -75,7 +75,7 @@ public class PlayerHealth : CommonHealth
 
     void playerDefeat()
     {
-        Debug.Log(" handle death");
+        PlayerEventSystem.TriggerDeathEvent();
     }
 
     public void setIsPoisoned(bool isPoisoned)
