@@ -11,7 +11,7 @@ public struct AttackType{
 
 public class PlayerInputHandler : SingletonBehaviour<PlayerInputHandler> {
     private IA_Player _playerInputActions;
-    private bool canAct = true;
+    private bool _playerAlive;
 
     // Movement Events
     public static event Action<Vector2, InputActionPhase> MoveEvent;
@@ -27,52 +27,61 @@ public class PlayerInputHandler : SingletonBehaviour<PlayerInputHandler> {
     protected override void Awake(){
         base.Awake();
         _playerInputActions = new IA_Player();
+        _playerAlive = true;
     }
 
     private void OnEnable() {
+        PlayerEventSystem.OnDeathEvent += UnalivePlayer;
+
         _playerInputActions.Enable();
     
         // Player input bindings
-        BindAction(_playerInputActions.Player.Movement, ctx => InvokeIfCanAct(() => MoveEvent?.Invoke(ctx.ReadValue<Vector2>(), ctx.phase)));
-        BindAction(_playerInputActions.Player.Look, ctx => InvokeIfCanAct(() => LookEvent?.Invoke(ctx.ReadValue<Vector2>(), ctx.phase)));
+        OnEnable(_playerInputActions.Player.Movement, inputContext => IfPlayerAlive(() => MoveEvent?.Invoke(inputContext.ReadValue<Vector2>(), inputContext.phase)));
+        OnEnable(_playerInputActions.Player.Look, inputContext => IfPlayerAlive(() => LookEvent?.Invoke(inputContext.ReadValue<Vector2>(), inputContext.phase)));
 
-        BindAction(_playerInputActions.Player.Jump, ctx => InvokeIfCanAct(() => JumpEvent?.Invoke(ctx.phase)));
+        OnEnable(_playerInputActions.Player.Jump, inputContext => IfPlayerAlive(() => JumpEvent?.Invoke(inputContext.phase)));
 
-        BindAction(_playerInputActions.Player.Guard, ctx => InvokeIfCanAct(() => GuardEvent?.Invoke(ctx.phase)));
+        OnEnable(_playerInputActions.Player.Guard, inputContext => IfPlayerAlive(() => GuardEvent?.Invoke(inputContext.phase)));
 
-        BindAction(_playerInputActions.Player.BasicAttack, ctx => InvokeIfCanAct(() => BasicAttackEvent?.Invoke(ctx.phase)));
-        BindAction(_playerInputActions.Player.ManaCharge, ctx => InvokeIfCanAct(() => ManaChargeEvent?.Invoke(ctx.phase)));
-        BindAction(_playerInputActions.Player.Ultimate, ctx => InvokeIfCanAct(() => UltimateEvent?.Invoke(ctx.phase)));
+        OnEnable(_playerInputActions.Player.BasicAttack, inputContext => IfPlayerAlive(() => BasicAttackEvent?.Invoke(inputContext.phase)));
+        OnEnable(_playerInputActions.Player.ManaCharge, inputContext => IfPlayerAlive(() => ManaChargeEvent?.Invoke(inputContext.phase)));
+        OnEnable(_playerInputActions.Player.Ultimate, inputContext => IfPlayerAlive(() => UltimateEvent?.Invoke(inputContext.phase)));
     }
 
     private void OnDisable() {
+        PlayerEventSystem.OnDeathEvent -= UnalivePlayer;
+
         _playerInputActions.Disable();
 
-        UnbindAction(_playerInputActions.Player.Movement, ctx => InvokeIfCanAct(() => MoveEvent?.Invoke(ctx.ReadValue<Vector2>(), ctx.phase)));
-        UnbindAction(_playerInputActions.Player.Look, ctx => InvokeIfCanAct(() => LookEvent?.Invoke(ctx.ReadValue<Vector2>(), ctx.phase)));
+        OnDisable(_playerInputActions.Player.Movement, inputContext => IfPlayerAlive(() => MoveEvent?.Invoke(inputContext.ReadValue<Vector2>(), inputContext.phase)));
+        OnDisable(_playerInputActions.Player.Look, inputContext => IfPlayerAlive(() => LookEvent?.Invoke(inputContext.ReadValue<Vector2>(), inputContext.phase)));
 
-        UnbindAction(_playerInputActions.Player.Jump, ctx => InvokeIfCanAct(() => JumpEvent?.Invoke(ctx.phase)));
+        OnDisable(_playerInputActions.Player.Jump, inputContext => IfPlayerAlive(() => JumpEvent?.Invoke(inputContext.phase)));
 
-        UnbindAction(_playerInputActions.Player.Guard, ctx => InvokeIfCanAct(() => GuardEvent?.Invoke(ctx.phase)));
+        OnDisable(_playerInputActions.Player.Guard, inputContext => IfPlayerAlive(() => GuardEvent?.Invoke(inputContext.phase)));
 
-        UnbindAction(_playerInputActions.Player.BasicAttack, ctx => InvokeIfCanAct(() => BasicAttackEvent?.Invoke(ctx.phase)));
-        UnbindAction(_playerInputActions.Player.ManaCharge, ctx => InvokeIfCanAct(() => ManaChargeEvent?.Invoke(ctx.phase)));
-        UnbindAction(_playerInputActions.Player.Ultimate, ctx => InvokeIfCanAct(() => UltimateEvent?.Invoke(ctx.phase)));
+        OnDisable(_playerInputActions.Player.BasicAttack, inputContext => IfPlayerAlive(() => BasicAttackEvent?.Invoke(inputContext.phase)));
+        OnDisable(_playerInputActions.Player.ManaCharge, inputContext => IfPlayerAlive(() => ManaChargeEvent?.Invoke(inputContext.phase)));
+        OnDisable(_playerInputActions.Player.Ultimate, inputContext => IfPlayerAlive(() => UltimateEvent?.Invoke(inputContext.phase)));
     }
 
-    private void InvokeIfCanAct(Action action)
+    private void IfPlayerAlive(Action action)
     {
-        if (canAct) action?.Invoke();
+        if (_playerAlive) action?.Invoke();
     }
 
-    private void BindAction(InputAction inputAction, Action<InputAction.CallbackContext> callback)
+    void UnalivePlayer(){
+        _playerAlive = false;
+    }
+
+    private void OnEnable(InputAction inputAction, Action<InputAction.CallbackContext> callback)
     {
         inputAction.started += callback;
         inputAction.performed += callback;
         inputAction.canceled += callback;
     }
 
-    private void UnbindAction(InputAction inputAction, Action<InputAction.CallbackContext> callback)
+    private void OnDisable(InputAction inputAction, Action<InputAction.CallbackContext> callback)
     {
         inputAction.started -= callback;
         inputAction.performed -= callback;

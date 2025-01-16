@@ -623,9 +623,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _healthBar: {fileID: 423346421210357215}
   _maxHealth: 1000
-  _manaOrbsPrefab: {fileID: 4410103429708213581, guid: 303fa2f1a2cf97745ba8309d95dd42ac,
-    type: 3}
-  _maxNumberOfOrbsDropped: 20
   _damageInfluence: 0.1
   _comboInfluence: 0.5
 --- !u!114 &5334995135213432675
