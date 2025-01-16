@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c935eeb63de43b04491c187984285f90, type: 3}
   m_Name: Attack A
   m_EditorClassIdentifier: 
-  _manaAttackFX: {fileID: 2142275784067066224, guid: f1bc5e7b4cd8e88439cfe59de682a32b,
+  _manaAttackFX: {fileID: 7498639908935904732, guid: 53644f91b7cd2134ab739eb8dea3aeab,
     type: 3}
-  _normalAttackFX: {fileID: 2142275784067066224, guid: 71bdaf2e488d76a4db6190599c35a1d9,
+  _normalAttackFX: {fileID: 5547412093244239573, guid: 45865e97ca67b724ba50c30478766749,
     type: 3}
   _normalAttackDamage: 10
   _manaAttackDamage: 20

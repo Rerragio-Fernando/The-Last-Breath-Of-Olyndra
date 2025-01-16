@@ -27,6 +27,8 @@ public class PlayerAnimationScript : AnimatorUtil
         PlayerEventSystem.OnCharacterGuardEvent += Guard;
 
         PlayerEventSystem.OnCharacterAttackTriggerEvent += TriggerAttack;
+
+        PlayerEventSystem.OnDeathEvent += Death;
     }
 
     private void OnDisable() {
@@ -43,6 +45,8 @@ public class PlayerAnimationScript : AnimatorUtil
         PlayerEventSystem.OnCharacterGuardEvent -= Guard;
 
         PlayerEventSystem.OnCharacterAttackTriggerEvent -= TriggerAttack;
+
+        PlayerEventSystem.OnDeathEvent -= Death;
     }
 
     public void Spawn(){
@@ -78,6 +82,10 @@ public class PlayerAnimationScript : AnimatorUtil
     public void UpdateCharacterDirection(Vector2 direction){
         BlendTreeValue(_anim, "FrontBack", direction.y, _movementLerper);
         BlendTreeValue(_anim, "LeftRight", direction.x, _movementLerper);
+    }
+
+    public void Death(){
+        AnimatorTrigger(_anim, "Death", 0.5f);
     }
 
     public void SetGrounded(bool val){

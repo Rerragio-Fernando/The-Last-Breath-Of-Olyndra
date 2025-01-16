@@ -36,9 +36,10 @@ public class SoundHandler : MonoBehaviour
         s.source.Play();
     }
     public void PlayRandomSound(){
-        if (soundFx.Length == 0) return;
-        var s = soundFx[UnityEngine.Random.Range(0, soundFx.Length)];
-        s.source.Play();
+        if(soundFx.Length > 0){
+            Sound s = soundFx[UnityEngine.Random.Range(0, soundFx.Length - 1)];
+            s.source.Play();
+        }
     }
     public void PlaySound(int x){
         if (x >= soundFx.Length) return;
